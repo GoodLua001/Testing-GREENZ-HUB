@@ -3229,7 +3229,7 @@ local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
             end
             return;
         end
-    end);
+    end)
     local Prehistoric = Tabs.Volcano:AddParagraph({
     Title="Status Prehistoric",
     Content=""
