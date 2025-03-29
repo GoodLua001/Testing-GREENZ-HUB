@@ -3220,7 +3220,7 @@ local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
             v506:SendKeyEvent(false, "W", false, game);
             _G.AutoFindPrehistoric = false;
             if not v513 then
-                v14:Notify({
+                Fluent:Notify({
                     Title = "Green Z Hub",
                     Content = "Found Volcano!",
                     Duration = 10
