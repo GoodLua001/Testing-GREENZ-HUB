@@ -3227,7 +3227,7 @@ local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
                 });
                 v513 = true;
             end
-            return;
+            return
         end
     end)
     local Prehistoric = Tabs.Volcano:AddParagraph({
