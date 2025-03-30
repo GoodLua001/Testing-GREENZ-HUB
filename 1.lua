@@ -3117,7 +3117,7 @@ spawn(function()
         end)
     end
     end)
-local Volcano = Tabs.Sea:AddSection("Prehistoric")
+local Volcano = Tabs.Vocalno:AddSection("Prehistoric")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3161,7 +3161,7 @@ local islandsToDelete = {
     Prehistoric = { "ShipwreckIsland", "SandIsland", "TreeIsland", "TinyIsland", "MysticIsland", "KitsuneIsland", "FrozenDimension" },
     }
 local function createToggle(title, toggleKey, islands, islandName, notification)
-    local toggle = Tabs.Sea:AddToggle(toggleKey, { Title = title, Default = false })
+    local toggle = Tabs.Vocalno:AddToggle(toggleKey, { Title = title, Default = false })
     Options[toggleKey]:SetValue(false)
     toggle:OnChanged(function(value) _G[toggleKey] = value end)
     RunService.RenderStepped:Connect(function()
