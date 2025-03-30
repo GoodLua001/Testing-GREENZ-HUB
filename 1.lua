@@ -3118,12 +3118,12 @@ spawn(function()
     end
     end)
 local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
-    local v503 = Tabs.Vocalno:AddSection("Speed Ship");
-    local v504 = game:GetService("Players");
-    local v505 = game:GetService("RunService");
-    local v506 = game:GetService("VirtualInputManager");
-    local v507 = game:GetService("Workspace");
-    local v508 = 350;
+    local v503 = Tabs.Vocalno:AddSection("Speed Ship")
+    local v504 = game:GetService("Players")
+    local v505 = game:GetService("RunService")
+    local v506 = game:GetService("VirtualInputManager")
+    local v507 = game:GetService("Workspace")
+    local v508 = 350
     local v509 = Tabs.Vocalno:AddSlider("SliderSpeedBoat", {
         Title = "Setting Speed Boat",
         Description = "",
@@ -3132,72 +3132,72 @@ local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
         Max = 350,
         Rounding = 1,
         Callback = function(v583)
-            v508 = v583;
+            v508 = v583
         end
-    });
-    v509:SetValue(v508);
+    })
+    v509:SetValue(v508)
     local v510 = Tabs.Vocalno:AddToggle("AutoFindPrehistoric", {
         Title = "Auto Find Prehistoric",
         Description = "",
         Default = false
-    });
-    v17.AutoFindPrehistoric:SetValue(false);
+    })
+    v17.AutoFindPrehistoric:SetValue(false)
     v510:OnChanged(function(v584)
-        _G.AutoFindPrehistoric = v584;
-    end);
-    local v511 = {};
-    local v512 = false;
-    local v513 = false;
+        _G.AutoFindPrehistoric = v584
+    end)
+    local v511 = {}
+    local v512 = false
+    local v513 = false
     v505.RenderStepped:Connect(function()
         if not _G.AutoFindPrehistoric then
-            v513 = false;
-            return;
+            v513 = false
+            return
         end
-        local v585 = v504.LocalPlayer;
-        local v586 = v585.Character;
+        local v585 = v504.LocalPlayer
+        local v586 = v585.Character
         if (not v586 or not v586:FindFirstChild("Humanoid")) then
-            return;
+            return
         end
         local function v587()
             if v512 then
-                return;
+                return
             end
-            v512 = true;
+            v512 = true
             for v769, v770 in pairs(v511) do
                 if (v770 and v770.Parent and (v770.Name == "VehicleSeat") and not v770.Occupant) then
-                    Tween2(v770.CFrame);
-                    break;
+                    Tween2(v770.CFrame)
+                    break
                 end
             end
-            v512 = false;
+            v512 = false
         end
-        local v588 = v586.Humanoid;
-        local v589 = false;
-        local v590 = nil;
+        local v588 = v586.Humanoid
+        local v589 = false
+        local v590 = nil
         for v684, v685 in pairs(v507.Boats:GetChildren()) do
-            local v686 = v685:FindFirstChild("VehicleSeat");
+            local v686 = v685:FindFirstChild("VehicleSeat")
             if (v686 and (v686.Occupant == v588)) then
-                v589 = true;
-                v590 = v686;
-                v511[v685.Name] = v686;
+                v589 = true
+                v590 = v686
+                v511[v685.Name] = v686
             elseif (v686 and (v686.Occupant == nil)) then
-                v587();
+                v587()
             end
         end
         if not v589 then
-            return;
+            return
         end
-        v590.MaxSpeed = v508;
-        v590.CFrame = CFrame.new(Vector3.new(v590.Position.X, v590.Position.Y, v590.Position.Z)) * v590.CFrame.Rotation ;
-        v506:SendKeyEvent(true, "W", false, game);
+        v590.MaxSpeed = v508
+        v590.CFrame = CFrame.new(Vector3.new(v590.Position.X, v590.Position.Y, v590.Position.Z)) * v590.CFrame.Rotation 
+        v506:SendKeyEvent(true, "W", false, game)
         for v687, v688 in pairs(v507.Boats:GetDescendants()) do
             if v688:IsA("BasePart") then
-                v688.CanCollide = false;
+                v688.CanCollide = false
             end
         end
         for v689, v690 in pairs(v586:GetDescendants()) do
             if v690:IsA("BasePart") then
-                v690.CanCollide = false;
+                v690.CanCollide = false
             end
         end
         local v593 = {
@@ -3208,24 +3208,24 @@ local Volcano = Tabs.Vocalno:AddSection("Prehistoric Island")
             "MysticIsland",
             "KitsuneIsland",
             "FrozenDimension"
-        };
+        }
         for v691, v692 in ipairs(v593) do
-            local v693 = v507.Map:FindFirstChild(v692);
+            local v693 = v507.Map:FindFirstChild(v692)
             if (v693 and v693:IsA("Model")) then
-                v693:Destroy();
+                v693:Destroy()
             end
         end
-        local v594 = v507.Map:FindFirstChild("PrehistoricIsland");
+        local v594 = v507.Map:FindFirstChild("PrehistoricIsland")
         if v594 then
-            v506:SendKeyEvent(false, "W", false, game);
-            _G.AutoFindPrehistoric = false;
+            v506:SendKeyEvent(false, "W", false, game)
+            _G.AutoFindPrehistoric = false
             if not v513 then
                 Fluent:Notify({
                     Title = "Green Z Hub",
                     Content = "Found Volcano!",
                     Duration = 10
-                });
-                v513 = true;
+                })
+                v513 = true
             end
             return
         end
