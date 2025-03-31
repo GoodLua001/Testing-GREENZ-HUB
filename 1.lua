@@ -3117,7 +3117,7 @@ spawn(function()
         end)
     end
     end)
-local Volcano = Tabs.Vocalno:AddSection("Prehistoric")
+local Volcano = Tabs.Vocalno:AddSection("Auto Find Prehistoric")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3226,6 +3226,7 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
     end)
 end
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
+local Volcano = Tabs.Vocalno:AddSection("Auto Event Volcano")
     local Prehistoric = Tabs.Volcano:AddParagraph({
     Title="Status Prehistoric",
     Content=""
