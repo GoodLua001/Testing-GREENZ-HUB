@@ -3304,7 +3304,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 local Volcano = Tabs.Vocalno:AddSection("Auto Event Volcano")
-    local Prehistoric = Tabs.Volcano:AddParagraph({
+    local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
     Content=""
 })
