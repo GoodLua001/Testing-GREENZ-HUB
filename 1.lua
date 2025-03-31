@@ -3117,7 +3117,7 @@ spawn(function()
         end)
     end
     end)
-local Volcano = Tabs.Vocalno:AddSection("Auto Find Prehistoric")
+local Volcano = Tabs.Vocalno:AddSection("Sea Event")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3226,6 +3226,83 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
     end)
 end
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
+createToggle("Auto Find Miragey", "AutoFindMirage", islandsToDelete.Mirage, "MysticIsland", "Mirage Island Is Spawner!")
+local AutoComeTikiToggle = Tabs.Sea:AddToggle("AutoComeTiki", {
+    Title="Auto Come Boat To Tiki",
+    Description="",
+    Default=false
+})
+AutoComeTikiToggle:OnChanged(function(value)
+    _G.AutoComeTiki=value 
+end)
+RunService.RenderStepped:Connect(function()
+    if not _G.AutoComeTiki then return end 
+    local player = Players.LocalPlayer
+    local character = player.Character
+    if not character or not character:FindFirstChild("Humanoid") then return end
+    local humanoid = character.Humanoid
+    local boat = nil
+    for _, b in pairs(Workspace.Boats:GetChildren()) do
+        local seat = b:FindFirstChild("VehicleSeat")
+        if seat and seat.Occupant==humanoid then
+            boat=seat
+            break
+        end
+    end
+    if boat then
+        boat.MaxSpeed=SetSpeedBoat  
+        local tikiPosition = CFrame.new(-16217.7568359375, 9.126761436462402, 446.06536865234375)
+        local currentPosition = boat.Position
+        local targetPosition = tikiPosition.Position
+        local direction = (targetPosition-currentPosition).unit
+        local moveVector = direction*boat.MaxSpeed*RunService.RenderStepped:Wait()
+        boat.CFrame=boat.CFrame+moveVector 
+        local lookAt = CFrame.new(currentPosition, targetPosition)  
+        boat.CFrame=CFrame.new(boat.Position, targetPosition)  
+        if (boat.Position-targetPosition).magnitude<120 then
+            _G.AutoComeTiki=false
+            VirtualInputManager:SendKeyEvent(false, "W", false, game) 
+        end
+    end
+end)
+local AutoComeHydraToggle = Tabs.Sea:AddToggle("AutoComeHydra", {
+    Title="Auto Come Boat To Hydra",
+    Description="",
+    Default=false
+})
+AutoComeHydraToggle:OnChanged(function(value)
+    _G.AutoComeHydra=value  
+end)
+RunService.RenderStepped:Connect(function()
+    if not _G.AutoComeHydra then return end 
+    local player = Players.LocalPlayer
+    local character = player.Character
+    if not character or not character:FindFirstChild("Humanoid") then return end
+    local humanoid = character.Humanoid
+    local boat = nil
+    for _, b in pairs(Workspace.Boats:GetChildren()) do
+        local seat = b:FindFirstChild("VehicleSeat")
+        if seat and seat.Occupant==humanoid then
+            boat=seat
+            break
+        end
+    end
+    if boat then
+        boat.MaxSpeed=SetSpeedBoat  
+        local tikiPosition = CFrame.new(5193.9375,-0.04690289497375488, 1631.578369140625)
+        local currentPosition = boat.Position
+        local targetPosition = tikiPosition.Position
+        local direction = (targetPosition-currentPosition).unit
+        local moveVector = direction*boat.MaxSpeed*RunService.RenderStepped:Wait()
+        boat.CFrame=boat.CFrame+moveVector 
+        local lookAt = CFrame.new(currentPosition, targetPosition)  
+        boat.CFrame=CFrame.new(boat.Position, targetPosition)  
+        if (boat.Position-targetPosition).magnitude<120 then
+            _G.AutoComeHydra=false 
+            VirtualInputManager:SendKeyEvent(false, "W", false, game)
+        end
+    end
+end)
 local Volcano = Tabs.Vocalno:AddSection("Auto Event Volcano")
     local Prehistoric = Tabs.Volcano:AddParagraph({
     Title="Status Prehistoric",
