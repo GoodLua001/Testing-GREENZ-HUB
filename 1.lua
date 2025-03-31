@@ -3226,8 +3226,8 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
     end)
 end
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
-createToggle("Auto Find Miragey", "AutoFindMirage", islandsToDelete.Mirage, "MysticIsland", "Mirage Island Is Spawner!")
-local AutoComeTikiToggle = Tabs.Sea:AddToggle("AutoComeTiki", {
+createToggle("Auto Find Mirage", "AutoFindMirage", islandsToDelete.Mirage, "MysticIsland", "Mirage Island Is Spawner!")
+local AutoComeTikiToggle = Tabs.Vocalno:AddToggle("AutoComeTiki", {
     Title="Auto Come Boat To Tiki",
     Description="",
     Default=false
@@ -3265,7 +3265,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-local AutoComeHydraToggle = Tabs.Sea:AddToggle("AutoComeHydra", {
+local AutoComeHydraToggle = Tabs.Vocalno:AddToggle("AutoComeHydra", {
     Title="Auto Come Boat To Hydra",
     Description="",
     Default=false
