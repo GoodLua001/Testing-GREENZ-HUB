@@ -3495,16 +3495,12 @@ spawn(function()
                         end
                     end
                 else
-                    topos(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
+                    Tween2(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
                 end
             end
         end
     end)
 end)
-Tabs.Stack:AddButton({
-    Title="Hop RipIndra",
-    Description="",
-    Callback=function()
 local JobId, TS
 local function scrapeAPI()
     local success, response = pcall(function()
@@ -3534,6 +3530,10 @@ local function scrapeAPI()
     return "Failed"
 
     end
+Tabs.Stack:AddButton({
+    Title="Hop RipIndra",
+    Description="",
+    Callback=function()
     spawn(function()
             for _, jobId in ipairs(jobIds) do
                 game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
