@@ -2756,6 +2756,7 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
           if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.Position).Magnitude>=10 then
             Tween(v.HumanoidRootPart.CFrame*Pos)
           end
+          savesetting()
           end
           end
           end
@@ -3117,7 +3118,7 @@ spawn(function()
         end)
     end
     end)
-local Volcano = Tabs.Vocalno:AddSection("Sea Event")
+local Volcano = Tabs.Vocalno:AddSection("Tab Volcano")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3226,84 +3227,6 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
     end)
 end
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
-createToggle("Auto Find Mirage", "AutoFindMirage", islandsToDelete.Mirage, "MysticIsland", "Mirage Island Is Spawner!")
-local AutoComeTikiToggle = Tabs.Vocalno:AddToggle("AutoComeTiki", {
-    Title="Auto Come Boat To Tiki",
-    Description="",
-    Default=false
-})
-AutoComeTikiToggle:OnChanged(function(value)
-    _G.AutoComeTiki=value 
-end)
-RunService.RenderStepped:Connect(function()
-    if not _G.AutoComeTiki then return end 
-    local player = Players.LocalPlayer
-    local character = player.Character
-    if not character or not character:FindFirstChild("Humanoid") then return end
-    local humanoid = character.Humanoid
-    local boat = nil
-    for _, b in pairs(Workspace.Boats:GetChildren()) do
-        local seat = b:FindFirstChild("VehicleSeat")
-        if seat and seat.Occupant==humanoid then
-            boat=seat
-            break
-        end
-    end
-    if boat then
-        boat.MaxSpeed=SetSpeedBoat  
-        local tikiPosition = CFrame.new(-16217.7568359375, 9.126761436462402, 446.06536865234375)
-        local currentPosition = boat.Position
-        local targetPosition = tikiPosition.Position
-        local direction = (targetPosition-currentPosition).unit
-        local moveVector = direction*boat.MaxSpeed*RunService.RenderStepped:Wait()
-        boat.CFrame=boat.CFrame+moveVector 
-        local lookAt = CFrame.new(currentPosition, targetPosition)  
-        boat.CFrame=CFrame.new(boat.Position, targetPosition)  
-        if (boat.Position-targetPosition).magnitude<120 then
-            _G.AutoComeTiki=false
-            VirtualInputManager:SendKeyEvent(false, "W", false, game) 
-        end
-    end
-end)
-local AutoComeHydraToggle = Tabs.Vocalno:AddToggle("AutoComeHydra", {
-    Title="Auto Come Boat To Hydra",
-    Description="",
-    Default=false
-})
-AutoComeHydraToggle:OnChanged(function(value)
-    _G.AutoComeHydra=value  
-end)
-RunService.RenderStepped:Connect(function()
-    if not _G.AutoComeHydra then return end 
-    local player = Players.LocalPlayer
-    local character = player.Character
-    if not character or not character:FindFirstChild("Humanoid") then return end
-    local humanoid = character.Humanoid
-    local boat = nil
-    for _, b in pairs(Workspace.Boats:GetChildren()) do
-        local seat = b:FindFirstChild("VehicleSeat")
-        if seat and seat.Occupant==humanoid then
-            boat=seat
-            break
-        end
-    end
-    if boat then
-        boat.MaxSpeed=SetSpeedBoat  
-        local tikiPosition = CFrame.new(5193.9375,-0.04690289497375488, 1631.578369140625)
-        local currentPosition = boat.Position
-        local targetPosition = tikiPosition.Position
-        local direction = (targetPosition-currentPosition).unit
-        local moveVector = direction*boat.MaxSpeed*RunService.RenderStepped:Wait()
-        boat.CFrame=boat.CFrame+moveVector 
-        local lookAt = CFrame.new(currentPosition, targetPosition)  
-        boat.CFrame=CFrame.new(boat.Position, targetPosition)  
-        if (boat.Position-targetPosition).magnitude<120 then
-            _G.AutoComeHydra=false 
-            VirtualInputManager:SendKeyEvent(false, "W", false, game)
-        end
-    end
-end)
-local Volcano = Tabs.Vocalno:AddSection("Auto Event Volcano")
     local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
     Content=""
@@ -3319,7 +3242,7 @@ spawn(function()
         end
     end)
 end)
-    local ToggleTPVolcano = Tabs.Vocalno:AddToggle("ToggleTPVolcano", { 
+      local ToggleTPVolcano = Tabs.Vocalno:AddToggle("ToggleTPVolcano", { 
     Title="Teleport To Volcano", 
     Description="", 
     Default=false 
@@ -3544,6 +3467,82 @@ spawn(function()
         end
     end
 end)
+local AutoRip = Tabs.Stack:AddToggle("AutoRip", {
+    Title = "Attack RipIndra",
+    Description = "",
+    Default = false
+})
+ToggleCollectEgg:OnChanged(function(Value)
+    _G.AutoRipIndra = Value
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            if _G.AutoRipIndra then
+                if game:GetService("Workspace").Enemies:FindFirstChild("rip_indra True Form [Lv. 5000] [Raid Boss]") or game:GetService("Workspace").Enemies:FindFirstChild("rip_indra [Lv. 5000] [Raid Boss]") then
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                        if v.Name == ("rip_indra True Form [Lv. 5000] [Raid Boss]" or v.Name == "rip_indra [Lv. 5000] [Raid Boss]") and v.Humanoid.Health > 0 and v:IsA("Model") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                            repeat task.wait()
+                                pcall(function()
+                                    AutoHaki()
+                                    EquipWeapon(_G.SelectWeapon)
+                                    v.HumanoidRootPart.CanCollide = false
+                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0,35,0))
+                                    game:GetService("VirtualUser"):CaptureController()
+                                    game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 670),workspace.CurrentCamera.CFrame)
+                                end)
+                            until _G.AutoRipIndra == false or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    topos(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
+                end
+            end
+        end
+    end)
+end)
+Tabs.Stack:AddButton({
+    Title="Hop RipIndra",
+    Description="",
+    Callback=function()
+local JobId, TS
+local function scrapeAPI()
+    local success, response = pcall(function()
+            return request({
+            Url = "https://donebell.vercel.app/api/Rip",
+            Method = "GET"
+        })
+    end)
+
+    if success and response.Success then
+        local data = game.HttpService:JSONDecode(response.Body)
+
+        if data.Amount and data.Amount > 0 then
+            local jobIds = {}
+
+            for _, job in ipairs(data.JobId) do
+                for jobId, _ in pairs(job) do
+                    table.insert(jobIds, jobId)
+                end
+            end
+            
+            TS = tick()
+            return jobIds
+        end
+    end
+    
+    return "Failed"
+
+    end
+    spawn(function()
+            for _, jobId in ipairs(jobIds) do
+                game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+                wait(5)
+            end
+        end)
+    end    
+})
+
 Fluent:Notify({
     Title="GreenZ Hub",
     Content="Done Load Code",
@@ -3693,3 +3692,29 @@ if _G.FastAttack then
 end
 
 
+local foldername = "GreenZ Hub"
+local filename = foldername.."/Setting.json"
+function saveSettings()
+    local HttpService = game:GetService("HttpService")
+    local json = HttpService:JSONEncode(_G)
+    if true then
+        if isfolder(foldername) then
+            if isfile(filename) then
+                writefile(filename, json)
+            else
+                writefile(filename, json)
+            end
+        else
+            makefolder(foldername)
+        end
+    end
+end
+
+function loadSettings()
+    local HttpService = game:GetService("HttpService")
+    if isfolder(foldername) then
+        if isfile(filename) then
+            _G = HttpService:JSONDecode(readfile(filename))
+        end
+    end
+end
