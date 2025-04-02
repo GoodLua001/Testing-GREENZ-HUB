@@ -2851,7 +2851,6 @@ spawn(function()
                                     else
                                         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                                         bringmob=false
-                                     saveSetings()
                                     end
                                 end
                             end
@@ -2862,6 +2861,7 @@ spawn(function()
             end)
         end
     end
+ saveSettings()
 end)
 local BoneNoQuest = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
 spawn(function()
