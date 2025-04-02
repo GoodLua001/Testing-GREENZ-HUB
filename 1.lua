@@ -2207,6 +2207,33 @@ end
 end
 return false
 end
+
+local foldername = "GreenZ Hub"
+local filename = foldername.."/Setting.json"
+function saveSettings()
+    local HttpService = game:GetService("HttpService")
+    local json = HttpService:JSONEncode(_G)
+    if true then
+        if isfolder(foldername) then
+            if isfile(filename) then
+                writefile(filename, json)
+            else
+                writefile(filename, json)
+            end
+        else
+            makefolder(foldername)
+        end
+    end
+end
+
+function loadSettings()
+    local HttpService = game:GetService("HttpService")
+    if isfolder(foldername) then
+        if isfile(filename) then
+            _G = HttpService:JSONDecode(readfile(filename))
+        end
+    end
+end
 local player = game.Players.LocalPlayer
 function AttackNoCoolDown()
     local character = player.Character
@@ -3617,63 +3644,49 @@ spawn(function()
     end
 end)
 local ToggleNextIsland = Tabs.Raid:AddToggle("ToggleNextIsland", {
-    Title="Fully Attack + Next Island",
+    Title="Auto Kill Mobs",
     Description="",
     Default=false
 })
 ToggleNextIsland:OnChanged(function(Value)
     AutoNextIsland=Value
     if not Value then
-        _G.AutoNear=false
+        _G.AutoNextIsland=false
     end
 end)
 Options.ToggleNextIsland:SetValue(false)
 spawn(function()
-    local visitedIslands = {}
-    while task.wait() do
-        if AutoNextIsland then
-            pcall(function()
-                local character = game.Players.LocalPlayer.Character
-                if character and character:FindFirstChild("HumanoidRootPart") then
-                    local locations = game:GetService("Workspace")["_WorldOrigin"].Locations
-                    local pos = character.HumanoidRootPart.Position
-                    if (pos-Vector3.new(-6438.73535, 250.645355,-4501.50684)).Magnitude<1 or
-                       (pos-Vector3.new(-5017.40869, 314.844055,-2823.0127)).Magnitude<1 then
-                        visitedIslands={}  
-                    end
-                    if locations:FindFirstChild("Island 1") then
-                        _G.AutoNear=true
-                    end
-                    if locations:FindFirstChild("Island 2") and not visitedIslands["Island 2"] then
-                        Tween(locations:FindFirstChild("Island 2").CFrame)
-                        visitedIslands["Island 2"]=true
-                        AutoNextIsland=false
-                        wait()
-                        AutoNextIsland=true
-                    elseif locations:FindFirstChild("Island 3") and not visitedIslands["Island 3"] then
-                        Tween(locations:FindFirstChild("Island 3").CFrame)
-                        visitedIslands["Island 3"]=true
-                        AutoNextIsland=false
-                        wait()
-                        AutoNextIsland=true
-                    elseif locations:FindFirstChild("Island 4") and not visitedIslands["Island 4"] then
-                        Tween(locations:FindFirstChild("Island 4").CFrame)
-                        visitedIslands["Island 4"]=true
-                        AutoNextIsland=false
-                        wait()
-                        AutoNextIsland=true
-                    elseif locations:FindFirstChild("Island 5") and not visitedIslands["Island 5"] then
-                        Tween(locations:FindFirstChild("Island 5").CFrame)
-                        visitedIslands["Island 5"]=true
-                        AutoNextIsland=false
-                        wait()
-                        AutoNextIsland=true
-                    end
-                end
-            end)
+        while wait(.1) do
+        if _G.AutoNear then
+        pcall(function()
+          for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
+          if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+          if v.Name then
+          if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 5000 then
+          repeat wait(_G.Fast_Delay)
+          AttackNoCoolDown()
+          bringmob=true
+          AutoHaki()
+       
+          Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
+          v.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+          v.HumanoidRootPart.Transparency = 1
+          v.Humanoid.JumpPower = 0
+          v.Humanoid.WalkSpeed = 0
+          v.HumanoidRootPart.CanCollide = false
+          FarmPos = v.HumanoidRootPart.CFrame
+          MonFarm = v.Name
+          --Click
+          until not _G.AutoNextIsland or not v.Parent or v.Humanoid.Health <= 0 or not game.Workspace.Enemies:FindFirstChild(v.Name)
+          bringmob = false
         end
-    end
-end)
+          end
+          end
+          end
+          end)
+        end
+        end
+      end)
 local ToggleAwake = Tabs.Raid:AddToggle("ToggleAwake", {Title="Auto Awake",Description="", Default=false })
 ToggleAwake:OnChanged(function(Value)
     AutoAwakenAbilities=Value
@@ -3951,30 +3964,3 @@ if _G.FastAttack then
     end)()
 end
 
-
-local foldername = "GreenZ Hub"
-local filename = foldername.."/Setting.json"
-function saveSettings()
-    local HttpService = game:GetService("HttpService")
-    local json = HttpService:JSONEncode(_G)
-    if true then
-        if isfolder(foldername) then
-            if isfile(filename) then
-                writefile(filename, json)
-            else
-                writefile(filename, json)
-            end
-        else
-            makefolder(foldername)
-        end
-    end
-end
-
-function loadSettings()
-    local HttpService = game:GetService("HttpService")
-    if isfolder(foldername) then
-        if isfile(filename) then
-            _G = HttpService:JSONDecode(readfile(filename))
-        end
-    end
-end
