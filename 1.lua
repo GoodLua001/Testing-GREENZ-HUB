@@ -3657,7 +3657,7 @@ end)
 Options.ToggleNextIsland:SetValue(false)
 spawn(function()
         while wait(.1) do
-        if _G.AutoNear then
+        if _G.AutoNextIsland then
         pcall(function()
           for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
           if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
