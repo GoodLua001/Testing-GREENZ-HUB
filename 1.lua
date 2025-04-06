@@ -1,3 +1,231 @@
+local GreenZHub = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local TextLabel = Instance.new("TextLabel")
+local TextBox = Instance.new("TextBox")
+local UIStroke = Instance.new("UIStroke")
+local TextBox_UICorner = Instance.new("UICorner")
+local CopyKey = Instance.new("TextButton")
+local CopyKey_UIStroke = Instance.new("UIStroke")
+local Sub = Instance.new("TextButton")
+local Sub_UIStroke = Instance.new("UIStroke")
+local Main_UICorner = Instance.new("UICorner")
+GreenZHub.Name = "GreenZ Hub"
+GreenZHub.Parent = game.CoreGui
+GreenZHub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Main.Name = "Main"
+Main.Parent = GreenZHub
+Main.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
+Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.255818635, 0, 0.215220392, 0)
+Main.Size = UDim2.new(0, 350, 0, 200)
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(117, 117, 117)), ColorSequenceKeypoint.new(0.67, Color3.fromRGB(200, 200, 200)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
+UIGradient.Parent = Main
+TextLabel.Parent = Main
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.0399999991, 0, 0.0549999997, 0)
+TextLabel.Size = UDim2.new(0, 325, 0, 50)
+TextLabel.Font = Enum.Font.Unknown
+TextLabel.Text = "GreenZ Hub"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 25.000
+TextLabel.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextStrokeTransparency = 2.000
+TextLabel.TextWrapped = true
+TextBox.Parent = Main
+TextBox.BackgroundColor3 = Color3.fromRGB(67, 67, 67)
+TextBox.BackgroundTransparency = 0.500
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.ClipsDescendants = true
+TextBox.Position = UDim2.new(0.0571428575, 0, 0.305000007, 0)
+TextBox.Size = UDim2.new(0, 310, 0, 50)
+TextBox.Font = Enum.Font.Highway
+TextBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
+TextBox.PlaceholderText = "Paste Your Key ..."
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 14.000
+UIStroke.Color = Color3.fromRGB(30, 30, 30)
+UIStroke.Parent = TextBox
+UIStroke.Thickness = 2.000
+TextBox_UICorner.Name = "TextBox_UICorner"
+TextBox_UICorner.Parent = TextBox
+CopyKey.Name = "CopyKey"
+CopyKey.Parent = Main
+CopyKey.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CopyKey.BackgroundTransparency = 0.900
+CopyKey.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CopyKey.BorderSizePixel = 0
+CopyKey.Position = UDim2.new(0.0571428575, 0, 0.735000014, 0)
+CopyKey.Size = UDim2.new(0, 120, 0, 35)
+CopyKey.Font = Enum.Font.Gotham
+CopyKey.Text = "Copy Link Get Key"
+CopyKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopyKey.TextSize = 14.000
+CopyKey_UIStroke.Name = "CopyKey_UIStroke"
+CopyKey_UIStroke.Parent = CopyKey
+CopyKey.MouseButton1Click:Connect(function()
+    setclipboard("https://link4sub.com/OVD5")
+end)    
+Sub.Name = "Sub"
+Sub.Parent = Main
+Sub.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Sub.BackgroundTransparency = 0.900
+Sub.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Sub.BorderSizePixel = 0
+Sub.Position = UDim2.new(0.600000024, 0, 0.735000014, 0)
+Sub.Size = UDim2.new(0, 120, 0, 35)
+Sub.Font = Enum.Font.Gotham
+Sub.Text = "Submit"
+Sub.TextColor3 = Color3.fromRGB(255, 255, 255)
+Sub.TextSize = 14.000
+Sub_UIStroke.Name = "Sub_UIStroke"
+Sub_UIStroke.Parent = Sub
+Main_UICorner.Name = "Main_UICorner"
+Main_UICorner.Parent = Main
+
+local foldername = "GreenZ Hub"
+local filename = "Keysystem.json"
+ 
+function saveSettings()
+    local HttpService = game:GetService("HttpService")
+    local json = HttpService:JSONEncode(_G)
+    if (writefile) then
+        if isfolder(foldername) then
+            if isfile(filename) then
+                writefile(filename, json)
+            else
+                writefile(filename, json)
+            end
+        else
+            writefile(filename, json)
+        end
+    end
+end
+
+function loadSettings()
+    local HttpService = game:GetService("HttpService")
+    if isfile(filename) then
+        _G = HttpService:JSONDecode(readfile(filename))
+    end
+end
+
+loadSettings()
+
+function SendWebhook()
+    local Webhook = ""
+    local data = {
+    ["embeds"] = {
+    ["avatar_url"] = "https://images-ext-1.discordapp.net/external/QJV80NQZayT8R-tZ_OmYlIjYoeXnTA0s1K1BroiyiHw/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1279018379449073736/a_c460b4314da364d29c05f485f7b430b9.gif",
+    {
+        ["title"] = "**Main Script GreenZ Hub**",
+        ["url"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
+        ["description"] = "Players Execute Success Loading Key System",
+        ["color"] = tonumber(0000E6),
+        ["type"] = "rich",
+        ["fields"] =  {
+            {
+                ["name"] = "Username",
+                ["value"] = game.Players.LocalPlayer.Name,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "Display Name",
+                ["value"] = game.Players.LocalPlayer.DisplayName,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "HWID",
+                ["value"] = tostring(game:GetService("RbxAnalyticsService"):GetClientId()),
+                ["inline"] = false
+            },
+            {
+                ["name"] = "6fcd87341616dd38ce08f6d97",
+                ["value"] = _G.Key1,
+                ["inline"] = false
+            }
+        },
+        ["thumbnail"] = {
+            ["url"] = "https://images-ext-1.discordapp.net/external/QJV80NQZayT8R-tZ_OmYlIjYoeXnTA0s1K1BroiyiHw/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1279018379449073736/a_c460b4314da364d29c05f485f7b430b9.gif",
+            },
+        ["footer"] = {
+            ["text"] = os.date("%A".." // ".."%d".." ".."%B".." ".."%Y".." // ".."%X")
+        }
+    }
+    },
+    }
+    local newdata = game:GetService("HttpService"):JSONEncode(data)
+    local headers = {["content-type"] = "application/json"}
+    request = http_request or request or HttpPost or syn.request
+    local abcdef = {Url = Webhook, Body = newdata, Method = "POST", Headers = headers}
+    request(abcdef)
+end
+
+   getgenv().Key = "Async"
+
+if _G.Key1 == getgenv().Key then
+    print("Your Hwid :",game:GetService("RbxAnalyticsService"):GetClientId(),"Your Key :",_G.Key1)
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextBox.Text = ""
+    TextBox.Text = "Checking."
+    wait(.2)
+    TextBox.Text = "Checking.."
+    wait(.2)
+    TextBox.Text = "Checking..."
+    wait(.2)
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 0)
+    TextBox.Text = "Success Key !"
+    game.TweenService:Create(Main, TweenInfo.new(5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut),
+    {
+        Position = UDim2.new(500, 0, 0, 0)}
+):Play()
+    wait(.3)
+    game.CoreGui.GreenZHub:Destroy()
+    SendWebhook()
+end
+    Sub.MouseButton1Click:Connect(function()
+	local KeyInput = TextBox.Text
+	local CorrectKey = getgenv().Key
+	if KeyInput == CorrectKey then
+        _G.Key1 = CorrectKey
+        saveSettings()
+        SendWebhook()
+        TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TextBox.Text = ""
+		TextBox.Text = "Checking."
+		wait(.2)
+		TextBox.Text = "Checking.."
+		wait(.2)
+		TextBox.Text = "Checking..."
+		wait(.2)
+		TextBox.TextColor3 = Color3.fromRGB(255, 255, 0)
+		TextBox.Text = "Success Key !"
+        game.TweenService:Create(Main, TweenInfo.new(5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut),
+        {
+            Position = UDim2.new(500, 0, 0, 0)}
+    ):Play()
+        wait(.3)
+		game.CoreGui.GreenZHub:Destroy()
+	else
+		TextBox.Text = "Checking."
+		wait(.1)
+		TextBox.Text = "Checking.."
+		wait(.1)
+		TextBox.Text = "Checking..."
+		wait(.1)
+		TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
+		TextBox.Text = "Incorrect Key !"
+		wait(0.5)
+		TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+		TextBox.Text = "Type Key Here ..."
+	end
+end)
+
 spawn(function()
     while wait() do
         local function blockPrints()
@@ -3571,7 +3799,7 @@ spawn(function()
     end)
 end)
 Tabs.Stack:AddButton({
-    Title="Hop RipIndra",
+    Title="Hop RipIndra(Api Offline)",
     Description="",
     Callback=function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/GoodLua001/Api-All/refs/heads/main/ripindra.lua"))()
@@ -3656,37 +3884,33 @@ ToggleNextIsland:OnChanged(function(Value)
 end)
 Options.ToggleNextIsland:SetValue(false)
 spawn(function()
-        while wait(.1) do
-        if _G.AutoNextIsland then
-        pcall(function()
-          for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
-          if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-          if v.Name then
-          if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 5000 then
-          repeat wait(_G.Fast_Delay)
-          AttackNoCoolDown()
-          bringmob=true
-          AutoHaki()
-       
-          Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
-          v.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
-          v.HumanoidRootPart.Transparency = 1
-          v.Humanoid.JumpPower = 0
-          v.Humanoid.WalkSpeed = 0
-          v.HumanoidRootPart.CanCollide = false
-          FarmPos = v.HumanoidRootPart.CFrame
-          MonFarm = v.Name
-          --Click
-          until not _G.AutoNextIsland or not v.Parent or v.Humanoid.Health <= 0 or not game.Workspace.Enemies:FindFirstChild(v.Name)
-          bringmob = false
+    while wait() do
+        if _G.NextIsland then
+            pcall(function()
+                for i, v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if v.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 5000 then
+                            repeat wait(_G.Fast_Delay)                               
+                                    AutoHaki()
+                                    bringmob = true
+                                    EquipTool(SelectWeapon)
+                                    Tween(v.HumanoidRootPart.CFrame * Pos)
+                                    v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                    v.HumanoidRootPart.Transparency = 1
+                                    v.Humanoid.JumpPower = 0
+                                    v.Humanoid.WalkSpeed = 0
+                                    v.HumanoidRootPart.CanCollide = false
+                                    FarmPos = v.HumanoidRootPart.CFrame
+                                    MonFarm = v.Name
+                                    until not _G.NextIsland or not v.Parent or v.Humanoid.Health <= 0 or not game.Workspace.Enemies:FindFirstChild(v.Name)
+                            bringmob = false
+                        end
+                    end
+                end
+            end)
         end
-          end
-          end
-          end
-          end)
-        end
-        end
-      end)
+    end
+end)
 local ToggleAwake = Tabs.Raid:AddToggle("ToggleAwake", {Title="Auto Awake",Description="", Default=false })
 ToggleAwake:OnChanged(function(Value)
     AutoAwakenAbilities=Value
