@@ -3187,6 +3187,59 @@ spawn(function()
     end
     end)
 local Volcano = Tabs.Vocalno:AddSection("Tab Volcano")
+local seatHistory = {}
+local boatList = {"Beast Hunter", "Sleigh", "Miracle", "The Sentinel", "Guardian", "Lantern", "Dinghy", "PirateSloop", "PirateBrigade", "PirateGrandBrigade", "MarineGrandBrigade", "MarineBrigade", "MarineSloop"} 
+local DropdownBoat = Tabs.Vocalno:AddDropdown("DropdownBoat", {
+    Title="Select Boat To Buy",
+    Description="",
+    Values=boatList,
+    Multi=false,
+    Default=1,
+})
+DropdownBoat:SetValue(selectedBoat)
+DropdownBoat:OnChanged(function(Value)
+    selectedBoat=Value
+end)
+local function buyBoat(boatName)
+    local args = {
+        [1]="BuyBoat",
+        [2]=boatName
+    }
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    task.delay(2, function()
+        for _, boat in pairs(Workspace.Boats:GetChildren()) do
+            if boat:IsA("Model") and boat.Name==boatName then
+                local seat = boat:FindFirstChild("VehicleSeat")
+                if seat and not seat.Occupant then
+                    seatHistory[boatName]=seat
+                end
+            end
+        end
+    end)
+end
+local function tpToMyBoat()
+    for boatName, seat in pairs(seatHistory) do
+        if seat and seat.Parent and seat.Name=="VehicleSeat" and not seat.Occupant then
+            Tween2(seat.CFrame)
+        end
+    end
+end
+game:GetService("RunService").RenderStepped:Connect(function()
+    for boatName, seat in pairs(seatHistory) do
+        if seat and seat.Parent and seat.Name=="VehicleSeat" and not seat.Occupant then
+            seatHistory[boatName]=seat
+        end
+    end
+end)
+local ToggleBuyBoat = Tabs.Vocalno:AddToggle("ToggleBuyBoat", { 
+    Title="Auto Buy Boat", 
+    Description="", 
+    Default=false
+})
+ToggleBuyBoat:OnChanged(function(Value)
+    buyBoat(selectedBoat)
+end)
+})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3198,6 +3251,7 @@ local nextDistance = 3000
 local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694) 
 local rotationSequence = {80, -50, -80, 50} 
 local currentStep = 1 
+-- Function auto buy boat
 
 -- Code 2: TPP function
 function TPP(CFgo)
