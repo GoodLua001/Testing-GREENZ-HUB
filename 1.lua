@@ -3239,7 +3239,6 @@ local ToggleBuyBoat = Tabs.Vocalno:AddToggle("ToggleBuyBoat", {
 ToggleBuyBoat:OnChanged(function(Value)
     buyBoat(selectedBoat)
 end)
-})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
