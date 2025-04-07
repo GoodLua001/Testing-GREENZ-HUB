@@ -1,231 +1,3 @@
-local GreenZHub = Instance.new("ScreenGui")
-local Main = Instance.new("Frame")
-local UIGradient = Instance.new("UIGradient")
-local TextLabel = Instance.new("TextLabel")
-local TextBox = Instance.new("TextBox")
-local UIStroke = Instance.new("UIStroke")
-local TextBox_UICorner = Instance.new("UICorner")
-local CopyKey = Instance.new("TextButton")
-local CopyKey_UIStroke = Instance.new("UIStroke")
-local Sub = Instance.new("TextButton")
-local Sub_UIStroke = Instance.new("UIStroke")
-local Main_UICorner = Instance.new("UICorner")
-GreenZHub.Name = "GreenZ Hub"
-GreenZHub.Parent = game.CoreGui
-GreenZHub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Main.Name = "Main"
-Main.Parent = GreenZHub
-Main.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0.255818635, 0, 0.215220392, 0)
-Main.Size = UDim2.new(0, 350, 0, 200)
-UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(117, 117, 117)), ColorSequenceKeypoint.new(0.67, Color3.fromRGB(200, 200, 200)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
-UIGradient.Parent = Main
-TextLabel.Parent = Main
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Position = UDim2.new(0.0399999991, 0, 0.0549999997, 0)
-TextLabel.Size = UDim2.new(0, 325, 0, 50)
-TextLabel.Font = Enum.Font.Unknown
-TextLabel.Text = "GreenZ Hub"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextSize = 25.000
-TextLabel.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextStrokeTransparency = 2.000
-TextLabel.TextWrapped = true
-TextBox.Parent = Main
-TextBox.BackgroundColor3 = Color3.fromRGB(67, 67, 67)
-TextBox.BackgroundTransparency = 0.500
-TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextBox.BorderSizePixel = 0
-TextBox.ClipsDescendants = true
-TextBox.Position = UDim2.new(0.0571428575, 0, 0.305000007, 0)
-TextBox.Size = UDim2.new(0, 310, 0, 50)
-TextBox.Font = Enum.Font.Highway
-TextBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
-TextBox.PlaceholderText = "Paste Your Key ..."
-TextBox.Text = ""
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.TextSize = 14.000
-UIStroke.Color = Color3.fromRGB(30, 30, 30)
-UIStroke.Parent = TextBox
-UIStroke.Thickness = 2.000
-TextBox_UICorner.Name = "TextBox_UICorner"
-TextBox_UICorner.Parent = TextBox
-CopyKey.Name = "CopyKey"
-CopyKey.Parent = Main
-CopyKey.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-CopyKey.BackgroundTransparency = 0.900
-CopyKey.BorderColor3 = Color3.fromRGB(0, 0, 0)
-CopyKey.BorderSizePixel = 0
-CopyKey.Position = UDim2.new(0.0571428575, 0, 0.735000014, 0)
-CopyKey.Size = UDim2.new(0, 120, 0, 35)
-CopyKey.Font = Enum.Font.Gotham
-CopyKey.Text = "Copy Link Get Key"
-CopyKey.TextColor3 = Color3.fromRGB(255, 255, 255)
-CopyKey.TextSize = 14.000
-CopyKey_UIStroke.Name = "CopyKey_UIStroke"
-CopyKey_UIStroke.Parent = CopyKey
-CopyKey.MouseButton1Click:Connect(function()
-    setclipboard("https://link4sub.com/OVD5")
-end)    
-Sub.Name = "Sub"
-Sub.Parent = Main
-Sub.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Sub.BackgroundTransparency = 0.900
-Sub.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Sub.BorderSizePixel = 0
-Sub.Position = UDim2.new(0.600000024, 0, 0.735000014, 0)
-Sub.Size = UDim2.new(0, 120, 0, 35)
-Sub.Font = Enum.Font.Gotham
-Sub.Text = "Submit"
-Sub.TextColor3 = Color3.fromRGB(255, 255, 255)
-Sub.TextSize = 14.000
-Sub_UIStroke.Name = "Sub_UIStroke"
-Sub_UIStroke.Parent = Sub
-Main_UICorner.Name = "Main_UICorner"
-Main_UICorner.Parent = Main
-
-local foldername = "GreenZ Hub"
-local filename = "Keysystem.json"
- 
-function saveSettings()
-    local HttpService = game:GetService("HttpService")
-    local json = HttpService:JSONEncode(_G)
-    if (writefile) then
-        if isfolder(foldername) then
-            if isfile(filename) then
-                writefile(filename, json)
-            else
-                writefile(filename, json)
-            end
-        else
-            writefile(filename, json)
-        end
-    end
-end
-
-function loadSettings()
-    local HttpService = game:GetService("HttpService")
-    if isfile(filename) then
-        _G = HttpService:JSONDecode(readfile(filename))
-    end
-end
-
-loadSettings()
-
-function SendWebhook()
-    local Webhook = ""
-    local data = {
-    ["embeds"] = {
-    ["avatar_url"] = "https://images-ext-1.discordapp.net/external/QJV80NQZayT8R-tZ_OmYlIjYoeXnTA0s1K1BroiyiHw/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1279018379449073736/a_c460b4314da364d29c05f485f7b430b9.gif",
-    {
-        ["title"] = "**Main Script GreenZ Hub**",
-        ["url"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
-        ["description"] = "Players Execute Success Loading Key System",
-        ["color"] = tonumber(0000E6),
-        ["type"] = "rich",
-        ["fields"] =  {
-            {
-                ["name"] = "Username",
-                ["value"] = game.Players.LocalPlayer.Name,
-                ["inline"] = true
-            },
-            {
-                ["name"] = "Display Name",
-                ["value"] = game.Players.LocalPlayer.DisplayName,
-                ["inline"] = true
-            },
-            {
-                ["name"] = "HWID",
-                ["value"] = tostring(game:GetService("RbxAnalyticsService"):GetClientId()),
-                ["inline"] = false
-            },
-            {
-                ["name"] = "6fcd87341616dd38ce08f6d97",
-                ["value"] = _G.Key1,
-                ["inline"] = false
-            }
-        },
-        ["thumbnail"] = {
-            ["url"] = "https://images-ext-1.discordapp.net/external/QJV80NQZayT8R-tZ_OmYlIjYoeXnTA0s1K1BroiyiHw/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1279018379449073736/a_c460b4314da364d29c05f485f7b430b9.gif",
-            },
-        ["footer"] = {
-            ["text"] = os.date("%A".." // ".."%d".." ".."%B".." ".."%Y".." // ".."%X")
-        }
-    }
-    },
-    }
-    local newdata = game:GetService("HttpService"):JSONEncode(data)
-    local headers = {["content-type"] = "application/json"}
-    request = http_request or request or HttpPost or syn.request
-    local abcdef = {Url = Webhook, Body = newdata, Method = "POST", Headers = headers}
-    request(abcdef)
-end
-
-   getgenv().Key = "Async"
-
-if _G.Key1 == getgenv().Key then
-    print("Your Hwid :",game:GetService("RbxAnalyticsService"):GetClientId(),"Your Key :",_G.Key1)
-    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextBox.Text = ""
-    TextBox.Text = "Checking."
-    wait(.2)
-    TextBox.Text = "Checking.."
-    wait(.2)
-    TextBox.Text = "Checking..."
-    wait(.2)
-    TextBox.TextColor3 = Color3.fromRGB(255, 255, 0)
-    TextBox.Text = "Success Key !"
-    game.TweenService:Create(Main, TweenInfo.new(5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut),
-    {
-        Position = UDim2.new(500, 0, 0, 0)}
-):Play()
-    wait(.3)
-    game.CoreGui.GreenZHub:Destroy()
-    SendWebhook()
-end
-    Sub.MouseButton1Click:Connect(function()
-	local KeyInput = TextBox.Text
-	local CorrectKey = getgenv().Key
-	if KeyInput == CorrectKey then
-        _G.Key1 = CorrectKey
-        saveSettings()
-        SendWebhook()
-        TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-		TextBox.Text = ""
-		TextBox.Text = "Checking."
-		wait(.2)
-		TextBox.Text = "Checking.."
-		wait(.2)
-		TextBox.Text = "Checking..."
-		wait(.2)
-		TextBox.TextColor3 = Color3.fromRGB(255, 255, 0)
-		TextBox.Text = "Success Key !"
-        game.TweenService:Create(Main, TweenInfo.new(5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut),
-        {
-            Position = UDim2.new(500, 0, 0, 0)}
-    ):Play()
-        wait(.3)
-		game.CoreGui.GreenZHub:Destroy()
-	else
-		TextBox.Text = "Checking."
-		wait(.1)
-		TextBox.Text = "Checking.."
-		wait(.1)
-		TextBox.Text = "Checking..."
-		wait(.1)
-		TextBox.TextColor3 = Color3.fromRGB(255, 0, 0)
-		TextBox.Text = "Incorrect Key !"
-		wait(0.5)
-		TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
-		TextBox.Text = "Type Key Here ..."
-	end
-end)
-
 spawn(function()
     while wait() do
         local function blockPrints()
@@ -3426,6 +3198,40 @@ local nextDistance = 3000
 local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694) 
 local rotationSequence = {80, -50, -80, 50} 
 local currentStep = 1 
+
+-- Code 2: TPP function
+function TPP(CFgo)
+    if player.Character:WaitForChild("Humanoid").Health <= 0 or not player.Character:FindFirstChild("Humanoid") then
+        if tween then tween:Cancel() end
+        repeat task.wait() until player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0
+        task.wait(7)
+        return
+    end
+    local tween_s = game:GetService("TweenService")
+    local info = TweenInfo.new((player.Character.HumanoidRootPart.Position - CFgo.Position).Magnitude / 325, Enum.EasingStyle.Linear)
+    tween = tween_s:Create(player.Character.HumanoidRootPart, info, {CFrame = CFgo})
+    tween:Play()
+    local tweenfunc = {}
+    function tweenfunc:Stop()
+        tween:Cancel()
+    end
+    return tweenfunc
+end
+-- Code 4: Force un-sit
+if player.Character.Humanoid.Sit == true then
+    player.Character.Humanoid.Sit = false
+end
+
+-- Code 1: Tự động mua thuyền khi gần điểm spawn
+local SelectBoat = "PirateBrigade" -- Hoặc thuyền bạn muốn
+RunService.RenderStepped:Connect(function()
+    local pos = player.Character.HumanoidRootPart.Position
+    if (pos - Vector3.new(-16927, 9, 433)).Magnitude <= 10 then
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyBoat", SelectBoat)
+    end
+end)
+
+-- Boat detection and control
 local function getPlayerBoat()
     for _, boat in pairs(Workspace.Boats:GetChildren()) do
         local seat = boat:FindFirstChild("VehicleSeat")
@@ -3435,50 +3241,54 @@ local function getPlayerBoat()
     end
     return nil
 end
+
 RunService.RenderStepped:Connect(function()
     if not character or not character.PrimaryPart then return end
     local distance = (character.PrimaryPart.Position - npcPosition).Magnitude
-    local distanceInMeters = math.floor(distance / 10)
-    if distanceInMeters >= nextDistance then
+    if math.floor(distance / 10) >= nextDistance then
         local boat = getPlayerBoat()
         if boat and boat.PrimaryPart then
             local angle = rotationSequence[currentStep]
             local newRotation = boat.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(angle), 0)
             boat:SetPrimaryPartCFrame(newRotation)
-            currentStep = currentStep + 1
-            if currentStep > #rotationSequence then
-                currentStep = 1 
-            end
+            currentStep = (currentStep % #rotationSequence) + 1
             nextDistance = nextDistance + 1000
         end
     end
 end)
+
+-- Auto-find volcano toggle
 local seatHistory, isTeleporting, notified = {}, false, false
 local islandsToDelete = {
     Prehistoric = { "ShipwreckIsland", "SandIsland", "TreeIsland", "TinyIsland", "MysticIsland", "KitsuneIsland", "FrozenDimension" },
-    }
+}
+
 local function createToggle(title, toggleKey, islands, islandName, notification)
     local toggle = Tabs.Vocalno:AddToggle(toggleKey, { Title = title, Default = false })
     Options[toggleKey]:SetValue(false)
     toggle:OnChanged(function(value) _G[toggleKey] = value end)
+
     RunService.RenderStepped:Connect(function()
         if not _G[toggleKey] then
             notified = false
             return
         end
+
         local humanoid = character:FindFirstChild("Humanoid")
         if not humanoid then return end
+
         local function tpToMyBoat()
             if isTeleporting then return end
             isTeleporting = true
             for _, seat in pairs(seatHistory) do
                 if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-                    Tween2(seat.CFrame)
+                    TPP(seat.CFrame)
                     break
                 end
             end
             isTeleporting = false
         end
+
         local boatFound, currentBoat = false, nil
         for _, boat in pairs(Workspace.Boats:GetChildren()) do
             local seat = boat:FindFirstChild("VehicleSeat")
@@ -3487,26 +3297,35 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
                     boatFound, currentBoat = true, seat
                     seatHistory[boat.Name] = seat
                 elseif seat.Occupant == nil then
-                    tpToMyBoat()
+                    if not humanoid.Sit then
+                        TPP(boat.VehicleSeat.CFrame * CFrame.new(0, 1, 0))
+                    else
+                        tpToMyBoat()
+                    end
                 end
             end
         end
+
         if not boatFound then return end
+
         currentBoat.MaxSpeed = SetSpeedBoat
         currentBoat.CFrame = CFrame.new(currentBoat.Position) * currentBoat.CFrame.Rotation
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
+
         for _, part in pairs(Workspace.Boats:GetDescendants()) do
             if part:IsA("BasePart") then part.CanCollide = false end
         end
         for _, part in pairs(character:GetDescendants()) do
             if part:IsA("BasePart") then part.CanCollide = false end
         end
+
         for _, island in ipairs(islands) do
             local toDelete = Workspace.Map:FindFirstChild(island)
             if toDelete and toDelete:IsA("Model") then
                 toDelete:Destroy()
             end
         end
+
         local targetIsland = Workspace.Map:FindFirstChild(islandName)
         if targetIsland then
             VirtualInputManager:SendKeyEvent(false, "W", false, game)
@@ -3522,6 +3341,7 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
         end
     end)
 end
+
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
     local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
