@@ -3220,28 +3220,52 @@ local function buyBoat(boatName)
         end
     end)
 end
-
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Workspace = game:GetService("Workspace")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local SetSpeedBoat = 350 
+local nextDistance = 3000 
+local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694) 
+local rotationSequence = {80, -50, -80, 50} 
+local currentStep = 1 
+local function getPlayerBoat()
+    for _, boat in pairs(Workspace.Boats:GetChildren()) do
+        local seat = boat:FindFirstChild("VehicleSeat")
+        if seat and seat.Occupant == character:FindFirstChild("Humanoid") then
+            return boat
+        end
+    end
+    return nil
+end
+RunService.RenderStepped:Connect(function()
+    if not character or not character.PrimaryPart then return end
+    local distance = (character.PrimaryPart.Position - npcPosition).Magnitude
+    local distanceInMeters = math.floor(distance / 10)
+    if distanceInMeters >= nextDistance then
+        local boat = getPlayerBoat()
+        if boat and boat.PrimaryPart then
+            local angle = rotationSequence[currentStep]
+            local newRotation = boat.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(angle), 0)
+            boat:SetPrimaryPartCFrame(newRotation)
+            currentStep = currentStep + 1
+            if currentStep > #rotationSequence then
+                currentStep = 1 
+            end
+            nextDistance = nextDistance + 1000
+        end
+    end
+end)
 local AutoBoatVolcano = Tabs.Vocalno:AddToggle("AutoBoatVolcano", {
     Title = "Auto Find Volcano",
     Description="", 
     Default=false 
 })
-AutoBoatVolcano:OnChanged(function(bool)
-    _G.AutoBoatVolcano = bool
+AutoBoatVolcano:OnChanged(function(Value)
+    _G.AutoBoatVolcano = Value
 end)
-
--- Tween function
-function TweenToPosition(targetCFrame)
-    local tweenService = game:GetService("TweenService")
-    local tweenInfo = TweenInfo.new(
-        (player.Character.HumanoidRootPart.Position - targetCFrame.Position).Magnitude / 325, -- time based on distance
-        Enum.EasingStyle.Linear,
-        Enum.EasingDirection.Out
-    )
-    local tween = tweenService:Create(player.Character.HumanoidRootPart, tweenInfo, {CFrame = targetCFrame})
-    tween:Play()
-end
-
 RunService.RenderStepped:Connect(function()
     if not _G.AutoBoatVolcano then
         notified = false
@@ -3251,11 +3275,9 @@ RunService.RenderStepped:Connect(function()
     local humanoid = character:FindFirstChild("Humanoid")
     if not humanoid then return end
 
-    -- Mua thuyền nếu chưa có
     if not hasBoughtBoat then
-        -- Tween đến vị trí trước khi mua thuyền
-        TweenToPosition(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
-        task.wait(5)  -- Đợi một chút để thuyền có thể được mua sau khi tween xong
+        Tween(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+        task.wait(5)  
         buyBoat(selectedBoat)
         return
     end
@@ -3324,7 +3346,6 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-
 createToggle("Auto Find Volcano", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!")
     local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
