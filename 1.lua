@@ -3141,8 +3141,8 @@ task.spawn(function()
     end
 end)
 local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
-    Title = "Bring Mob (Optimized)",
-    Description = "Gom tối đa 2 quái và tránh lỗi quái ảo",
+    Title = "Bring Mob",
+    Description = "",
     Default = true
 })
 ToggleBringMob:OnChanged(function(Value)
@@ -3150,27 +3150,44 @@ ToggleBringMob:OnChanged(function(Value)
 end)
 Options.ToggleBringMob:SetValue(true)
 
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
-RunService.Heartbeat:Connect(function()
-    if not _G.BringMob then return end
-    local character = player.Character
-    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-
-    local root = character.HumanoidRootPart
-    local mobCount = 0
-
-    for _, mob in pairs(workspace.Enemies:GetChildren()) do
-        if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
-            if (mob.HumanoidRootPart.Position - root.Position).Magnitude < 150 then
-                mob.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                mob.HumanoidRootPart.CFrame = root.CFrame * CFrame.new(5 * mobCount, 0, -5)
-                mobCount += 1
-                if mobCount >= 2 then break end
+spawn(function()
+    while wait() do
+        pcall(function()
+            for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                if _G.BringMob and bringmob then
+                    if v.Name == MonFarm and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                        if v.Name == "Factory Staff" then
+                            if (v.HumanoidRootPart.Position - FarmPos.Position).Magnitude <= 3 then
+                                v.Head.CanCollide = false
+                                v.HumanoidRootPart.CanCollide = false
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                v.HumanoidRootPart.CFrame = FarmPos
+                                if v.Humanoid:FindFirstChild("Animator") then
+                                    v.Humanoid.Animator:Destroy()
+                                end
+                                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                            end
+                        elseif v.Name == MonFarm then
+                            if (v.HumanoidRootPart.Position - FarmPos.Position).Magnitude <= 3 then
+                                v.HumanoidRootPart.CFrame = FarmPos
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                v.HumanoidRootPart.Transparency = 1
+                                v.Humanoid.JumpPower = 0
+                                v.Humanoid.WalkSpeed = 0
+                                if v.Humanoid:FindFirstChild("Animator") then
+                                    v.Humanoid.Animator:Destroy()
+                                end
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Head.CanCollide = false
+                                v.Humanoid:ChangeState(11)
+                                v.Humanoid:ChangeState(14)
+                                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                            end
+                        end
+                    end
+                end
             end
-        end
+        end)
     end
 end)
 local Volcano = Tabs.Vocalno:AddSection("Tab Volcano")
