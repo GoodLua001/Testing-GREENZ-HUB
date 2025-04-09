@@ -2102,22 +2102,128 @@ for i,v in pairs(game:GetService("Workspace").Map.MysticIsland:GetChildren()) do
     end)
 end
 end
-function Tween2(KG)
-    local Distance = (KG.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-    local Speed = 350
-    local tweenInfo = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
-    local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, tweenInfo, {
-        CFrame = KG
-    })
+local baylen = nil
+local getgenv = getgenv or function() return _G end
+if not getgenv().TweenSpeed then
+    getgenv().TweenSpeed = 350 -- Giá trị mặc định nếu chưa được thiết lập
+end
+local Dodge = CFrame.new(0, 30, 0) -- Khởi tạo giá trị mặc định
+
+-- Hàm WaitHRP - chờ và trả về HumanoidRootPart của người chơi
+local function WaitHRP(player)
+    if not player.Character then
+        player.CharacterAdded:Wait()
+    end
+    return player.Character:WaitForChild("HumanoidRootPart")
+end
+
+-- Hàm Tween2 đã được sửa lỗi
+function Tween2(Pos, KG)
+    local player = game.Players.LocalPlayer
+    if not player.Character then return end
+    if not player.Character:FindFirstChild("Humanoid") then return end
+    if player.Character.Humanoid.Health <= 0 then return end
+    if not player.Character:FindFirstChild("HumanoidRootPart") then return end
+    
+    -- Kiểm tra Pos
+    if not Pos then return end
+    
+    local Distance = (Pos.Position - player.Character.HumanoidRootPart.Position).Magnitude
+    player.Character:WaitForChild("HumanoidRootPart", 9)
+    player.Character:WaitForChild("Head", 9)
+
+    local v13 = player.Character.HumanoidRootPart
+    if not v13:FindFirstChild("Hold") then
+        local Hold = Instance.new("BodyVelocity", v13)
+        Hold.Name = "Hold"
+        Hold.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+        Hold.Velocity = Vector3.new(0, 0, 0)
+    else
+        v13:FindFirstChild("Hold"):Destroy()
+    end
+    
+    local PartTele
+    if not player.Character:FindFirstChild("PartTele") then
+        PartTele = Instance.new("Part", player.Character) -- Create part
+        PartTele.Size = Vector3.new(10, 1, 10)
+        PartTele.Name = "PartTele"
+        PartTele.Anchored = true
+        PartTele.Transparency = 1
+        PartTele.CanCollide = false
+        PartTele.CFrame = WaitHRP(player).CFrame 
+        PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+            task.wait(0.01)
+            local hrp = WaitHRP(player)
+            if hrp then
+                hrp.CFrame = PartTele.CFrame
+            end
+        end)
+    else
+        PartTele = player.Character.PartTele
+    end
+    
+    if baylen then
+        baylen:Cancel()
+    end
+    
+    baylen = game:GetService("TweenService"):Create(PartTele, TweenInfo.new(Distance / getgenv().TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
+    baylen:Play()
+end
+
+-- Hàm TweenBoat giữ nguyên
+function TweenBoat(CFgo)
+    local tween_s = game:service("TweenService")
+    local info = TweenInfo.new((game:GetService("Workspace").Boats.PirateBrigade.VehicleSeat.CFrame.Position - CFgo.Position).Magnitude/300, Enum.EasingStyle.Linear)
+    local tween = tween_s:Create(game:GetService("Workspace").Boats.PirateBrigade.VehicleSeat, info, {CFrame = CFgo})
     tween:Play()
-    if _G.StopTween2 then
+    
+    local tweenfunc = {}
+    function tweenfunc:Stop()
         tween:Cancel()
     end
-    _G.Clip2 = true
-    wait(Distance / Speed)
-    _G.Clip2 = false
+    return tweenfunc
 end
-function BKP(Point)
+
+-- Khởi tạo biến a
+local a = 1
+
+-- Spawn đầu tiên - cập nhật Dodge dựa trên giá trị a
+spawn(function()
+    while wait() do
+        if a == 1 then
+            Dodge = CFrame.new(0, 30, 15)
+        elseif a == 2 then
+            Dodge = CFrame.new(0, 30, -30)
+        elseif a == 3 then
+            Dodge = CFrame.new(30, 30, 0)
+        elseif a == 4 then
+            Dodge = CFrame.new(0, 30, 30) -- Đã sửa tên biến PDodgeos thành Dodge
+        elseif a == 5 then
+            Dodge = CFrame.new(-30, 30, 0)
+        elseif a == 6 then
+            Dodge = CFrame.new(0, 30, 30)
+        end
+    end
+end)
+
+-- Spawn thứ hai - thay đổi giá trị a theo thời gian
+spawn(function()
+    while wait() do
+        a = 1
+        wait(0.5)
+        a = 2
+        wait(0.5)
+        a = 3
+        wait(0.5)
+        a = 4
+        wait(0.5)
+        a = 5
+        wait(0.5)
+        a = 6 -- Thêm a = 6 cho khớp với spawn đầu tiên
+        wait(0.5)
+    end
+end)
+  function BKP(Point)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
     task.wait()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
@@ -4049,4 +4155,3 @@ if _G.FastAttack then
         return FastAttack
     end)()
 end
-
