@@ -3294,7 +3294,7 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
         -- Khi toggle được bật, thực hiện mua thuyền
         if value then
             -- Di chuyển đến điểm mua thuyền
-            Tween(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+            Tween2(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
             task.wait(5)  -- Đợi teleport hoàn thành
             
             -- Mua thuyền trước
