@@ -3204,6 +3204,7 @@ DropdownBoat:SetValue(selectedBoat)
 DropdownBoat:OnChanged(function(Value)
     selectedBoat=Value
 end)
+
 local function buyBoat(boatName)
     local args = {
         [1]="BuyBoat",
@@ -3221,6 +3222,7 @@ local function buyBoat(boatName)
         end
     end)
 end
+
 local function tpToMyBoat()
     for boatName, seat in pairs(seatHistory) do
         if seat and seat.Parent and seat.Name=="VehicleSeat" and not seat.Occupant then
@@ -3228,6 +3230,7 @@ local function tpToMyBoat()
         end
     end
 end
+
 game:GetService("RunService").RenderStepped:Connect(function()
     for boatName, seat in pairs(seatHistory) do
         if seat and seat.Parent and seat.Name=="VehicleSeat" and not seat.Occupant then
@@ -3235,7 +3238,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
         end
     end
 end)
-    hasBoughtBoat = false
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3247,6 +3250,7 @@ local nextDistance = 3000
 local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694) 
 local rotationSequence = {80, -50, -80, 50} 
 local currentStep = 1 
+
 local function getPlayerBoat()
     for _, boat in pairs(Workspace.Boats:GetChildren()) do
         local seat = boat:FindFirstChild("VehicleSeat")
@@ -3256,6 +3260,7 @@ local function getPlayerBoat()
     end
     return nil
 end
+
 RunService.RenderStepped:Connect(function()
     if not character or not character.PrimaryPart then return end
     local distance = (character.PrimaryPart.Position - npcPosition).Magnitude
@@ -3274,30 +3279,49 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-local humanoid = character:FindFirstChild("Humanoid")
-    if not humanoid then return end
-
-    if not hasBoughtBoat then
-        Tween(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
-        task.wait(5)  
-        buyBoat(selectedBoat)
-    end
 
 local seatHistory, isTeleporting, notified = {}, false, false
 local islandsToDelete = {
     Prehistoric = { "ShipwreckIsland", "SandIsland", "TreeIsland", "TinyIsland", "MysticIsland", "KitsuneIsland", "FrozenDimension" },
 }
+
 local function createToggle(title, toggleKey, islands, islandName, notification)
-    local toggle = Tabs.Sea:AddToggle(toggleKey, { Title = title, Default = false })
+    local toggle = Tabs.Vocalno:AddToggle(toggleKey, { Title = title, Default = false })
     Options[toggleKey]:SetValue(false)
-    toggle:OnChanged(function(value) _G[toggleKey] = value end)
+    toggle:OnChanged(function(value) 
+        _G[toggleKey] = value 
+        
+        -- Khi toggle được bật, thực hiện mua thuyền
+        if value then
+            -- Di chuyển đến điểm mua thuyền
+            Tween(CFrame.new(-16915.7422, -60, 510.555969, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+            task.wait(5)  -- Đợi teleport hoàn thành
+            
+            -- Mua thuyền trước
+            buyBoat(selectedBoat)
+            
+            -- Kiểm tra nếu người chơi đang ngồi
+            local humanoid = character:FindFirstChild("Humanoid")
+            if humanoid and humanoid.Sit then
+                humanoid.Sit = false
+                task.wait(0.5)
+            end
+            
+            -- Thử di chuyển đến thuyền sau khi mua
+            task.wait(3)
+            tpToMyBoat()
+        end
+    end)
+    
     RunService.RenderStepped:Connect(function()
         if not _G[toggleKey] then
             notified = false
             return
         end
+        
         local humanoid = character:FindFirstChild("Humanoid")
         if not humanoid then return end
+        
         local function tpToMyBoat()
             if isTeleporting then return end
             isTeleporting = true
@@ -3309,6 +3333,7 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
             end
             isTeleporting = false
         end
+        
         local boatFound, currentBoat = false, nil
         for _, boat in pairs(Workspace.Boats:GetChildren()) do
             local seat = boat:FindFirstChild("VehicleSeat")
@@ -3321,22 +3346,28 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
                 end
             end
         end
+        
         if not boatFound then return end
+        
         currentBoat.MaxSpeed = SetSpeedBoat
         currentBoat.CFrame = CFrame.new(currentBoat.Position) * currentBoat.CFrame.Rotation
         VirtualInputManager:SendKeyEvent(true, "W", false, game)
+        
         for _, part in pairs(Workspace.Boats:GetDescendants()) do
             if part:IsA("BasePart") then part.CanCollide = false end
         end
+        
         for _, part in pairs(character:GetDescendants()) do
             if part:IsA("BasePart") then part.CanCollide = false end
         end
+        
         for _, island in ipairs(islands) do
             local toDelete = Workspace.Map:FindFirstChild(island)
             if toDelete and toDelete:IsA("Model") then
                 toDelete:Destroy()
             end
         end
+        
         local targetIsland = Workspace.Map:FindFirstChild(islandName)
         if targetIsland then
             VirtualInputManager:SendKeyEvent(false, "W", false, game)
@@ -3352,6 +3383,7 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
         end
     end)
 end
+
 createToggle("Auto Find Prehistoric", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!!!")
     local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
