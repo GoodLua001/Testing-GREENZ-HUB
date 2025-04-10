@@ -3982,7 +3982,7 @@ if _G.FastAttack then
         end
 
         local FastAttack = {
-            Distance = 100,
+            Distance = 250,
             attackMobs = true,
             attackPlayers = true,
             Equipped = nil
@@ -4022,7 +4022,7 @@ if _G.FastAttack then
             if #OthersEnemies > 0 then
                 self:Attack(Part1 or Part2, OthersEnemies)
             else
-                task.wait(0)
+                task.wait(0.5)
             end
         end
 
@@ -4031,7 +4031,7 @@ if _G.FastAttack then
             if Equipped and Equipped.ToolTip ~= "Gun" then
                 self:AttackNearest()
             else
-                task.wait(0)
+                task.wait(0.5)
             end
         end
 
