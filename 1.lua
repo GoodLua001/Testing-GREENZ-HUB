@@ -2102,123 +2102,22 @@ for i,v in pairs(game:GetService("Workspace").Map.MysticIsland:GetChildren()) do
     end)
 end
 end
-local v13 = nil
-local getgenv = getgenv or function() return _G end
-if not getgenv().TweenSpeed then
-    getgenv().TweenSpeed = 350 
-end
-local Dodge = CFrame.new(0, 30, 0)
-local function WaitHRP(player)
-    if not player.Character then
-        player.CharacterAdded:Wait()
-    end
-    return player.Character:WaitForChild("HumanoidRootPart")
-end
-
 function Tween2(Pos, KG)
-    local player = game.Players.LocalPlayer
-    if not player.Character then return end
-    if not player.Character:FindFirstChild("Humanoid") then return end
-    if player.Character.Humanoid.Health <= 0 then return end
-    if not player.Character:FindFirstChild("HumanoidRootPart") then return end
-    
-    if not Pos then return end
-    
-    local Distance = (Pos.Position - player.Character.HumanoidRootPart.Position).Magnitude
-    player.Character:WaitForChild("HumanoidRootPart", 9)
-    player.Character:WaitForChild("Head", 9)
-
-    local v13 = player.Character.HumanoidRootPart
-    if not v13:FindFirstChild("Hold") then
-        local Hold = Instance.new("BodyVelocity", v13)
-        Hold.Name = "Hold"
-        Hold.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-        Hold.Velocity = Vector3.new(0, 0, 0)
-    else
-        v13:FindFirstChild("Hold"):Destroy()
-    end
-    
-    local PartTele
-    if not player.Character:FindFirstChild("PartTele") then
-        PartTele = Instance.new("Part", player.Character) -- Create part
-        PartTele.Size = Vector3.new(10, 1, 10)
-        PartTele.Name = "PartTele"
-        PartTele.Anchored = true
-        PartTele.Transparency = 1
-        PartTele.CanCollide = false
-        PartTele.CFrame = WaitHRP(player).CFrame 
-        PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-            task.wait(0.01)
-            local hrp = WaitHRP(player)
-            if hrp then
-                hrp.CFrame = PartTele.CFrame
-            end
-        end)
-    else
-        PartTele = player.Character.PartTele
-    end
-    
-    if v13 then
-        v13:Cancel()
-    end
-    
-    v13 = game:GetService("TweenService"):Create(PartTele, TweenInfo.new(Distance / getgenv().TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
-    v13:Play()
-end
-
-function TweenBoat(CFgo)
-    local tween_s = game:service("TweenService")
-    local info = TweenInfo.new((game:GetService("Workspace").Boats.PirateBrigade.VehicleSeat.CFrame.Position - CFgo.Position).Magnitude/300, Enum.EasingStyle.Linear)
-    local tween = tween_s:Create(game:GetService("Workspace").Boats.PirateBrigade.VehicleSeat, info, {CFrame = CFgo})
+     local Distance = (KG.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+    local Speed = 350
+    local tweenInfo = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
+    local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, tweenInfo, {
+        CFrame = KG
+    })
     tween:Play()
-    
-    local tweenfunc = {}
-    function tweenfunc:Stop()
+    if _G.StopTween2 then
         tween:Cancel()
     end
-    return tweenfunc
+    _G.Clip2 = true
+    wait(Distance / Speed)
+    _G.Clip2 = false
 end
-
--- Khởi tạo biến a
-local a = 1
-
--- Spawn đầu tiên - cập nhật Dodge dựa trên giá trị a
-spawn(function()
-    while wait() do
-        if a == 1 then
-            Dodge = CFrame.new(0, 30, 15)
-        elseif a == 2 then
-            Dodge = CFrame.new(0, 30, -30)
-        elseif a == 3 then
-            Dodge = CFrame.new(30, 30, 0)
-        elseif a == 4 then
-            Dodge = CFrame.new(0, 30, 30) -- Đã sửa tên biến PDodgeos thành Dodge
-        elseif a == 5 then
-            Dodge = CFrame.new(-30, 30, 0)
-        elseif a == 6 then
-            Dodge = CFrame.new(0, 30, 30)
-        end
-    end
-end)
-
--- Spawn thứ hai - thay đổi giá trị a theo thời gian
-spawn(function()
-    while wait() do
-        a = 1
-        wait(0.5)
-        a = 2
-        wait(0.5)
-        a = 3
-        wait(0.5)
-        a = 4
-        wait(0.5)
-        a = 5
-        wait(0.5)
-        a = 6 -- Thêm a = 6 cho khớp với spawn đầu tiên
-        wait(0.5)
-    end
-end)
-  function BKP(Point)
+        function BKP(Point)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
     task.wait()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
@@ -2877,7 +2776,7 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
         _G.AutoLevel=Value
         if Value==false then
             wait()
-            Tween2(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
             wait()
         end
     end)
@@ -2902,7 +2801,7 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
           bringmob=true
           AutoHaki()
           EquipTool(SelectWeapon)
-          Tween2(v.HumanoidRootPart.CFrame*Pos)
+          Tween(v.HumanoidRootPart.CFrame*Pos)
           v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
           v.HumanoidRootPart.Transparency=1
           v.Humanoid.JumpPower=0
@@ -2918,7 +2817,7 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
           for i,v in pairs(game:GetService("Workspace")["_WorldOrigin"].EnemySpawns:GetChildren()) do
           if string.find(v.Name,NameMon) then
           if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-v.Position).Magnitude>=10 then
-            Tween2(v.HumanoidRootPart.CFrame*Pos)
+            Tween(v.HumanoidRootPart.CFrame*Pos)
           end
           saveSettings()
           end
@@ -2937,7 +2836,7 @@ ToggleBone:OnChanged(function(Value)
     _G.AutoBone=Value
     if Value==false then
         wait()
-        Tween2(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+        Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
         wait()
     end
 end)
@@ -2952,7 +2851,7 @@ spawn(function()
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible==false then
-                 Tween2(BoneCFrame)
+                 Tween(BoneCFrame)
                 if (BoneCFrame.Position-game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude<=3 then    
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest","HauntedQuest2",1)
                     end
@@ -2967,7 +2866,7 @@ spawn(function()
                                             AutoHaki()
                                             bringmob=true
                                             EquipTool(SelectWeapon)
-                                            Tween2(v.HumanoidRootPart.CFrame*Pos)
+                                            Tween(v.HumanoidRootPart.CFrame*Pos)
                                             v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
                                             v.HumanoidRootPart.Transparency=1
                                             v.Humanoid.JumpPower=0
@@ -2995,7 +2894,7 @@ spawn(function()
     while wait() do
         if _G.AutoBoneNoQuest then
             pcall(function()
-                Tween2(BoneNoQuest)
+                Tween(BoneNoQuest)
                 if (BoneNoQuest.Position-game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude<=3 then
                 end
                 if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
@@ -3007,7 +2906,7 @@ spawn(function()
                                     AutoHaki()
                                     bringmob=true
                                     EquipTool(SelectWeapon)
-                                    Tween2(v.HumanoidRootPart.CFrame*Pos)
+                                    Tween(v.HumanoidRootPart.CFrame*Pos)
                                     v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
                                     v.HumanoidRootPart.Transparency=1
                                     v.Humanoid.JumpPower=0
@@ -3054,7 +2953,7 @@ ToggleCake:OnChanged(function(Value)
     _G.Cake = Value
     if Value == false then
         wait()
-        Tween2(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+        Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
         wait()
     end
 end)
@@ -3074,13 +2973,13 @@ spawn(function()
                                     v.HumanoidRootPart.CanCollide = false  
                                     v.Humanoid.WalkSpeed = 0  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
-                                    Tween2(v.HumanoidRootPart.CFrame * Pos)  
+                                    Tween(v.HumanoidRootPart.CFrame * Pos)  
                                     AttackNoCoolDown()  
                                 until _G.Cake == false or not v.Parent or v.Humanoid.Health <= 0
                             end    
                         end    
                     else
-                        Tween2(CFrame.new(-2116.40308, 66.0019989, -12270.6396, -0.258864403, 0, 0.965913713, 0, 1, 0, -0.965913713, 0, -0.258864403)) 
+                        Tween(CFrame.new(-2116.40308, 66.0019989, -12270.6396, -0.258864403, 0, 0.965913713, 0, 1, 0, -0.965913713, 0, -0.258864403)) 
                     end
                 else
                     if game.Workspace.Enemies:FindFirstChild("Baking Staff") or game.Workspace.Enemies:FindFirstChild("Head Baker") or game.Workspace.Enemies:FindFirstChild("Cake Guard") or game.Workspace.Enemies:FindFirstChild("Cookie Crafter") then
@@ -3093,14 +2992,14 @@ spawn(function()
                                     bringmob = true  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
                                     POSCAKE = v.HumanoidRootPart.CFrame  
-                                    Tween2(v.HumanoidRootPart.CFrame * Pos)  
+                                    Tween(v.HumanoidRootPart.CFrame * Pos)  
                                     AttackNoCoolDown()  
                                 until _G.Cake == false or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince") or game:GetService("ReplicatedStorage"):FindFirstChild("Dough King") or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
                     else
                         bringmob = false
-                        Tween2(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
+                        Tween(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
                         saveSettings() 
                     end
                 end
@@ -3140,13 +3039,13 @@ spawn(function()
                                     v.HumanoidRootPart.CanCollide = false  
                                     v.Humanoid.WalkSpeed = 0  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
-                                    Tween2(v.HumanoidRootPart.CFrame * Pos)  
+                                    Tween(v.HumanoidRootPart.CFrame * Pos)  
                                     AttackNoCoolDown()  
                                 until _G.Cake == false or not v.Parent or v.Humanoid.Health <= 0
                             end    
                         end    
                     else
-                        Tween2(CFrame.new(-2009.2802734375, 4532.97216796875, -14937.3076171875)) 
+                        Tween(CFrame.new(-2009.2802734375, 4532.97216796875, -14937.3076171875)) 
                     end
                 else
                     if game.Workspace.Enemies:FindFirstChild("Baking Staff") or game.Workspace.Enemies:FindFirstChild("Head Baker") or game.Workspace.Enemies:FindFirstChild("Cake Guard") or game.Workspace.Enemies:FindFirstChild("Cookie Crafter") then
@@ -3159,14 +3058,14 @@ spawn(function()
                                     bringmob = true  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
                                     POSCAKE = v.HumanoidRootPart.CFrame  
-                                    Tween2(v.HumanoidRootPart.CFrame * Pos)  
+                                    Tween(v.HumanoidRootPart.CFrame * Pos)  
                                     AttackNoCoolDown()  
                                 until _G.Cake == false or game:GetService("ReplicatedStorage"):FindFirstChild("Cake Prince") or game:GetService("ReplicatedStorage"):FindFirstChild("Dough King") or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
                     else
                         bringmob = false
-                        Tween2(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375)) 
+                        Tween(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375)) 
                     end
                 end
             end)
@@ -3396,12 +3295,6 @@ local function createToggle(title, toggleKey, islands, islandName, notification)
             -- Di chuyển đến điểm mua thuyền
             Tween2(ChoMuaThuyen)
             task.wait(5)
-                                    v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
-                                    v.HumanoidRootPart.Transparency=1
-                                    v.Humanoid.JumpPower=0
-                                    v.Humanoid.WalkSpeed=0
-                                    v.HumanoidRootPart.CanCollide=false
-            
             -- Mua thuyền trước
             buyBoat(selectedBoat)
             
