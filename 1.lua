@@ -3275,16 +3275,15 @@ AutoFindPrehistoricToggle:OnChanged(
     function(state)
         _G.AutoFindPrehistoric = state
     end)
-  Tween(CFrame.new(-16899.7715, 20.6307602, 486.5047, -0.783248305, -0.182369336, 0.594359815, -1.49011594e-08, 0.956009686, 0.293335468, -0.621709049, 0.229754493, -0.748792946))
+local AvailableSeats = {}
+local IsFindingBoat = false
+local IslandFound = false
+  Tween(CFrame.new(-16875.5195, 4.90899658, 383.290009, 0.999391913, 0, 0.0348687991, 0, 1, 0, -0.0348687991, 0, 0.999391913))
   task.wait(5)
    buyBoat(selectedBoat)
  task.wait(2)
  tpToMyBoat()
  task.wait(1)
-local AvailableSeats = {}
-local IsFindingBoat = false
-local IslandFound = false
-
 RunService.RenderStepped:Connect(
     function()
         if not _G.AutoFindPrehistoric then
