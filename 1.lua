@@ -3275,11 +3275,12 @@ AutoFindPrehistoricToggle:OnChanged(
     function(state)
         _G.AutoFindPrehistoric = state
     end)
-  Tween(CFrame.new(-16918.2188, -60, 510.295532, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+  Tween(CFrame.new(-16899.7715, 20.6307602, 486.5047, -0.783248305, -0.182369336, 0.594359815, -1.49011594e-08, 0.956009686, 0.293335468, -0.621709049, 0.229754493, -0.748792946))
   task.wait(5)
    buyBoat(selectedBoat)
  task.wait(2)
  tpToMyBoat()
+ task.wait(1)
 local AvailableSeats = {}
 local IsFindingBoat = false
 local IslandFound = false
