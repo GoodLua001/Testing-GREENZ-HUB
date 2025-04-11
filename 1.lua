@@ -2145,7 +2145,7 @@ function EquipTool(ToolSe)
    spawn(function()
             while task.wait() do
                 pcall(function()
-                    if _G.AutoEvoRace or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.Tweenfruit or _G.AutoFishCrew or _G.Auto_Saber or _G.AutoShark or _G.Auto_Warden or _G.Auto_RainbowHaki or AutoFarmRace or _G.AutoQuestRace or Auto_Law or AutoTushita or _G.AutoHolyTorch or _G.AutoTerrorshark or _G.farmpiranya or _G.Auto_MusketeerHat or _G.Auto_ObservationV2 or _G.AutoNear or _G.Auto_PoleV1 or _G.Auto_Buddy or _G.Ectoplasm or AutoEvoRace or AutoBartilo or _G.Auto_Canvander or _G.AutoLevel or _G.Auto_DualKatana or Auto_Quest_Yama_3 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3  or _G.Clip2 or _G.Auto_Regoku or _G.AutoBone or _G.AutoBoneNoQuest or _G.AutoBoss or AutoFarmMasDevilFruit or AutoFarmMasGun or AutoHallowSycthe or AutoTushita or _G.Cake or _G.Auto_SkullGuitar or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or AutoFarmRaceQuest or _G.Factory or _G.Auto_Saw or _G.AutoFrozenDimension or _G.AutoKillTrial or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.TeleportToBuyBoat then
+                    if _G.AutoEvoRace or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.Tweenfruit or _G.AutoFishCrew or _G.Auto_Saber or _G.AutoShark or _G.Auto_Warden or _G.Auto_RainbowHaki or AutoFarmRace or _G.AutoQuestRace or Auto_Law or AutoTushita or _G.AutoHolyTorch or _G.AutoTerrorshark or _G.farmpiranya or _G.Auto_MusketeerHat or _G.Auto_ObservationV2 or _G.AutoNear or _G.Auto_PoleV1 or _G.Auto_Buddy or _G.Ectoplasm or AutoEvoRace or AutoBartilo or _G.Auto_Canvander or _G.AutoLevel or _G.Auto_DualKatana or Auto_Quest_Yama_3 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3  or _G.Clip2 or _G.Auto_Regoku or _G.AutoBone or _G.AutoBoneNoQuest or _G.AutoBoss or AutoFarmMasDevilFruit or AutoFarmMasGun or AutoHallowSycthe or AutoTushita or _G.Cake or _G.Auto_SkullGuitar or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or AutoFarmRaceQuest or _G.Factory or _G.Auto_Saw or _G.AutoFrozenDimension or _G.AutoKillTrial or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric then
                         if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                             local Noclip = Instance.new("BodyVelocity")
                             Noclip.Name="BodyClip"
@@ -2162,7 +2162,7 @@ function EquipTool(ToolSe)
 spawn(function()
   pcall(function()
     game:GetService("RunService").Stepped:Connect(function()
-      if _G.AutoEvoRace or _G.Auto_RainbowHaki or _G.Auto_SkullGuitar or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Tweenfruit or _G.Auto_Saber or _G.Auto_PoleV1 or _G.Auto_MusketeerHat or _G.AutoFishCrew or _G.AutoShark or AutoFarmRace or _G.AutoQuestRace or _G.Auto_Warden or Auto_Law or _G.Auto_DualKatana or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3 or AutoTushita or _G.AutoHolyTorch or _G.Auto_Buddy or _G.AutoTerrorshark or _G.farmpiranya or Auto_Quest_Yama_3 or _G.Auto_ObservationV2 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or _G.AutoNear or _G.Ectoplasm or AutoEvoRace or _G.AutoKillTrial or AutoBartilo or AutoFarmMasGun or _G.Auto_Regoku or _G.AutoLevel or _G.Clip2 or _G.AutoBone or _G.Auto_Canvander or _G.AutoBoneNoQuest or _G.AutoBoss or _G.Auto_Saw or AutoFarmMasDevilFruit or AutoHallowSycthe or AutoTushita or _G.Cake or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or _G.Factory or _G.AutoFrozenDimension or AutoFarmRaceQuest or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.TeleportToBuyBoat then
+      if _G.AutoEvoRace or _G.Auto_RainbowHaki or _G.Auto_SkullGuitar or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Tweenfruit or _G.Auto_Saber or _G.Auto_PoleV1 or _G.Auto_MusketeerHat or _G.AutoFishCrew or _G.AutoShark or AutoFarmRace or _G.AutoQuestRace or _G.Auto_Warden or Auto_Law or _G.Auto_DualKatana or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3 or AutoTushita or _G.AutoHolyTorch or _G.Auto_Buddy or _G.AutoTerrorshark or _G.farmpiranya or Auto_Quest_Yama_3 or _G.Auto_ObservationV2 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or _G.AutoNear or _G.Ectoplasm or AutoEvoRace or _G.AutoKillTrial or AutoBartilo or AutoFarmMasGun or _G.Auto_Regoku or _G.AutoLevel or _G.Clip2 or _G.AutoBone or _G.Auto_Canvander or _G.AutoBoneNoQuest or _G.AutoBoss or _G.Auto_Saw or AutoFarmMasDevilFruit or AutoHallowSycthe or AutoTushita or _G.Cake or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or _G.Factory or _G.AutoFrozenDimension or AutoFarmRaceQuest or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric then
       for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
       if v:IsA("BasePart") then
       v.CanCollide=false
@@ -2423,7 +2423,7 @@ end)
 local Mastery = Tabs.Shop:AddSection("Tab Shop")
 local codes = {"KITT_RESET", "Sub2UncleKizaru", "SUB2GAMERROBOT_RESET1", "Sub2Fer999", "Enyu_is_Pro", "JCWK", "StarcodeHEO", "MagicBus", "KittGaming", "Sub2CaptainMaui", "Sub2OfficalNoobie", "TheGreatAce", "Sub2NoobMaster123", "Sub2Daigrock", "Axiore", "StrawHatMaine", "TantaiGaming", "Bluxxy", "SUB2GAMERROBOT_EXP1", "Chandler", "NOMOREHACK", "BANEXPLOIT", "WildDares", "BossBuild", "GetPranked", "EARN_FRUITS", "FIGHT4FRUIT", "NOEXPLOITER", "NOOB2ADMIN", "CODESLIDE", "ADMINHACKED", "ADMINDARES", "fruitconcepts", "krazydares", "TRIPLEABUSE", "SEATROLLING", "24NOADMIN", "REWARDFUN", "NEWTROLL", "fudd10_v2", "Fudd10", "Bignews", "SECRET_ADMIN"}
 Tabs.Shop:AddButton({
-    Title="Nhập Hết",
+    Title="Redeem All Code",
     Description="",
     Callback=function()
         for _, code in ipairs(codes) do
@@ -3237,7 +3237,6 @@ game:GetService("RunService").RenderStepped:Connect(function()
         end
     end
 end)
-local ChoMuaThuyen = Tween(CFrame.new(-16918.2188, -60, 510.295532, 1, 0, 0, 0, 1, 0, 0, 0, 1))
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -3249,140 +3248,142 @@ local nextDistance = 3000
 local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694) 
 local rotationSequence = {80, -50, -80, 50} 
 local currentStep = 1 
-
-local function getPlayerBoat()
-    for _, boat in pairs(Workspace.Boats:GetChildren()) do
-        local seat = boat:FindFirstChild("VehicleSeat")
-        if seat and seat.Occupant == character:FindFirstChild("Humanoid") then
-            return boat
+local SpeedBoatSlider =
+    Tabs.Volcanic:AddSlider(
+    "SliderSpeedBoat",
+    {
+        Title = "Speed Boat",
+        Description = "",
+        Default = SetSpeedBoat,
+        Min = 0,
+        Max = 350,
+        Rounding = 1,
+        Callback = function(value)
+            BoatSpeed = value
         end
-    end
-    return nil
-end
+    })
 
-RunService.RenderStepped:Connect(function()
-    if not character or not character.PrimaryPart then return end
-    local distance = (character.PrimaryPart.Position - npcPosition).Magnitude
-    local distanceInMeters = math.floor(distance / 10)
-    if distanceInMeters >= nextDistance then
-        local boat = getPlayerBoat()
-        if boat and boat.PrimaryPart then
-            local angle = rotationSequence[currentStep]
-            local newRotation = boat.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(angle), 0)
-            boat:SetPrimaryPartCFrame(newRotation)
-            currentStep = currentStep + 1
-            if currentStep > #rotationSequence then
-                currentStep = 1 
-            end
-            nextDistance = nextDistance + 1000
-        end
-    end
-end)
+SpeedBoatSlider:SetValue(BoatSpeed)
 
-local seatHistory, isTeleporting, notified = {}, false, false
-local islandsToDelete = {
-    Prehistoric = { "ShipwreckIsland", "SandIsland", "TreeIsland", "TinyIsland", "MysticIsland", "KitsuneIsland", "FrozenDimension" },
-}
-
-local function createToggle(title, toggleKey, islands, islandName, notification)
-    local toggle = Tabs.Vocalno:AddToggle(toggleKey, { Title = title, Default = false })
-    Options[toggleKey]:SetValue(false)
-    toggle:OnChanged(function(value) 
-        _G[toggleKey] = value 
-        
-        -- Khi toggle được bật, thực hiện mua thuyền
-        if _G.TeleportToBuyBoat then
-            -- Di chuyển đến điểm mua thuyền
-            Tween(ChoMuaThuyen)
-            task.wait(5)
-            -- Mua thuyền trước
-            buyBoat(selectedBoat)
-            
-            -- Kiểm tra nếu người chơi đang ngồi
-            local humanoid = character:FindFirstChild("Humanoid")
-            if humanoid and humanoid.Sit then
-                humanoid.Sit = false
-                task.wait(0.5)
-            end
-            
-            -- Thử di chuyển đến thuyền sau khi mua
-            task.wait(3)
-            tpToMyBoat()
-        end
+local AutoFindPrehistoricToggle = Tabs.Vocalno:AddToggle( "AutoFindPrehistoric", {
+        Title = "Auto Find Volcano",
+        Description = "",
+        Default = false
+    })
+Options.AutoFindPrehistoric:SetValue(false)
+AutoFindPrehistoricToggle:OnChanged(
+    function(state)
+        _G.AutoFindPrehistoric = state
     end)
-    
-    RunService.RenderStepped:Connect(function()
-        if not _G[toggleKey] then
-            notified = false
+  Tween(CFrame.new(-16918.2188, -60, 510.295532, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+  task.wait(5)
+   buyBoat(selectedBoat)
+ task.wait(2)
+ tpToMyBoat()
+local AvailableSeats = {}
+local IsFindingBoat = false
+local IslandFound = false
+
+RunService.RenderStepped:Connect(
+    function()
+        if not _G.AutoFindPrehistoric then
+            IslandFound = false
             return
         end
-        
-        local humanoid = character:FindFirstChild("Humanoid")
-        if not humanoid then return end
-        
-        local function tpToMyBoat()
-            if isTeleporting then return end
-            isTeleporting = true
-            for _, seat in pairs(seatHistory) do
+
+        local LocalPlayer = PlayersService.LocalPlayer
+        local Character = LocalPlayer.Character
+        if not Character or not Character:FindFirstChild("Humanoid") then
+            return
+        end
+
+        local function FindAndMoveToBoat()
+            if IsFindingBoat then
+                return
+            end
+            IsFindingBoat = true
+
+            for _, seat in pairs(AvailableSeats) do
                 if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
                     Tween2(seat.CFrame)
                     break
                 end
             end
-            isTeleporting = false
+
+            IsFindingBoat = false
         end
-        
-        local boatFound, currentBoat = false, nil
+
+        local Humanoid = Character.Humanoid
+        local OnBoat = false
+        local CurrentSeat = nil
+
         for _, boat in pairs(Workspace.Boats:GetChildren()) do
-            local seat = boat:FindFirstChild("VehicleSeat")
-            if seat then
-                if seat.Occupant == humanoid then
-                    boatFound, currentBoat = true, seat
-                    seatHistory[boat.Name] = seat
-                elseif seat.Occupant == nil then
-                    tpToMyBoat()
-                end
+            local Seat = boat:FindFirstChild("VehicleSeat")
+            if Seat and Seat.Occupant == Humanoid then
+                OnBoat = true
+                CurrentSeat = Seat
+                AvailableSeats[boat.Name] = Seat
+            elseif Seat and not Seat.Occupant then
+                FindAndMoveToBoat()
             end
         end
-        
-        if not boatFound then return end
-        
-        currentBoat.MaxSpeed = SetSpeedBoat
-        currentBoat.CFrame = CFrame.new(currentBoat.Position) * currentBoat.CFrame.Rotation
-        VirtualInputManager:SendKeyEvent(true, "W", false, game)
-        
+
+        if not OnBoat then
+            return
+        end
+
+        CurrentSeat.MaxSpeed = BoatSpeed
+        CurrentSeat.CFrame =
+            CFrame.new(Vector3.new(CurrentSeat.Position.X, CurrentSeat.Position.Y, CurrentSeat.Position.Z)) *
+            CurrentSeat.CFrame.Rotation
+        VirtualInput:SendKeyEvent(true, "W", false, game)
+
         for _, part in pairs(Workspace.Boats:GetDescendants()) do
-            if part:IsA("BasePart") then part.CanCollide = false end
-        end
-        
-        for _, part in pairs(character:GetDescendants()) do
-            if part:IsA("BasePart") then part.CanCollide = false end
-        end
-        
-        for _, island in ipairs(islands) do
-            local toDelete = Workspace.Map:FindFirstChild(island)
-            if toDelete and toDelete:IsA("Model") then
-                toDelete:Destroy()
+            if part:IsA("BasePart") then
+                part.CanCollide = false
             end
         end
-        
-        local targetIsland = Workspace.Map:FindFirstChild(islandName)
-        if targetIsland then
-            VirtualInputManager:SendKeyEvent(false, "W", false, game)
-            _G[toggleKey] = false
-            if not notified then
-                Fluent:Notify({
-                    Title = "GreenZ Hub",
-                    Content = notification,
-                    Duration = 10
-                })
-                notified = true
+
+        for _, part in pairs(Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
             end
+        end
+
+        local IslandNames = {
+            "ShipwreckIsland",
+            "SandIsland",
+            "TreeIsland",
+            "TinyIsland",
+            "MysticIsland",
+            "KitsuneIsland",
+            "FrozenDimension"
+        }
+
+        for _, islandName in ipairs(IslandNames) do
+            local Island = Workspace.Map:FindFirstChild(islandName)
+            if Island and Island:IsA("Model") then
+                Island:Destroy()
+            end
+        end
+
+        local PrehistoricIsland = Workspace.Map:FindFirstChild("PrehistoricIsland")
+        if PrehistoricIsland then
+            VirtualInput:SendKeyEvent(false, "W", false, game)
+            _G.AutoFindPrehistoric = false
+
+            if not IslandFound then
+                Fluent:Notify(
+                    {
+                        Title = "Prehistoric Island Spawn",
+                        Content = "Notification",
+                        Duration = 10
+                    })
+                IslandFound = true
+            end
+            return
         end
     end)
-end
-
-createToggle("Auto Find Prehistoric", "AutoFindPrehistoric", islandsToDelete.Prehistoric, "PrehistoricIsland", "Volcano Is Spawner!!!")
     local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
     Content=""
@@ -3652,7 +3653,7 @@ spawn(function()
                         end
                     end
                 else
-                    Tween(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
+                    Tween2(CFrame.new(-5344.822265625, 423.98541259766, -2725.0930175781))
                 end
             end
         end
