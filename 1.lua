@@ -3189,7 +3189,7 @@ spawn(function()
         end)
     end
 end)
-local Volcano = Tabs.Vocalno:AddSection("Tab Volcano")
+local Gay = Tabs.Vocalno:AddSection("Tab Volcano")
 local seatHistory = {}
 local boatList = {"Beast Hunter", "Sleigh", "Miracle", "The Sentinel", "Guardian", "Lantern", "Dinghy", "PirateSloop", "PirateBrigade", "PirateGrandBrigade", "MarineGrandBrigade", "MarineBrigade", "MarineSloop"} 
 local DropdownBoat = Tabs.Vocalno:AddDropdown("DropdownBoat", {
@@ -3249,7 +3249,7 @@ local npcPosition = Vector3.new(-16665.191, 104.596, 1579.694)
 local rotationSequence = {80, -50, -80, 50} 
 local currentStep = 1 
 local SpeedBoatSlider =
-    Tabs.Volcanic:AddSlider(
+    Tabs.Vocalno:AddSlider(
     "SliderSpeedBoat",
     {
         Title = "Speed Boat",
