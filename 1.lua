@@ -3203,25 +3203,6 @@ DropdownBoat:SetValue(selectedBoat)
 DropdownBoat:OnChanged(function(Value)
     selectedBoat=Value
 end)
-
-local function buyBoat(boatName)
-    local args = {
-        [1]="BuyBoat",
-        [2]=boatName
-    }
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-    task.delay(2, function()
-        for _, boat in pairs(Workspace.Boats:GetChildren()) do
-            if boat:IsA("Model") and boat.Name==boatName then
-                local seat = boat:FindFirstChild("VehicleSeat")
-                if seat and not seat.Occupant then
-                    seatHistory[boatName]=seat
-                end
-            end
-        end
-    end)
-end
-
 local function tpToMyBoat()
     for boatName, seat in pairs(seatHistory) do
         if seat and seat.Parent and seat.Name=="VehicleSeat" and not seat.Occupant then
@@ -3275,23 +3256,13 @@ AutoFindPrehistoricToggle:OnChanged(
     function(state)
         _G.AutoFindPrehistoric = state
     end)
+ Tween(CFrame.new(-16927, 9, 433))
+                            if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(-16927, 9, 433)).Magnitude <= 10 then
+                                game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyBoat", selectedBoat)
+                            end
 local AvailableSeats = {}
-local TpAndBuyBoat = false
 local IsFindingBoat = false
 local IslandFound = false
-
-local function GAndBuyBoat()
-    if TpAndBuyBoat then
-        return -- Tránh thực hiện hàm nhiều lần
-    end
-    
-    Tween(CFrame.new(-16875.5195, 4.90899658, 383.290009, 0.999391913, 0, 0.0348687991, 0, 1, 0, -0.0348687991, 0, 0.999391913))
-    task.wait(5)
-    buyBoat(selectedBoat)
-    task.wait(2)
-    tpToMyBoat()
-    TpAndBuyBoat = true
-end
 RunService.RenderStepped:Connect(
     function()
         if not _G.AutoFindPrehistoric then
