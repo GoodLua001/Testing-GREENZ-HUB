@@ -3195,7 +3195,7 @@ local boatList = {"Beast Hunter", "Sleigh", "Miracle", "The Sentinel", "Guardian
 local DropdownBoat = Tabs.Vocalno:AddDropdown("DropdownBoat", {
     Title="Select Boat To Buy",
     Description="",
-    Values=Guardian,
+    Values=boatList,
     Multi=false,
     Default=1,
 })
