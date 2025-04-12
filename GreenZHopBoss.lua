@@ -13,6 +13,7 @@ local Tabs = {
     Main=Window:AddTab({ Title="Main Hop" }),
 }
 local Options = Fluent.Options
+do
 local ScreenGui = Instance.new("ScreenGui")
 local ImageButton = Instance.new("ImageButton")
 local UICorner = Instance.new("UICorner")
@@ -188,7 +189,6 @@ function loadSettings()
         end
     end
 end
-do
 local Gay = Tabs.Information:AddSection("Information Script")
 local Prehistoric = Tabs.Information:AddParagraph({
     Title="Dev Script",
