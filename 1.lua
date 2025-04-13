@@ -3197,7 +3197,6 @@ local TogglePre = Tabs.Vocalno:AddToggle("TogglePre", {
 })
 TogglePre:OnChanged(function(Value)
     _G.AutoFindPrehistoric = Value
-    _G.Settings.FindPre = Value
     saveSettings()
 end)
 
