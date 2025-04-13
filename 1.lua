@@ -3217,7 +3217,7 @@ end)
 local function tpToMyBoat()
     for boatName, seat in pairs(seatHistory) do
         if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-            Tween2(seat.CFrame)
+            Tween(seat.CFrame)
         end
     end
 end
@@ -3273,7 +3273,7 @@ RunService.RenderStepped:Connect(function()
         isTeleporting = true
         for boatName, seat in pairs(seatHistory) do
             if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-                Tween2(seat.CFrame)
+                Tween(seat.CFrame)
                 break
             end
         end
