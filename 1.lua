@@ -2145,7 +2145,7 @@ function EquipTool(ToolSe)
    spawn(function()
             while task.wait() do
                 pcall(function()
-                    if _G.AutoEvoRace or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.Tweenfruit or _G.AutoFishCrew or _G.Auto_Saber or _G.AutoShark or _G.Auto_Warden or _G.Auto_RainbowHaki or AutoFarmRace or _G.AutoQuestRace or Auto_Law or AutoTushita or _G.AutoHolyTorch or _G.AutoTerrorshark or _G.farmpiranya or _G.Auto_MusketeerHat or _G.Auto_ObservationV2 or _G.AutoNear or _G.Auto_PoleV1 or _G.Auto_Buddy or _G.Ectoplasm or AutoEvoRace or AutoBartilo or _G.Auto_Canvander or _G.AutoLevel or _G.Auto_DualKatana or Auto_Quest_Yama_3 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3  or _G.Clip2 or _G.Auto_Regoku or _G.AutoBone or _G.AutoBoneNoQuest or _G.AutoBoss or AutoFarmMasDevilFruit or AutoFarmMasGun or AutoHallowSycthe or AutoTushita or _G.Cake or _G.Auto_SkullGuitar or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or AutoFarmRaceQuest or _G.Factory or _G.Auto_Saw or _G.AutoFrozenDimension or _G.AutoKillTrial or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric then
+                    if _G.AutoEvoRace or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.Tweenfruit or _G.AutoFishCrew or _G.Auto_Saber or _G.AutoShark or _G.Auto_Warden or _G.Auto_RainbowHaki or AutoFarmRace or _G.AutoQuestRace or Auto_Law or AutoTushita or _G.AutoHolyTorch or _G.AutoTerrorshark or _G.farmpiranya or _G.Auto_MusketeerHat or _G.Auto_ObservationV2 or _G.AutoNear or _G.Auto_PoleV1 or _G.Auto_Buddy or _G.Ectoplasm or AutoEvoRace or AutoBartilo or _G.Auto_Canvander or _G.AutoLevel or _G.Auto_DualKatana or Auto_Quest_Yama_3 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3  or _G.Clip2 or _G.Auto_Regoku or _G.AutoBone or _G.AutoBoneNoQuest or _G.AutoBoss or AutoFarmMasDevilFruit or AutoFarmMasGun or AutoHallowSycthe or AutoTushita or _G.Cake or _G.Auto_SkullGuitar or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or AutoFarmRaceQuest or _G.Factory or _G.Auto_Saw or _G.AutoFrozenDimension or _G.AutoKillTrial or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric or _G.Settings.FindPre or _G.BoatPrehis then
                         if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                             local Noclip = Instance.new("BodyVelocity")
                             Noclip.Name="BodyClip"
@@ -2162,7 +2162,7 @@ function EquipTool(ToolSe)
 spawn(function()
   pcall(function()
     game:GetService("RunService").Stepped:Connect(function()
-      if _G.AutoEvoRace or _G.Auto_RainbowHaki or _G.Auto_SkullGuitar or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Tweenfruit or _G.Auto_Saber or _G.Auto_PoleV1 or _G.Auto_MusketeerHat or _G.AutoFishCrew or _G.AutoShark or AutoFarmRace or _G.AutoQuestRace or _G.Auto_Warden or Auto_Law or _G.Auto_DualKatana or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3 or AutoTushita or _G.AutoHolyTorch or _G.Auto_Buddy or _G.AutoTerrorshark or _G.farmpiranya or Auto_Quest_Yama_3 or _G.Auto_ObservationV2 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or _G.AutoNear or _G.Ectoplasm or AutoEvoRace or _G.AutoKillTrial or AutoBartilo or AutoFarmMasGun or _G.Auto_Regoku or _G.AutoLevel or _G.Clip2 or _G.AutoBone or _G.Auto_Canvander or _G.AutoBoneNoQuest or _G.AutoBoss or _G.Auto_Saw or AutoFarmMasDevilFruit or AutoHallowSycthe or AutoTushita or _G.Cake or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or _G.Factory or _G.AutoFrozenDimension or AutoFarmRaceQuest or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric then
+      if _G.AutoEvoRace or _G.Auto_RainbowHaki or _G.Auto_SkullGuitar or _G.CastleRaid or _G.CollectAzure or _G.TweenToKitsune or _G.Auto_Sea3 or _G.Auto_Sea2 or _G.GhostShip or _G.Ship or _G.Auto_Holy_Torch or _G.TeleportPly or _G.Tweenfruit or _G.Auto_Saber or _G.Auto_PoleV1 or _G.Auto_MusketeerHat or _G.AutoFishCrew or _G.AutoShark or AutoFarmRace or _G.AutoQuestRace or _G.Auto_Warden or Auto_Law or _G.Auto_DualKatana or Auto_Quest_Tushita_1 or Auto_Quest_Tushita_2 or Auto_Quest_Tushita_3 or AutoTushita or _G.AutoHolyTorch or _G.Auto_Buddy or _G.AutoTerrorshark or _G.farmpiranya or Auto_Quest_Yama_3 or _G.Auto_ObservationV2 or Auto_Quest_Yama_2 or Auto_Quest_Yama_1 or _G.AutoNear or _G.Ectoplasm or AutoEvoRace or _G.AutoKillTrial or AutoBartilo or AutoFarmMasGun or _G.Auto_Regoku or _G.AutoLevel or _G.Clip2 or _G.AutoBone or _G.Auto_Canvander or _G.AutoBoneNoQuest or _G.AutoBoss or _G.Auto_Saw or AutoFarmMasDevilFruit or AutoHallowSycthe or AutoTushita or _G.Cake or _G.AutoFarmSwan or _G.AutoEliteor or AutoNextIsland or Musketeer or _G.AutoMaterial or _G.Factory or _G.AutoFrozenDimension or AutoFarmRaceQuest or _G.AutoUpgrade or _G.TweenToFrozenDimension or _G.AutoFindPrehistoric or _G.Settings.FindPre or _G.BoatPrehis then
       for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
       if v:IsA("BasePart") then
       v.CanCollide=false
@@ -3215,11 +3215,10 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-
 local function tpToMyBoat()
     for boatName, seat in pairs(seatHistory) do
         if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-            topos(seat.CFrame)
+            Tween2(seat.CFrame)
         end
     end
 end
@@ -3239,7 +3238,7 @@ spawn(function()
                 end
 
                 if not MyBoat then
-                    buyb = TPP(CFrame.new(-16933.3535, -0.591003418, 520.89801))
+                    buyb = Tween(CFrame.new(-16933.3535, -0.591003418, 520.89801))
                     if (LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(-16933.3535, -0.591003418, 520.89801)).Magnitude <= 10 then
                         if buyb then buyb:Stop() end
                         local args = {
@@ -3251,7 +3250,7 @@ spawn(function()
                 elseif MyBoat then
                     local seat = MyBoat:FindFirstChild("VehicleSeat")
                     if seat and LocalPlayer.Character:FindFirstChild("Humanoid").Sit == false then
-                        TPP(seat.CFrame * CFrame.new(0,1,0))
+                        Tween2(seat.CFrame * CFrame.new(0,1,0))
                     end
                 end
             end
@@ -3275,7 +3274,7 @@ RunService.RenderStepped:Connect(function()
         isTeleporting = true
         for boatName, seat in pairs(seatHistory) do
             if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-                topos(seat.CFrame)
+                Tween2(seat.CFrame)
                 break
             end
         end
@@ -3360,35 +3359,6 @@ spawn(function()
             end
         end
     end)
-end)
-local DaiMay = Tabs.Vocalno:AddToggle("DaiMay", {
-    Title = "Teleport Prehistoric Island", 
-    Description = "", 
-    Default = false
-})
-DaiMay:OnChanged(function(Value)
-	_G.TpPrehistoric = v410
-	StopTween(_G.TpPrehistoric)
-end)
-spawn(function()
-	local v411
-	while  not v411 do
-		v411 = game:GetService("Workspace").Map:FindFirstChild("PrehistoricIsland")
-		wait()
-	end
-	while wait() do
-		if _G.TpPrehistoric then
-			local v1558 = game:GetService("Workspace").Map:FindFirstChild("PrehistoricIsland")
-			if v1558 then
-				local v1737 = v1558:FindFirstChild("Core") and v1558.Core:FindFirstChild("PrehistoricRelic") 
-				local v1738 = v1737 and v1737:FindFirstChild("Skull") 
-				if v1738 then
-					Tween2(CFrame.new(v1738.Position))
-					_G.TpPrehistoric = false;
-				end
-			end
-		end
-	end
 end)
 local ToggleDefendVolcano = Tabs.Vocalno:AddToggle("ToggleDefendVolcano", {
     Title = "Defend Volcano", 
