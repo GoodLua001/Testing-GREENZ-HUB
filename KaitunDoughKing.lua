@@ -146,11 +146,11 @@ spawn(function()
                 
                 -- Kiểm tra Workspace
                 for _, model in pairs(game.Workspace:GetChildren()) do
-                    if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
+                    if model:IsA("Model") and (model.Name == getgenv().SelectBoss) then
                         local humanoid = model:FindFirstChild("Humanoid")
                         if humanoid and humanoid.Health > 0 then
                             foundBoss = true
-                            statusText.Text = "Status: Xuất Hiện Boss " .. bossName
+                            statusText.Text = "Status: Xuất Hiện Boss " .. getgenv().SelectBoss
                             statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
                             break
                         end
@@ -160,7 +160,7 @@ spawn(function()
                 -- Kiểm tra ReplicatedStorage
                 if not foundBoss then
                     for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-                        if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
+                        if model:IsA("Model") and (model.Name == getgenv().SelectBoss) then
                             foundBoss = true
                             statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
                             statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1075,7 +1075,6 @@ task.spawn(function()
 
 end)
 getgenv().KaitunBoss = true
-
 spawn(function()
     while wait() do
         if getgenv().KaitunBoss and not BypassTP then
@@ -1096,78 +1095,52 @@ spawn(function()
                         end
                     end
                 else
-                    local boss = game:GetService("ReplicatedStorage"):FindFirstChild(getgenv().SelectBoss)
-                    if boss then
-                        topos(boss.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    else
-                        local apiEndpoint = ""
-                        
-                        if getgenv().SelectBoss == "Dough King" then
-                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Gay"
-                        elseif getgenv().SelectBoss == "rip_indra True Form" then
-                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Rip"
-                        elseif getgenv().SelectBoss == "Darkbeard" then
-                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Dark"
-                        end
-                        
-                        local JobId, TS
-                        
-                        local function scrapeAPI()
-                            local success, response = pcall(function()
-                                return request({
-                                    Url = apiEndpoint,
-                                    Method = "GET"
-                                })
-                            end)
-                        
-                            if success and response.Success then
-                                local data = game.HttpService:JSONDecode(response.Body)
-                        
-                                if data.Amount and data.Amount > 0 and data.JobId then
-                                    local jobIds = {}
-                        
-                                    for _, job in ipairs(data.JobId) do
-                                        for jobId, _ in pairs(job) do
-                                            table.insert(jobIds, jobId)
+                    local SelectBoss = getgenv().SelectBoss  -- Lấy giá trị SelectBoss từ getgenv()
+                    local url = {}
+                    local apiEndpoint = ""
+
+                    -- Lựa chọn API dựa trên SelectBoss
+                    if SelectBoss == "Dough King" then
+                        apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Gay"
+                    elseif SelectBoss == "rip_indra True Form" then
+                        apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Rip"
+                    elseif SelectBoss == "Darkbeard" then
+                        apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Dark"
+                    end
+
+                    -- Thêm apiEndpoint vào url
+                    table.insert(url, apiEndpoint)
+
+                    -- Scrape JobId từ API
+                    local a, b = pcall(function()
+                        for _, v in pairs(url) do
+                            local response = game:HttpGet(v, true)
+                            local data = game:GetService("HttpService"):JSONDecode(response)
+                            if data and data.Amount and data.Amount > 0 and data.JobId then
+                                for _, job in ipairs(data.JobId) do
+                                    for JobId, _ in pairs(job) do
+                                        if JobId and JobId ~= game.JobId then
+                                            return {
+                                                Job = JobId
+                                            }
                                         end
                                     end
-                        
-                                    TS = tick()
-                                    return jobIds
                                 end
                             end
-                        
-                            return "Failed"
                         end
-                        
-                        local jobIds = scrapeAPI()
-                        
-                        if jobIds ~= "Failed" then
-                            spawn(function()
-                                for _, jobId in ipairs(jobIds) do
-                                    if jobId ~= game.JobId then
-                                        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
-                                        wait(2)
-                                    end
-                                end
-                            end)
-                        
-                            spawn(function()
-                                while wait(10) do
-                                    if tick() - TS > 100 then
-                                        jobIds = scrapeAPI()
-                                    end
-                                end
-                            end)
-                        end
+                        return nil
+                    end)
+
+                    if a and b then
+                        -- Nếu tìm thấy jobId hợp lệ, teleport sang server đó
+                        game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
+                        return true
                     end
                 end
             end)
         end
     end
-end)
-                      
-                       function AutoHaki()
+end)                       function AutoHaki()
     if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
     end
