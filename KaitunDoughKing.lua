@@ -1,3 +1,8 @@
+--[[
+getgenv().BossCheck = "Dough King" 
+getgenv().SelectBoss = "Dough King"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/GoodLua001/Testing-GREENZ-HUB/refs/heads/main/KaitunDoughKing.lua"))()
+]]
 local player = game.Players.LocalPlayer
 local ContentProvider = game:GetService("ContentProvider")
 
@@ -130,120 +135,46 @@ spawn(function()
         timeLabel.Text = "Time: " .. hrs .. " Hours " .. mins .. " Minutes " .. secs .. " Seconds"
     end
 end)
+getgenv().GreenZBossCheck = true
 
--- Kiểm tra Dough King
-_G.GreenZDoughKing = Value
 spawn(function()
     while wait(5) do
-        pcall(function()
-            local foundBoss = false
-            
-            -- Kiểm tra Workspace
-            for _, model in pairs(game.Workspace:GetChildren()) do
-                if model:IsA("Model") and (model.Name == "Dough King" or model.Name:find("Dough King")) then
-                    local humanoid = model:FindFirstChild("Humanoid")
-                    if humanoid and humanoid.Health > 0 then
-                        foundBoss = true
-                        statusText.Text = "Status: Xuất Hiện Boss Dough King"
-                        statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
-                        break
+        if getgenv().GreenZBossCheck then
+            pcall(function()
+                local foundBoss = false
+                local bossName = getgenv().BossCheck
+                
+                -- Kiểm tra Workspace
+                for _, model in pairs(game.Workspace:GetChildren()) do
+                    if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
+                        local humanoid = model:FindFirstChild("Humanoid")
+                        if humanoid and humanoid.Health > 0 then
+                            foundBoss = true
+                            statusText.Text = "Status: Xuất Hiện Boss " .. bossName
+                            statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
+                            break
+                        end
                     end
                 end
-            end
-            
-            -- Kiểm tra ReplicatedStorage
-            if not foundBoss then
-                for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-                    if model:IsA("Model") and (model.Name == "Dough King" or model.Name:find("Dough King")) then
-                        foundBoss = true
-                        statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
-                        statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        break
+                
+                -- Kiểm tra ReplicatedStorage
+                if not foundBoss then
+                    for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
+                        if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
+                            foundBoss = true
+                            statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
+                            statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            break
+                        end
                     end
                 end
-            end
-            
-            if not foundBoss then
-                statusText.Text = "Status: Đang tìm server tiếp theo"
-                statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-            end
-        end)
-    end
-end)
-_G.GreenZRipIndra = Value
-spawn(function()
-    while wait(5) do
-        pcall(function()
-            local RipGay = false
-            
-            -- Kiểm tra Workspace
-            for _, model in pairs(game.Workspace:GetChildren()) do
-                if model:IsA("Model") and (model.Name == "rip_indra True Form" or model.Name:find("rip_indra True Form")) then
-                    local humanoid = model:FindFirstChild("Humanoid")
-                    if humanoid and humanoid.Health > 0 then
-                        foundBoss = true
-                        statusText.Text = "Status: Xuất Hiện Boss RipIndra"
-                        statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
-                        break
-                    end
+                
+                if not foundBoss then
+                    statusText.Text = "Status: Đang Tìm Server Tiếp Theo"
+                    statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
                 end
-            end
-            
-            -- Kiểm tra ReplicatedStorage
-            if not RipGay then
-                for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-                    if model:IsA("Model") and (model.Name == "rip_indra True Form" or model.Name:find("rip_indra True Form")) then
-                        foundBoss = true
-                        statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
-                        statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        break
-                    end
-                end
-            end
-            
-            if not RipGay then
-                statusText.Text = "Status: Đang Tìm Server Tiếp Theo"
-                statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-            end
-        end)
-    end
-end)
-_G.GreenZDarkBeard = Value
-spawn(function()
-    while wait(5) do
-        pcall(function()
-            local DarkGay = false
-            
-            -- Kiểm tra Workspace
-            for _, model in pairs(game.Workspace:GetChildren()) do
-                if model:IsA("Model") and (model.Name == "Darkbeard" or model.Name:find("Darkbeard")) then
-                    local humanoid = model:FindFirstChild("Humanoid")
-                    if humanoid and humanoid.Health > 0 then
-                        foundBoss = true
-                        statusText.Text = "Status: Xuất Hiện Boss RipIndra"
-                        statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
-                        break
-                    end
-                end
-            end
-            
-            -- Kiểm tra ReplicatedStorage
-            if not DarkGay then
-                for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-                    if model:IsA("Model") and (model.Name == "Darkbeard" or model.Name:find("Darkbeard")) then
-                        foundBoss = true
-                        statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
-                        statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        break
-                    end
-                end
-            end
-            
-            if not DarkGay then
-                statusText.Text = "Status: Đang Tìm Server Tiếp Theo"
-                statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-            end
-        end)
+            end)
+        end
     end
 end)
 
@@ -604,7 +535,7 @@ spawn(function()
 
         while wait() do
 
-            if _G.KaitunDoughKing or _G.KaitunRipIndra or _G.KaitunDarkBeard then
+            if getgenv().KaitunBoss then
 
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
 
@@ -636,7 +567,7 @@ spawn(function()
 
         game:GetService("RunService").Stepped:Connect(function()
 
-            if  _G.KaitunDoughKing or _G.KaitunRipIndra or _G.KaitunDarkBeard then
+            if getgenv().KaitunBoss then
 
                 for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
 
@@ -1143,18 +1074,16 @@ task.spawn(function()
 	end
 
 end)
+getgenv().KaitunBoss = true
 
-
-
-_G.KaitunDoughKing = Value
 spawn(function()
     while wait() do
-        if _G.KaitunDoughKing and not BypassTP then
+        if getgenv().KaitunBoss and not BypassTP then
             pcall(function()
                 local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Dough King") then
+                if enemies:FindFirstChild(getgenv().SelectBoss) then
                     for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        if v.Name == getgenv().SelectBoss and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                             repeat
                                 task.wait()
                                 AutoHaki()
@@ -1163,229 +1092,75 @@ spawn(function()
                                 v.Humanoid.WalkSpeed = 0
                                 topos(v.HumanoidRootPart.CFrame * Pos)
                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not _G.KaitunDoughKing or not v.Parent or v.Humanoid.Health <= 0
+                            until not getgenv().KaitunBoss or not v.Parent or v.Humanoid.Health <= 0
                         end
                     end
                 else
-                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
-                    if doughKing then
-                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    local boss = game:GetService("ReplicatedStorage"):FindFirstChild(getgenv().SelectBoss)
+                    if boss then
+                        topos(boss.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
                     else
+                        local apiEndpoint = ""
+                        
+                        if getgenv().SelectBoss == "Dough King" then
+                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Gay"
+                        elseif getgenv().SelectBoss == "rip_indra True Form" then
+                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Rip"
+                        elseif getgenv().SelectBoss == "Darkbeard" then
+                            apiEndpoint = "http://greenzapi.serveirc.com:31447/Api/Dark"
+                        end
+                        
                         local JobId, TS
-
-local function scrapeAPI()
-    local success, response = pcall(function()
-        return request({
-            Url = "http://greenzapi.serveirc.com:31447/Api/Gay",
-            Method = "GET"
-        })
-    end)
-
-    if success and response.Success then
-        local data = game.HttpService:JSONDecode(response.Body)
-
-        if data.Amount and data.Amount > 0 and data.JobId then
-            local jobIds = {}
-
-            for _, job in ipairs(data.JobId) do
-                for jobId, _ in pairs(job) do
-                    table.insert(jobIds, jobId)
-                end
-            end
-
-            TS = tick()
-            return jobIds
-        end
-    end
-
-    return "Failed"
-end
-
-local jobIds = scrapeAPI()
-
-if jobIds ~= "Failed" then
-    spawn(function()
-        for _, jobId in ipairs(jobIds) do
-            if jobId ~= game.JobId then
-                game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
-                wait(5)
-            end
-        end
-    end)
-
-    spawn(function()
-        while wait(10) do
-            if tick() - TS > 100 then
-                jobIds = scrapeAPI()
-            end
-        end
-    end)
-end
-
-                    end
-                end
-            end)
-        end
-    end
-end)
-_G.KaitunRipIndra = Value
-spawn(function()
-    while wait() do
-        if _G.KaitunRipIndra and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("rip_indra True Form") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not _G.KaitunRipIndra or not v.Parent or v.Humanoid.Health <= 0
+                        
+                        local function scrapeAPI()
+                            local success, response = pcall(function()
+                                return request({
+                                    Url = apiEndpoint,
+                                    Method = "GET"
+                                })
+                            end)
+                        
+                            if success and response.Success then
+                                local data = game.HttpService:JSONDecode(response.Body)
+                        
+                                if data.Amount and data.Amount > 0 and data.JobId then
+                                    local jobIds = {}
+                        
+                                    for _, job in ipairs(data.JobId) do
+                                        for jobId, _ in pairs(job) do
+                                            table.insert(jobIds, jobId)
+                                        end
+                                    end
+                        
+                                    TS = tick()
+                                    return jobIds
+                                end
+                            end
+                        
+                            return "Failed"
+                        end
+                        
+                        local jobIds = scrapeAPI()
+                        
+                        if jobIds ~= "Failed" then
+                            spawn(function()
+                                for _, jobId in ipairs(jobIds) do
+                                    if jobId ~= game.JobId then
+                                        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+                                        wait(2)
+                                    end
+                                end
+                            end)
+                        
+                            spawn(function()
+                                while wait(10) do
+                                    if tick() - TS > 100 then
+                                        jobIds = scrapeAPI()
+                                    end
+                                end
+                            end)
                         end
                     end
-                else
-                    local Rip = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
-                    if Rip then
-                        topos(Rip.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    else
-                        local JobId, TS
-
-local function scrapeAPI()
-    local success, response = pcall(function()
-        return request({
-            Url = "http://greenzapi.serveirc.com:31447/Api/Rip",
-            Method = "GET"
-        })
-    end)
-
-    if success and response.Success then
-        local data = game.HttpService:JSONDecode(response.Body)
-
-        if data.Amount and data.Amount > 0 and data.JobId then
-            local jobIds = {}
-
-            for _, job in ipairs(data.JobId) do
-                for jobId, _ in pairs(job) do
-                    table.insert(jobIds, jobId)
-                end
-            end
-
-            TS = tick()
-            return jobIds
-        end
-    end
-
-    return "Failed"
-end
-
-local jobIds = scrapeAPI()
-
-if jobIds ~= "Failed" then
-    spawn(function()
-        for _, jobId in ipairs(jobIds) do
-            if jobId ~= game.JobId then
-                game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
-                wait(5)
-            end
-        end
-    end)
-
-    spawn(function()
-        while wait(10) do
-            if tick() - TS > 100 then
-                jobIds = scrapeAPI()
-            end
-        end
-    end)
-end
-
-                    end
-                end
-            end)
-        end
-    end
-end)
-_G.KaitunDarkBeard = Value
-spawn(function()
-    while wait() do
-        if _G.KaitunDarkBeard and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Darkbeard") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not _G.KaitunDarkBeard or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Darkbeard = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
-                    if Darkbeard then
-                        topos(Darkbeard.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    else
-                    local JobId, TS
-
-local function scrapeAPI()
-    local success, response = pcall(function()
-        return request({
-            Url = "http://greenzapi.serveirc.com:31447/Api/Dark",
-            Method = "GET"
-        })
-    end)
-
-    if success and response.Success then
-        local data = game.HttpService:JSONDecode(response.Body)
-
-        if data.Amount and data.Amount > 0 and data.JobId then
-            local jobIds = {}
-
-            for _, job in ipairs(data.JobId) do
-                for jobId, _ in pairs(job) do
-                    table.insert(jobIds, jobId)
-                end
-            end
-
-            TS = tick()
-            return jobIds
-        end
-    end
-
-    return "Failed"
-end
-
-local jobIds = scrapeAPI()
-
-if jobIds ~= "Failed" then
-    spawn(function()
-        for _, jobId in ipairs(jobIds) do
-            if jobId ~= game.JobId then
-                game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
-                wait(5)
-            end
-        end
-    end)
-
-    spawn(function()
-        while wait(10) do
-            if tick() - TS > 100 then
-                jobIds = scrapeAPI()
-            end
-        end
-    end)
-end
-end
                 end
             end)
         end
