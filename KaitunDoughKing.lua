@@ -1,4 +1,98 @@
+getgenv().GreenZKaitunDoughKing = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunDoughKing and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("Dough King") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunDoughKing or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
+                    if doughKing then
+                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    end
+                end
+            end)
+        end
+    end
+end)
 
+getgenv().GreenZKaitunDarkbeard = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunDarkbeard and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("Darkbeard") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunDarkbeard or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local Dark = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
+                    if Dark then
+                        topos(Dark.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+getgenv().GreenZKaitunRipIndra = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunRipIndra and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("rip_indra True Form") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunRipIndra or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local Rip = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
+                    if Rip then
+                        topos(Rip.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    end
+                end
+            end)
+        end
+    end
+end)
 local player = game.Players.LocalPlayer
 local ContentProvider = game:GetService("ContentProvider")
 
@@ -1112,101 +1206,6 @@ task.spawn(function()
 
 	end
 
-end)
-getgenv().GreenZKaitunDoughKing = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunDoughKing and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Dough King") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunDoughKing or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
-                    if doughKing then
-                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-getgenv().GreenZKaitunDarkbeard = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunDarkbeard and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Darkbeard") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunDarkbeard or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Dark = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
-                    if Dark then
-                        topos(Dark.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-getgenv().GreenZKaitunRipIndra = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunRipIndra and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("rip_indra True Form") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunRipIndra or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Rip = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
-                    if Rip then
-                        topos(Rip.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
 end)
 function AutoHaki()
     if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
