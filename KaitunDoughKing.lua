@@ -1,3 +1,4 @@
+
 local player = game.Players.LocalPlayer
 local ContentProvider = game:GetService("ContentProvider")
 
@@ -1190,8 +1191,8 @@ spawn(function()
 end)
 function AutoV3()
     game:GetService("ReplicatedStorage").Remotes.CommE:FireServer("ActivateAbility")
-            end
-        end
+end
+
 spawn(function()
     while wait() do
         pcall(function()
@@ -1199,7 +1200,6 @@ spawn(function()
         end)
     end
 end)
-
 local player = game.Players.LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
 
