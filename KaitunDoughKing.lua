@@ -1113,7 +1113,10 @@ task.spawn(function()
 	end
 
 end)
-if getgenv().GreenZKaitunDoughKing and not BypassTP then
+getgenv().GreenZKaitunDoughKing = Value
+spawn(function()
+    while wait() do
+    if getgenv().GreenZKaitunDoughKing and not BypassTP then
     pcall(function()
         local enemies = game:GetService("Workspace").Enemies
         if enemies:FindFirstChild("Dough King") then
@@ -1134,7 +1137,10 @@ if getgenv().GreenZKaitunDoughKing and not BypassTP then
         end
     end) 
 end
-if getgenv().GreenZKaitunDarkbeard and not BypassTP then
+getgenv().GreenZKaitunDarkbeard = Value
+spawn(function()
+    while wait() do
+    if getgenv().GreenZKaitunDarkbeard and not BypassTP then
     pcall(function()
         local enemies = game:GetService("Workspace").Enemies
         if enemies:FindFirstChild("Darkbeard") then
@@ -1155,7 +1161,10 @@ if getgenv().GreenZKaitunDarkbeard and not BypassTP then
         end
     end) 
 end
-if getgenv().GreenZKaitunRipIndra and not BypassTP then
+getgenv().GreenZKaitunRipIndra = Value
+spawn(function()
+    while wait() do
+    if getgenv().GreenZKaitunRipIndra and not BypassTP then
     pcall(function()
         local enemies = game:GetService("Workspace").Enemies
         if enemies:FindFirstChild("rip_indra True Form") then
