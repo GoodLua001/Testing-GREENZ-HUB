@@ -725,11 +725,6 @@ if _G.FastAttack then
     end)()
 end
 
-function AutoHaki()
-    if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
-    end
-end
 
 function EquipWeapon(ToolSe)
     if not Nill then
