@@ -1063,6 +1063,7 @@ task.spawn(function()
 	end
 
 end)
+getgenv().GreenZKaitunDoughKing = true
 spawn(function()
     while wait() do
         if getgenv().GreenZKaitunDoughKing and not BypassTP then
