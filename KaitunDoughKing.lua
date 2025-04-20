@@ -1063,7 +1063,6 @@ task.spawn(function()
 	end
 
 end)
-getgenv().GreenZKaitunDoughKing = Value
 spawn(function()
     while wait() do
         if getgenv().GreenZKaitunDoughKing and not BypassTP then
@@ -1089,23 +1088,46 @@ spawn(function()
                     if doughKing then
                         topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
                     else
-                        local url = {
-                            "http://greenzapi.serveirc.com:31447/Api/Gay"
-                        }
-                        local a, b = pcall(function()
-                            for _, v in pairs(url) do
-                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
-                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
-                                    return jobid
+                        local JobId, TS
+                        local function scrapeAPI()
+                            local success, response = pcall(function()
+                                return request({
+                                    Url = "http://greenzapi.serveirc.com:31447/Api/Gay",
+                                    Method = "GET"
+                                })
+                            end)
+                            if success and response.Success then
+                                local data = game.HttpService:JSONDecode(response.Body)
+                                if data.Amount and data.Amount > 0 and data.JobId then
+                                    local jobIds = {}
+                                    for _, job in ipairs(data.JobId) do
+                                        for jobId, _ in pairs(job) do
+                                            table.insert(jobIds, jobId)
+                                        end
+                                    end
+                                    TS = tick()
+                                    return jobIds
                                 end
                             end
-                            return nil
-                        end)
-                        if a and b then
-                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
-                        else
-                            warn("Dough King not found :" .. tostring(b))
-                            return true
+                            return "Failed"
+                        end
+                        local jobIds = scrapeAPI()
+                        if jobIds ~= "Failed" then
+                            spawn(function()
+                                for _, jobId in ipairs(jobIds) do
+                                    if jobId ~= game.JobId then
+                                        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+                                        wait(5)
+                                    end
+                                end
+                            end)
+                            spawn(function()
+                                while wait(10) do
+                                    if tick() - TS > 100 then
+                                        jobIds = scrapeAPI()
+                                    end
+                                end
+                            end)
                         end
                     end
                 end
@@ -1113,8 +1135,6 @@ spawn(function()
         end
     end
 end)
-
-getgenv().GreenZKaitunDarkbeard = Value
 spawn(function()
     while wait() do
         if getgenv().GreenZKaitunDarkbeard and not BypassTP then
@@ -1140,23 +1160,46 @@ spawn(function()
                     if Dark then
                         topos(Dark.HumanoidRootPart.CFrame * CFrame.new(3777.63, 14.97, -3499.05))
                     else
-                        local url = {
-                            "http://greenzapi.serveirc.com:31447/Api/Dark"
-                        }
-                        local a, b = pcall(function()
-                            for _, v in pairs(url) do
-                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
-                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
-                                    return jobid
+                        local JobId, TS
+                        local function scrapeAPI()
+                            local success, response = pcall(function()
+                                return request({
+                                    Url = "http://greenzapi.serveirc.com:31447/Api/Dark",
+                                    Method = "GET"
+                                })
+                            end)
+                            if success and response.Success then
+                                local data = game.HttpService:JSONDecode(response.Body)
+                                if data.Amount and data.Amount > 0 and data.JobId then
+                                    local jobIds = {}
+                                    for _, job in ipairs(data.JobId) do
+                                        for jobId, _ in pairs(job) do
+                                            table.insert(jobIds, jobId)
+                                        end
+                                    end
+                                    TS = tick()
+                                    return jobIds
                                 end
                             end
-                            return nil
-                        end)
-                        if a and b then
-                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
-                        else
-                            warn("Darkbeard not found :" .. tostring(b))
-                            return true
+                            return "Failed"
+                        end
+                        local jobIds = scrapeAPI()
+                        if jobIds ~= "Failed" then
+                            spawn(function()
+                                for _, jobId in ipairs(jobIds) do
+                                    if jobId ~= game.JobId then
+                                        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+                                        wait(5)
+                                    end
+                                end
+                            end)
+                            spawn(function()
+                                while wait(10) do
+                                    if tick() - TS > 100 then
+                                        jobIds = scrapeAPI()
+                                    end
+                                end
+                            end)
                         end
                     end
                 end
@@ -1164,8 +1207,6 @@ spawn(function()
         end
     end
 end)
-
-getgenv().GreenZKaitunRipIndra = Value
 spawn(function()
     while wait() do
         if getgenv().GreenZKaitunRipIndra and not BypassTP then
@@ -1191,23 +1232,46 @@ spawn(function()
                     if Rip then
                         topos(Rip.HumanoidRootPart.CFrame * CFrame.new(-5562.37255859375, 314.0408630371094, -2659.544189453125))
                     else
-                        local url = {
-                            "http://greenzapi.serveirc.com:31447/Api/Rip"
-                        }
-                        local a, b = pcall(function()
-                            for _, v in pairs(url) do
-                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
-                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
-                                    return jobid
+                    local JobId, TS
+                        local function scrapeAPI()
+                            local success, response = pcall(function()
+                                return request({
+                                    Url = "http://greenzapi.serveirc.com:31447/Api/Gay",
+                                    Method = "GET"
+                                })
+                            end)
+                            if success and response.Success then
+                                local data = game.HttpService:JSONDecode(response.Body)
+                                if data.Amount and data.Amount > 0 and data.JobId then
+                                    local jobIds = {}
+                                    for _, job in ipairs(data.JobId) do
+                                        for jobId, _ in pairs(job) do
+                                            table.insert(jobIds, jobId)
+                                        end
+                                    end
+                                    TS = tick()
+                                    return jobIds
                                 end
                             end
-                            return nil
-                        end)
-                        if a and b then
-                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
-                        else
-                            warn("Rip Indra not found :" .. tostring(b))
-                            return true
+                            return "Failed"
+                        end
+                        local jobIds = scrapeAPI()
+                        if jobIds ~= "Failed" then
+                            spawn(function()
+                                for _, jobId in ipairs(jobIds) do
+                                    if jobId ~= game.JobId then
+                                        game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", jobId)
+                                        wait(5)
+                                    end
+                                end
+                            end)
+                            spawn(function()
+                                while wait(10) do
+                                    if tick() - TS > 100 then
+                                        jobIds = scrapeAPI()
+                                    end
+                                end
+                            end)
                         end
                     end
                 end
@@ -1215,7 +1279,7 @@ spawn(function()
         end
     end
 end)
-function AutoHaki()
+  function AutoHaki()
     if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
     end
