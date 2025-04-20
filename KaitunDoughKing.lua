@@ -194,37 +194,18 @@ require(game.ReplicatedStorage.Util.CameraShaker):Stop()
 
 
 if game.PlaceId == 2753915549 then
-
         World1 = true
-
     elseif game.PlaceId == 4442272183 then
-
         World2 = true
-
     elseif game.PlaceId == 7449423635 then
-
         World3 = true
-
     end
-
-
-
 local isTeleporting = false
-
-
-
 function WaitHRP(q0)
-
     if not q0 then return end
-
     return q0.Character:WaitForChild("HumanoidRootPart", 9)
-
 end
-
-
-
 function CheckNearestTeleporter(aI)
-
     local vcspos = aI.Position
 
     local minDist = math.huge
@@ -233,94 +214,64 @@ function CheckNearestTeleporter(aI)
 
     local y = game.PlaceId
 
-
-
     local TableLocations = {}
 
-
-
     if y == 2753915549 then
-
         TableLocations = {
-
             ["Sky3"] = Vector3.new(-7894, 5547, -380),
-
             ["Sky3Exit"] = Vector3.new(-4607, 874, -1667),
-
             ["UnderWater"] = Vector3.new(61163, 11, 1819),
-
             ["UnderwaterExit"] = Vector3.new(4050, -1, -1814)
-
         }
-
     elseif y == 4442272183 then
-
         TableLocations = {
-
             ["Swan Mansion"] = Vector3.new(-390, 332, 673),
-
             ["Swan Room"] = Vector3.new(2285, 15, 905),
-
             ["Cursed Ship"] = Vector3.new(923, 126, 32852),
-
             ["Zombie Island"] = Vector3.new(-6509, 83, -133)
-
         }
-
     elseif y == 7449423635 then
-
         TableLocations = {
-
             ["Floating Turtle"] = Vector3.new(-12462, 375, -7552),
-
             ["Hydra Island"] = Vector3.new(5662, 1013, -335),
-
             ["Mansion"] = Vector3.new(-12462, 375, -7552),
-
             ["Castle"] = Vector3.new(-5036, 315, -3179),
-
             ["Beautiful Pirate"] = Vector3.new(5319, 23, -93),
-
-            ["Beautiful Room"] = Vector3.new(5314.58203, 22.5364361, -125.942276),
-			
+            ["Beautiful Room"] = Vector3.new(
+                5314.58203,
+                22.5364361,
+                -125.942276,
+                1,
+                2.14762768e-08,
+                -1.99111154e-13,
+                -2.14762768e-08,
+                1,
+                -3.0510602e-08,
+                1.98455903e-13,
+                3.0510602e-08,
+                1
+            ),
             ["Temple of Time"] = Vector3.new(28286, 14897, 103)
-
         }
-
     end
 
-
-
     for _, v in pairs(TableLocations) do
-
         local dist = (v - vcspos).Magnitude
 
         if dist < minDist then
-
             minDist = dist
 
             chosenTeleport = v
-
         end
-
     end
-
-
 
     local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
 
     if minDist <= (vcspos - playerPos).Magnitude then
-
         return chosenTeleport
-
     end
-
 end
-
-
-
 function requestEntrance(teleportPos)
-
     game.ReplicatedStorage.Remotes.CommF_:InvokeServer("requestEntrance", teleportPos)
 
     local char = game.Players.LocalPlayer.Character.HumanoidRootPart
@@ -328,21 +279,14 @@ function requestEntrance(teleportPos)
     char.CFrame = char.CFrame + Vector3.new(0, 50, 0)
 
     task.wait(0.5)
-
 end
 
-
-
 function topos(Pos)
-
     local plr = game.Players.LocalPlayer
 
     if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-        if not Pos then 
-
-            return 
-
+        if not Pos then
+            return
         end
 
         local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
@@ -350,16 +294,13 @@ function topos(Pos)
         local nearestTeleport = CheckNearestTeleporter(Pos)
 
         if nearestTeleport then
-
             requestEntrance(nearestTeleport)
-
         end
 
         if not plr.Character:FindFirstChild("PartTele") then
-
             local PartTele = Instance.new("Part", plr.Character)
 
-            PartTele.Size = Vector3.new(10,1,10)
+            PartTele.Size = Vector3.new(10, 1, 10)
 
             PartTele.Name = "PartTele"
 
@@ -369,24 +310,24 @@ function topos(Pos)
 
             PartTele.CanCollide = false
 
-            PartTele.CFrame = WaitHRP(plr).CFrame 
+            PartTele.CFrame = WaitHRP(plr).CFrame
 
-            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(
+                function()
+                    if not isTeleporting then
+                        return
+                    end
 
-                if not isTeleporting then return end
+                    task.wait()
 
-                task.wait()
+                    if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                        local targetCFrame = PartTele.CFrame
 
-                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-                    local targetCFrame = PartTele.CFrame
-
-                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
-
+                        WaitHRP(plr).CFrame =
+                            CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
+                    end
                 end
-
-            end)
-
+            )
         end
 
         isTeleporting = true
@@ -394,298 +335,215 @@ function topos(Pos)
         local SpeedTw = getgenv().TweenSpeed
 
         if Distance <= 250 then
-
             SpeedTw = SpeedTw * 3
-
         end
 
         local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
 
-        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
+        local Tween =
+            game:GetService("TweenService"):Create(
+            plr.Character.PartTele,
+            TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear),
+            {CFrame = Pos}
+        )
 
         Tween:Play()
 
-        Tween.Completed:Connect(function(status)
+        Tween.Completed:Connect(
+            function(status)
+                if status == Enum.PlaybackState.Completed then
+                    if plr.Character:FindFirstChild("PartTele") then
+                        plr.Character.PartTele:Destroy()
+                    end
 
-            if status == Enum.PlaybackState.Completed then
-
-                if plr.Character:FindFirstChild("PartTele") then
-
-                    plr.Character.PartTele:Destroy()
-
+                    isTeleporting = false
                 end
-
-                isTeleporting = false
-
             end
-
-        end)
-
+        )
     end
-
 end
-
-
 
 getgenv().TweenSpeed = 350
 
-
-
 function stopTeleport()
-
     isTeleporting = false
 
     local plr = game.Players.LocalPlayer
 
     if plr.Character:FindFirstChild("PartTele") then
-
         plr.Character.PartTele:Destroy()
-
     end
-
 end
 
-
-
-spawn(function()
-
-    while task.wait() do
-
-        if not isTeleporting then
-
-            stopTeleport()
-
-        end
-
-    end
-
-end)
-
-
-
-spawn(function()
-
-    local plr = game.Players.LocalPlayer
-
-    while task.wait() do
-
-        pcall(function()
-
-            if plr.Character:FindFirstChild("PartTele") then
-
-                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-
-                    stopTeleport()
-
-                end
-
+spawn(
+    function()
+        while task.wait() do
+            if not isTeleporting then
+                stopTeleport()
             end
-
-        end)
-
+        end
     end
+)
 
-end)
+spawn(
+    function()
+        local plr = game.Players.LocalPlayer
 
-
+        while task.wait() do
+            pcall(
+                function()
+                    if plr.Character:FindFirstChild("PartTele") then
+                        if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+                            stopTeleport()
+                        end
+                    end
+                end
+            )
+        end
+    end
+)
 
 local plr = game.Players.LocalPlayer
 
-
-
 local function onCharacterAdded(character)
-
     local humanoid = character:WaitForChild("Humanoid")
 
-    humanoid.Died:Connect(function()
-
-        stopTeleport()
-
-    end)
-
+    humanoid.Died:Connect(
+        function()
+            stopTeleport()
+        end
+    )
 end
-
-
 
 plr.CharacterAdded:Connect(onCharacterAdded)
 
-
-
 if plr.Character then
-
     onCharacterAdded(plr.Character)
-
 end
 
+spawn(
+    function()
+        pcall(
+            function()
+                while wait() do
+                    if _G.FarmBoss then
+                        if
+                            not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild(
+                                "BodyClip"
+                            )
+                         then
+                            local Noclip = Instance.new("BodyVelocity")
 
+                            Noclip.Name = "BodyClip"
 
-spawn(function()
+                            Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 
-    pcall(function()
+                            Noclip.MaxForce = Vector3.new(100000, 100000, 100000)
 
-        while wait() do
-
-            if _G.FarmBoss then
-
-                if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-
-                    local Noclip = Instance.new("BodyVelocity")
-
-                    Noclip.Name = "BodyClip"
-
-                    Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-
-                    Noclip.MaxForce = Vector3.new(100000,100000,100000)
-
-                    Noclip.Velocity = Vector3.new(0,0,0)
-
-                end
-
-            end
-
-        end
-
-    end)
-
-end)
-
-    
-
-spawn(function()
-
-    pcall(function()
-
-        game:GetService("RunService").Stepped:Connect(function()
-
-            if _G.FarmBoss then
-
-                for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-
-                    if v:IsA("BasePart") then
-
-                        v.CanCollide = false    
-
+                            Noclip.Velocity = Vector3.new(0, 0, 0)
+                        end
                     end
-
                 end
-
             end
+        )
+    end
+)
 
-        end)
-
-    end)
-
-end)
-
-
+spawn(
+    function()
+        pcall(
+            function()
+                game:GetService("RunService").Stepped:Connect(
+                    function()
+                        if _G.FarmBoss then
+                            for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                                if v:IsA("BasePart") then
+                                    v.CanCollide = false
+                                end
+                            end
+                        end
+                    end
+                )
+            end
+        )
+    end
+)
 
 PosY = 25
 
-
-
 Type = 1
 
-spawn(function()
-
-    while wait() do
-
-		if Type == 1 then
-
-			Pos = CFrame.new(0,PosY,-19)
-
-		elseif Type == 2 then
-
-			Pos = CFrame.new(19,PosY,0)
-
-		elseif Type == 3 then
-
-			Pos = CFrame.new(0,PosY,19)	
-
-		elseif Type == 4 then
-
-			Pos = CFrame.new(-19,PosY,0)
-
+spawn(
+    function()
+        while wait() do
+            if Type == 1 then
+                Pos = CFrame.new(0, PosY, -19)
+            elseif Type == 2 then
+                Pos = CFrame.new(19, PosY, 0)
+            elseif Type == 3 then
+                Pos = CFrame.new(0, PosY, 19)
+            elseif Type == 4 then
+                Pos = CFrame.new(-19, PosY, 0)
+            end
         end
-
     end
+)
 
-end)
+spawn(
+    function()
+        while wait(.1) do
+            Type = 1
 
+            wait(0.2)
 
+            Type = 2
 
-spawn(function()
+            wait(0.2)
 
-    while wait(.1) do
+            Type = 3
 
-        Type = 1
+            wait(0.2)
 
-        wait(0.2)
+            Type = 4
 
-        Type = 2
-
-        wait(0.2)
-
-        Type = 3
-
-        wait(0.2)
-
-        Type = 4
-
-        wait(0.2)
-
+            wait(0.2)
+        end
     end
-
-end)
-
-
+)
 
 _G.FastAttack = true
 
-
-
 if _G.FastAttack then
-
     local _ENV = (getgenv or getrenv or getfenv)()
 
-
-
     local function SafeWaitForChild(parent, childName)
-
-        local success, result = pcall(function()
-
-            return parent:WaitForChild(childName)
-
-        end)
+        local success, result =
+            pcall(
+            function()
+                return parent:WaitForChild(childName)
+            end
+        )
 
         if not success or not result then
-
             warn("noooooo: " .. childName)
-
         end
 
         return result
-
     end
 
-
-
     local function WaitChilds(path, ...)
-
         local last = path
 
         for _, child in {...} do
-
             last = last:FindFirstChild(child) or SafeWaitForChild(last, child)
 
-            if not last then break end
-
+            if not last then
+                break
+            end
         end
 
         return last
-
     end
-
-
 
     local VirtualInputManager = game:GetService("VirtualInputManager")
 
@@ -701,31 +559,23 @@ if _G.FastAttack then
 
     local Player = Players.LocalPlayer
 
-
-
     if not Player then
-
         warn("Không tìm thấy người chơi cục bộ.")
 
         return
-
     end
-
-
 
     local Remotes = SafeWaitForChild(ReplicatedStorage, "Remotes")
 
-    if not Remotes then return end
-
-
+    if not Remotes then
+        return
+    end
 
     local Validator = SafeWaitForChild(Remotes, "Validator")
 
     local CommF = SafeWaitForChild(Remotes, "CommF_")
 
     local CommE = SafeWaitForChild(Remotes, "CommE")
-
-
 
     local ChestModels = SafeWaitForChild(workspace, "ChestModels")
 
@@ -737,13 +587,9 @@ if _G.FastAttack then
 
     local Map = SafeWaitForChild(workspace, "Map")
 
-
-
     local EnemySpawns = SafeWaitForChild(WorldOrigin, "EnemySpawns")
 
     local Locations = SafeWaitForChild(WorldOrigin, "Locations")
-
-
 
     local RenderStepped = RunService.RenderStepped
 
@@ -751,319 +597,198 @@ if _G.FastAttack then
 
     local Stepped = RunService.Stepped
 
-
-
     local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
 
     local Net = SafeWaitForChild(Modules, "Net")
 
-
-
-    local sethiddenproperty = sethiddenproperty or function(...) return ... end
+    local sethiddenproperty = sethiddenproperty or function(...)
+            return ...
+        end
 
     local setupvalue = setupvalue or (debug and debug.setupvalue)
 
     local getupvalue = getupvalue or (debug and debug.getupvalue)
 
-
-
     local Settings = {
-
         AutoClick = true,
-
         ClickDelay = 0
-
     }
-
-
 
     local Module = {}
 
-
-
-    Module.FastAttack = (function()
-
+    Module.FastAttack =
+        (function()
         if _ENV.rz_FastAttack then
-
             return _ENV.rz_FastAttack
-
         end
 
-
-
         local FastAttack = {
-
             Distance = 100,
-
             attackMobs = true,
-
             attackPlayers = true,
-
             Equipped = nil
-
         }
-
-
 
         local RegisterAttack = SafeWaitForChild(Net, "RE/RegisterAttack")
 
         local RegisterHit = SafeWaitForChild(Net, "RE/RegisterHit")
 
-
-
         local function IsAlive(character)
-
             return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
-
         end
 
-
-
         local function ProcessEnemies(OthersEnemies, Folder)
-
             local BasePart = nil
 
             for _, Enemy in Folder:GetChildren() do
-
                 local Head = Enemy:FindFirstChild("Head")
 
                 if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
-
                     if Enemy ~= Player.Character then
-
-                        table.insert(OthersEnemies, { Enemy, Head })
+                        table.insert(OthersEnemies, {Enemy, Head})
 
                         BasePart = Head
-
                     end
-
                 end
-
             end
 
             return BasePart
-
         end
 
-
-
         function FastAttack:Attack(BasePart, OthersEnemies)
-
-            if not BasePart or #OthersEnemies == 0 then return end
+            if not BasePart or #OthersEnemies == 0 then
+                return
+            end
 
             RegisterAttack:FireServer(Settings.ClickDelay or 0)
 
             RegisterHit:FireServer(BasePart, OthersEnemies)
-
         end
 
-
-
         function FastAttack:AttackNearest()
-
             local OthersEnemies = {}
 
             local Part1 = ProcessEnemies(OthersEnemies, Enemies)
 
             local Part2 = ProcessEnemies(OthersEnemies, Characters)
 
-
-
             local character = Player.Character
 
-            if not character then return end
+            if not character then
+                return
+            end
 
             local equippedWeapon = character:FindFirstChildOfClass("Tool")
 
-
-
             if equippedWeapon and equippedWeapon:FindFirstChild("LeftClickRemote") then
-
                 for _, enemyData in ipairs(OthersEnemies) do
-
                     local enemy = enemyData[1]
 
                     local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
 
-                    pcall(function()
-
-                        equippedWeapon.LeftClickRemote:FireServer(direction, 1)
-
-                    end)
-
+                    pcall(
+                        function()
+                            equippedWeapon.LeftClickRemote:FireServer(direction, 1)
+                        end
+                    )
                 end
-
             elseif #OthersEnemies > 0 then
-
                 self:Attack(Part1 or Part2, OthersEnemies)
-
             else
-
                 task.wait(0)
-
             end
-
         end
 
-
-
         function FastAttack:BladeHits()
-
             local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
 
             if Equipped and Equipped.ToolTip ~= "Gun" then
-
                 self:AttackNearest()
-
             else
-
                 task.wait(0)
-
             end
-
         end
 
-
-
-        task.spawn(function()
-
-            while task.wait(Settings.ClickDelay) do
-
-                if Settings.AutoClick then
-
-                    FastAttack:BladeHits()
-
+        task.spawn(
+            function()
+                while task.wait(Settings.ClickDelay) do
+                    if Settings.AutoClick then
+                        FastAttack:BladeHits()
+                    end
                 end
-
             end
-
-        end)
-
-
+        )
 
         _ENV.rz_FastAttack = FastAttack
 
         return FastAttack
-
     end)()
-
 end
-
-
 
 function AutoHaki()
-
     if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
-
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
-
     end
-
 end
 
-
-
 function EquipWeapon(ToolSe)
-
     if not Nill then
-
         if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
-
             Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
 
             wait(.1)
 
             game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
-
         end
-
     end
-
 end
-
-
 
 _G.SelectWeapon = "Melee"
 
+task.spawn(
+    function()
+        while wait() do
+            pcall(
+                function()
+                    if _G.SelectWeapon == "Melee" then
+                        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                            if v.ToolTip == "Melee" then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
+                                    _G.SelectWeapon = v.Name
+                                end
+                            end
+                        end
+                    elseif _G.SelectWeapon == "Sword" then
+                        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                            if v.ToolTip == "Sword" then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
+                                    _G.SelectWeapon = v.Name
+                                end
+                            end
+                        end
+                    elseif _G.SelectWeapon == "Gun" then
+                        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                            if v.ToolTip == "Gun" then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
+                                    _G.SelectWeapon = v.Name
+                                end
+                            end
+                        end
+                    elseif _G.SelectWeapon == "Fruit" then
+                        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                            if v.ToolTip == "Blox Fruit" then
+                                if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
+                                    _G.SelectWeapon = v.Name
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+        end
+    end
+)
 
-
-task.spawn(function()
-
-	while wait() do
-
-		pcall(function()
-
-			if _G.SelectWeapon == "Melee" then
-
-				for i ,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-
-					if v.ToolTip == "Melee" then
-
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-
-							_G.SelectWeapon = v.Name
-
-						end
-
-					end
-
-				end
-
-			elseif _G.SelectWeapon == "Sword" then
-
-				for i ,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-
-					if v.ToolTip == "Sword" then
-
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-
-							_G.SelectWeapon = v.Name
-
-						end
-
-					end
-
-				end
-
-			elseif _G.SelectWeapon == "Gun" then
-
-				for i ,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-
-					if v.ToolTip == "Gun" then
-
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-
-							_G.SelectWeapon = v.Name
-
-						end
-
-					end
-
-				end
-
-			elseif _G.SelectWeapon == "Fruit" then
-
-				for i ,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-
-					if v.ToolTip == "Blox Fruit" then
-
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-
-							_G.SelectWeapon = v.Name
-
-						end
-
-					end
-
-				end
-
-			end
-
-		end)
-
-	end
-
-end)
 _G.FarmBoss = true
 
 
