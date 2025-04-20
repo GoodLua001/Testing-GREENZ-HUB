@@ -132,39 +132,42 @@ spawn(function()
 end)
 -----------------------------------
     spawn(function()
-        while wait(5) do
-            pcall(function()
-                local foundBoss = false
-                for _, model in pairs(game.Workspace:GetChildren()) do
+    while wait(5) do
+        pcall(function()
+            local foundBoss = false
+            
+            -- Kiểm tra Workspace
+            for _, model in pairs(game.Workspace:GetChildren()) do
+                if model:IsA("Model") and (model.Name == "Dough King" or model.Name:find("Dough King")) then
+                    local humanoid = model:FindFirstChild("Humanoid")
+                    if humanoid and humanoid.Health > 0 then
+                        foundBoss = true
+                        statusText.Text = "Status: Xuất hiện boss Dough King"
+                        statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
+                        break
+                    end
+                end
+            end
+            
+            -- Kiểm tra ReplicatedStorage
+            if not foundBoss then
+                for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
                     if model:IsA("Model") and (model.Name == "Dough King" or model.Name:find("Dough King")) then
-                        local humanoid = model:FindFirstChild("Humanoid")
-                        if humanoid and humanoid.Health > 0 then
-                            foundBoss = true
-                            -- Giả sử statusText là một TextLabel trong UI của bạn
-                            statusText.Text = "Status: Xuất hiện boss Dough King"
-                            statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
-                            break
-                        end
+                        foundBoss = true
+                        statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
+                        statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                        break
                     end
                 end
-                if not foundBoss then
-                    for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-                        if model:IsA("Model") and (model.Name == getgenv().SelectBoss or model.Name:find(getgenv().SelectBoss)) then
-                            foundBoss = true
-                            statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
-                            statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                            break
-                        end
-                    end
-                end
-                if not foundBoss then
-                    statusText.Text = "Status: Đang tìm server tiếp theo"
-                    statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-                end
-            end)
-        end
-    end)
-end
+            end
+            
+            if not foundBoss then
+                statusText.Text = "Status: Đang tìm server tiếp theo"
+                statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            end
+        end)
+    end
+end)
 wait(0.5)
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetTeam", "Marines")
 
