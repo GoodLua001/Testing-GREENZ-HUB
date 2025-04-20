@@ -1,98 +1,3 @@
-getgenv().GreenZKaitunDoughKing = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunDoughKing and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Dough King") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunDoughKing or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
-                    if doughKing then
-                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-getgenv().GreenZKaitunDarkbeard = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunDarkbeard and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Darkbeard") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunDarkbeard or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Dark = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
-                    if Dark then
-                        topos(Dark.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-getgenv().GreenZKaitunRipIndra = Value
-spawn(function()
-    while wait() do
-        if getgenv().GreenZKaitunRipIndra and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("rip_indra True Form") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                AutoV3()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            until not getgenv().GreenZKaitunRipIndra or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Rip = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
-                    if Rip then
-                        topos(Rip.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    end
-                end
-            end)
-        end
-    end
-end)
 local player = game.Players.LocalPlayer
 local ContentProvider = game:GetService("ContentProvider")
 
@@ -226,91 +131,42 @@ spawn(function()
     end
 end)
 -----------------------------------
-local HttpService = game:GetService("HttpService") local TeleportService = game:GetService("TeleportService") local player = game.Players.LocalPlayer
-
--- Đảm bảo bạn đã gán statusText trước khi dùng -- ví dụ: -- local statusText = player:WaitForChild("PlayerGui"):WaitForChild("ScreenGui"):WaitForChild("StatusLabel")
-
-getgenv().GreenZBossCheck = true
-
-spawn(function() while task.wait(5) do if not getgenv().GreenZBossCheck then return end
-
-local bossName = getgenv().SelectBoss or ""
-    local foundBoss = false
-
-    -- Kiểm tra boss trong workspace
-    for _, model in ipairs(workspace:GetChildren()) do
-        if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
-            local hum = model:FindFirstChild("Humanoid")
-            if hum and hum.Health > 0 then
-                foundBoss = true
-                statusText.Text = "Status: Xuất hiện Boss " .. bossName
-                statusText.TextColor3 = Color3.fromRGB(255,50,50)
-                break
-            end
-        end
-    end
-
-    -- Kiểm tra boss trong ReplicatedStorage nếu chưa tìm thấy
-    if not foundBoss then
-        for _, obj in ipairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-            if obj:IsA("Model") and (obj.Name == bossName or obj.Name:find(bossName)) then
-                foundBoss = true
-                statusText.Text = "Status: Boss " .. bossName .. " Spawn. Húppp"
-                statusText.TextColor3 = Color3.fromRGB(255,255,255)
-                break
-            end
-        end
-    end
-
-    -- Nếu vẫn chưa tìm thấy, chuyển server
-    if not foundBoss then
-        statusText.Text = "Status: Không tìm thấy boss, tìm server khác..."
-        statusText.TextColor3 = Color3.fromRGB(255,255,255)
-
-        local endpoints = {
-            ["Dough King"] = "http://greenzapi.serveirc.com:31447/Api/Gay",
-            ["rip_indra True Form"] = "http://greenzapi.serveirc.com:31447/Api/Rip",
-            ["Darkbeard"] = "http://greenzapi.serveirc.com:31447/Api/Dark",
-        }
-        local url = endpoints[bossName]
-
-        if not url then
-            statusText.Text = "Status: Chưa có API cho boss này"
-            statusText.TextColor3 = Color3.fromRGB(255,0,0)
-        else
-            local ok, jobIdList = pcall(function()
-                local res = game:HttpGet(url, true)
-                local data = HttpService:JSONDecode(res)
-                local jobIds = {}
-
-                if data and data.Amount > 0 and data.JobId then
-                    for _, entry in ipairs(data.JobId) do
-                        for jobIdKey in pairs(entry) do
-                            if jobIdKey ~= game.JobId then
-                                table.insert(jobIds, jobIdKey)
-                            end
+local function checkBoss()
+    spawn(function()
+        while wait(5) do
+            pcall(function()
+                local foundBoss = false
+                for _, model in pairs(game.Workspace:GetChildren()) do
+                    if model:IsA("Model") and (model.Name == getgenv().SelectBoss or model.Name:find(getgenv().SelectBoss)) then
+                        local humanoid = model:FindFirstChild("Humanoid")
+                        if humanoid and humanoid.Health > 0 then
+                            foundBoss = true
+                            -- Giả sử statusText là một TextLabel trong UI của bạn
+                            statusText.Text = "Status: Xuất hiện boss " .. getgenv().SelectBoss
+                            statusText.TextColor3 = Color3.fromRGB(255, 50, 50)
+                            break
                         end
                     end
                 end
-                return jobIds
-            end)
-
-            if ok and jobIdList and #jobIdList > 0 then
-                for _, jobId in ipairs(jobIdList) do
-                    statusText.Text = "Status: Teleport đến JobId: " .. jobId
-                    statusText.TextColor3 = Color3.fromRGB(0,255,0)
-                    TeleportService:TeleportToPlaceInstance(game.PlaceId, jobId, player)
-                    task.wait(10)
+                if not foundBoss then
+                    for _, model in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
+                        if model:IsA("Model") and (model.Name == getgenv().SelectBoss or model.Name:find(getgenv().SelectBoss)) then
+                            foundBoss = true
+                            statusText.Text = "Status: Chà Boss Kìa Bú Lẹ"
+                            statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            break
+                        end
+                    end
                 end
-            else
-                statusText.Text = "Status: Lấy JobId thất bại"
-                statusText.TextColor3 = Color3.fromRGB(255,0,0)
-            end
+                if not foundBoss then
+                    statusText.Text = "Status: Đang tìm server tiếp theo"
+                    statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                end
+            end)
         end
-    end
+    end)
 end
-end)
-
+checkBoss()
 wait(0.5)
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetTeam", "Marines")
 
@@ -1206,6 +1062,158 @@ task.spawn(function()
 
 	end
 
+end)
+getgenv().GreenZKaitunDoughKing = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunDoughKing and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("Dough King") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunDoughKing or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
+                    if doughKing then
+                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    else
+                        local url = {
+                            "http://greenzapi.serveirc.com:31447/Api/Gay"
+                        }
+                        local a, b = pcall(function()
+                            for _, v in pairs(url) do
+                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
+                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
+                                    return jobid
+                                end
+                            end
+                            return nil
+                        end)
+                        if a and b then
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
+                        else
+                            warn("Dough King not found :" .. tostring(b))
+                            return true
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+getgenv().GreenZKaitunDarkbeard = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunDarkbeard and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("Darkbeard") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunDarkbeard or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local Dark = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
+                    if Dark then
+                        topos(Dark.HumanoidRootPart.CFrame * CFrame.new(3777.63, 14.97, -3499.05))
+                    else
+                        local url = {
+                            "http://greenzapi.serveirc.com:31447/Api/Dark"
+                        }
+                        local a, b = pcall(function()
+                            for _, v in pairs(url) do
+                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
+                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
+                                    return jobid
+                                end
+                            end
+                            return nil
+                        end)
+                        if a and b then
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
+                        else
+                            warn("Darkbeard not found :" .. tostring(b))
+                            return true
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+getgenv().GreenZKaitunRipIndra = Value
+spawn(function()
+    while wait() do
+        if getgenv().GreenZKaitunRipIndra and not BypassTP then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                if enemies:FindFirstChild("rip_indra True Form") then
+                    for _, v in pairs(enemies:GetChildren()) do
+                        if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat
+                                task.wait()
+                                AutoHaki()
+                                AutoV3()
+                                EquipWeapon(_G.SelectWeapon)
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
+                                topos(v.HumanoidRootPart.CFrame * Pos)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            until not getgenv().GreenZKaitunRipIndra or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    local Rip = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
+                    if Rip then
+                        topos(Rip.HumanoidRootPart.CFrame * CFrame.new(-5562.37255859375, 314.0408630371094, -2659.544189453125))
+                    else
+                        local url = {
+                            "http://greenzapi.serveirc.com:31447/Api/Rip"
+                        }
+                        local a, b = pcall(function()
+                            for _, v in pairs(url) do
+                                local jobid = game:GetService("HttpService"):JSONDecode(game:HttpGet(v, true))
+                                if jobid and jobid.Job and jobid.Job ~= "Not Found" then
+                                    return jobid
+                                end
+                            end
+                            return nil
+                        end)
+                        if a and b then
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, b.Job, game.Players.LocalPlayer)
+                        else
+                            warn("Rip Indra not found :" .. tostring(b))
+                            return true
+                        end
+                    end
+                end
+            end)
+        end
+    end
 end)
 function AutoHaki()
     if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
