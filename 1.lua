@@ -3371,33 +3371,36 @@ _G.BoatBought = false
 getgenv().HasAttemptedBuy = false
 _G.IsOnBoat = false
 local Gay = Tabs.Vocalno:AddSection("Tab Volcano")
-Vocalno:AddToggle("AutoFindPrehistoric", {
-    Title = " Auto Find Prehistoric",
+local v1 = Tabs.Vocalno:AddToggle("v1", {
+    Title = "Auto Find Prehistoric",
     Default = false
-}):OnChanged(function(v)
+})
+v1:OnChanged(function(v)
     _G.AutoFindPrehistoric = v
     _G.IsOnBoat = false
 end)
 
-Vocalno:AddDropdown("BoatType", {
+local v2 = Tabs.Vocalno:AddDropdown("v2", {
     Title = "Choose Boat",
     Values = {
         "Beast Hunter", "Sleigh", "Miracle", "The Sentinel", "Guardian", "Lantern", "Dinghy", "PirateSloop", "PirateBrigade", "PirateGrandBrigade", "MarineGrandBrigade", "MarineBrigade", "MarineSloop"
     },
     Multi = false,
     Default = 1
-}):OnChanged(function(v)
+})
+v2:OnChanged(function(v)
     _G.SelectedBoat = v
     _G.BoatBought = false
     _G.IsOnBoat = false
 end)
 
-Vocalno:AddDropdown("BoatSpeed", {
+local v3 = Tabs.Vocalno:AddDropdown("v3", {
     Title = "Boat Speed",
     Values = {"100", "150", "200", "300", "400"},
     Multi = false,
     Default = "300"
-}):OnChanged(function(v)
+})
+v3:OnChanged(function(v)
     _G.BoatSpeed = tonumber(v)
 end)
 
@@ -3549,10 +3552,11 @@ spawn(function()
         end
     end)
 end)
-Vocalno:AddToggle("TpPrehistoric", {
+local v4 = Tabs.Vocalno:AddToggle("v4", {
     Title = "Teleport Prehistoric",
     Default = false
-}):OnChanged(function(Value)
+})
+v4:OnChanged(function(Value)
     _G.TweenPrehistoric = Value
 end)
     spawn(function()
