@@ -2868,7 +2868,7 @@ local ToggleTyrant = Tabs.Main:AddToggle("ToggleTyrant", {
     Description="Fully A - Z", 
     Default=false })
 ToggleTyrant:OnChanged(function(Value)
-    	_G.FarmDaiBan = value 
+    	_G.FarmDaiBan = Value -- Đã sửa từ value thành Value
      	StopTween(_G.FarmDaiBan)
        end)
     local TyrantoftheSkies = CFrame.new(-16194.0048828125, 155.21844482421875, 1420.719970703125)
@@ -2877,6 +2877,9 @@ ToggleTyrant:OnChanged(function(Value)
     while task.wait() do
         if _G.FarmDaiBan then
             pcall(function()
+                local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position -- Thêm định nghĩa playerPos
+                local BypassTP = true -- Định nghĩa BypassTP
+                
                 if game:GetService("Workspace").Enemies:FindFirstChild("Tyrant of the Skies") then
                     for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                         if v.Name == "Tyrant of the Skies" then
@@ -2955,13 +2958,13 @@ ToggleTyrant:OnChanged(function(Value)
                     else
                         Tween(TyrantoftheSkies)
                     end
-                    UnEquipWeapon(_G.Selectweapon)
+                    UnEquipWeapon(_G.SelectWeapon) -- Sửa từ _G.Selectweapon thành _G.SelectWeapon
                     Tween(CFrame.new(-16194.0048828125, 155.21844482421875, 1420.719970703125))
                 end
             end)
         end
     end
-end)        
+end)
 local MiscFarm = Tabs.Main:AddSection("Bone Farm")
         local ToggleBone = Tabs.Main:AddToggle("ToggleBone", {
     Title="Auto Farm Bone",
