@@ -40,7 +40,7 @@ local statusText = Instance.new("TextLabel")
 statusText.Size = UDim2.new(1, 0, 0.05, 0)
 statusText.Position = UDim2.new(0, 0, 0.29, 0)
 statusText.BackgroundTransparency = 1
-statusText.Text = "GreenZ Kaitun Farm Boss"  -- Sửa lỗi cú pháp thiếu dấu ngoặc kép
+statusText.Text = "Status: Auto Farm Boss Dough King"  -- Sửa lỗi cú pháp thiếu dấu ngoặc kép
 statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
 statusText.TextSize = 24
 statusText.Font = Enum.Font.GothamSemibold
@@ -130,87 +130,6 @@ spawn(function()
         timeLabel.Text = "Time: " .. hrs .. " Hours " .. mins .. " Minutes " .. secs .. " Seconds"
     end
 end)
------------------------------------
-    local HttpService = game:GetService("HttpService") local TeleportService = game:GetService("TeleportService") local player = game.Players.LocalPlayer
-getgenv().GreenZBossCheck = true
-
-spawn(function() while task.wait(5) do if not getgenv().GreenZBossCheck then return end
-
-local bossName = "Dough King"
-    local foundBoss = false
-
-    -- Kiểm tra boss trong workspace
-    for _, model in ipairs(workspace:GetChildren()) do
-        if model:IsA("Model") and (model.Name == bossName or model.Name:find(bossName)) then
-            local hum = model:FindFirstChild("Humanoid")
-            if hum and hum.Health > 0 then
-                foundBoss = true
-                statusText.Text = "Status: Xuất hiện Boss " .. bossName
-                statusText.TextColor3 = Color3.fromRGB(255,50,50)
-                break
-            end
-        end
-    end
-
-    -- Kiểm tra boss trong ReplicatedStorage nếu chưa tìm thấy
-    if not foundBoss then
-        for _, obj in ipairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
-            if obj:IsA("Model") and (obj.Name == bossName or obj.Name:find(bossName)) then
-                foundBoss = true
-                statusText.Text = "Status: Boss " .. bossName .. " Spawn. Húppp"
-                statusText.TextColor3 = Color3.fromRGB(255,255,255)
-                break
-            end
-        end
-    end
-
-    -- Nếu vẫn chưa tìm thấy, chuyển server
-    if not foundBoss then
-        statusText.Text = "Status: Không tìm thấy boss, tìm server khác..."
-        statusText.TextColor3 = Color3.fromRGB(255,255,255)
-
-        local endpoints = {
-            ["Dough King"] = "http://greenzapi.serveirc.com:31447/Api/Gay",
-        }
-        local url = endpoints[bossName]
-
-        if not url then
-            statusText.Text = "Status: Chưa có API cho boss này"
-            statusText.TextColor3 = Color3.fromRGB(255,0,0)
-        else
-            local ok, jobIdList = pcall(function()
-                local res = game:HttpGet(url, true)
-                local data = HttpService:JSONDecode(res)
-                local jobIds = {}
-
-                if data and data.Amount > 0 and data.JobId then
-                    for _, entry in ipairs(data.JobId) do
-                        for jobIdKey in pairs(entry) do
-                            if jobIdKey ~= game.JobId then
-                                table.insert(jobIds, jobIdKey)
-                            end
-                        end
-                    end
-                end
-                return jobIds
-            end)
-
-            if ok and jobIdList and #jobIdList > 0 then
-                for _, jobId in ipairs(jobIdList) do
-                    statusText.Text = "Status: Teleport đến JobId: " .. jobId
-                    statusText.TextColor3 = Color3.fromRGB(0,255,0)
-                    TeleportService:TeleportToPlaceInstance(game.PlaceId, jobId, player)
-                    task.wait(10)
-                end
-            else
-                statusText.Text = "Status: Lấy JobId thất bại"
-                statusText.TextColor3 = Color3.fromRGB(255,0,0)
-            end
-        end
-    end
-end
-end)
-wait(0.5)
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetTeam", "Marines")
 
 
@@ -990,39 +909,35 @@ if _G.FastAttack then
     end)()
 
 end
+function SetSpawn()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")
+    print("Đã đặt điểm hồi sinh thành công")
+end
 
+-- Khi nhân vật spawn lại (sau khi chết hoặc reset)
+player.CharacterAdded:Connect(function()
+    wait(1) -- đợi load game một chút
+    SetSpawn()
+end)
 
+-- Nếu đang online rồi thì cũng gọi một lần luôn
+if player.Character then
+    SetSpawn()
+end
 
 function AutoHaki()
-
-    if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
-
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
-
+    if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
     end
-
 end
-
-
-
-function EquipWeapon(ToolSe)
-
-    if not Nill then
-
-        if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
-
-            Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
-
-            wait(.1)
-
-            game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
-
-        end
-
+-- Tự động sử dụng Haki
+spawn(function()
+    while wait(1) do
+        pcall(function()
+            AutoHaki()
+        end)
     end
-
-end
-
+end)
 
 
 _G.SelectWeapon = "Melee"
@@ -1108,189 +1023,48 @@ task.spawn(function()
 end)
 
 
-
 _G.FarmBoss = true
-
-
 
 spawn(function()
     while wait() do
         if _G.FarmBoss and not BypassTP then
             pcall(function()
                 local enemies = game:GetService("Workspace").Enemies
-                if enemies:FindFirstChild("Dough King") then
+
+                if enemies:FindFirstChild("Tyrant of the Skies") then
                     for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        if v.Name == "Tyrant of the Skies" 
+                        and v:FindFirstChild("Humanoid") 
+                        and v:FindFirstChild("HumanoidRootPart") 
+                        and v.Humanoid.Health > 0 then
+                            
                             repeat
                                 task.wait()
                                 AutoHaki()
                                 EquipWeapon(_G.SelectWeapon)
+
                                 v.HumanoidRootPart.CanCollide = false
                                 v.Humanoid.WalkSpeed = 0
                                 topos(v.HumanoidRootPart.CFrame * Pos)
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+
+                                sethiddenproperty(
+                                    game:GetService("Players").LocalPlayer,
+                                    "SimulationRadius",
+                                    math.huge
+                                )
                             until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
                         end
                     end
                 else
-                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
-                    if doughKing then
-                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    local Tyrant = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
+                    
+                    if Tyrant then
+                        topos(Tyrant.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    else
+                        loadstring(game:HttpGet("https://pastefy.app/98pinmw8/raw"))()
+                    end
                 end
             end)
         end
     end
-end)
-
-function AutoHaki()
-    if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
-        game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
-    end
-end
-
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            AutoHaki()
-        end)
-    end
-end)
-
-local player = game.Players.LocalPlayer
-local rs = game:GetService("ReplicatedStorage")
-
--- Hàm lưu điểm hồi sinh
-function SetSpawn()
-    rs.Remotes.CommF_:InvokeServer("SetSpawnPoint")
-    print("set thành công")
-end
-
--- Khi nhân vật spawn lại (sau khi chết hoặc reset)
-player.CharacterAdded:Connect(function()
-    wait(1) -- đợi load game một chút
-    SetSpawn()
-end)
-
--- Nếu đang online rồi thì cũng gọi một lần luôn
-if player.Character then
-    SetSpawn()
-end
-
-getgenv().FixAttack = true
--- Hàm Click
-function Click(delayTime)
-    while task.wait(delayTime) do
-        if getgenv().FixAttack then  -- Chỉ chạy nếu Attack là true
-            print("")  -- Hoặc thay bằng hành động click thực sự
-        else
-            print("")
-            break  -- Thoát khỏi vòng lặp nếu Attack là false
-        end
-    end
-end
--- Tải script từ URL và thực thi
-local url = "https://raw.githubusercontent.com/diemquy/Autochatmizuhara/refs/heads/main/fasthuy%20.txt"
-local success, scriptContent = pcall(function()
-    return game:HttpGet(url)
-end)
-
-if success then
-    local runScript = loadstring(scriptContent)
-    if runScript then
-        runScript()  -- Thực thi script
-        print("ez boss")
-    else
-        warn("Failed.")
-    end
-else
-    warn("Failed.")
-end
-
--- Vòng lặp kiểm tra biến Attack
-task.spawn(function()
-    while task.wait() do
-        if getgenv().FixAttack then
-            Click(0.000000000000000000000000000000004)  -- Thực hiện hành động click với delay
-        else
-            print("off")
-        end
-    end
-end)
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local hrp = character:WaitForChild("HumanoidRootPart")
-
--- Tạo Attachment để gắn hiệu ứng vào nhân vật
-local attachment = Instance.new("Attachment")
-attachment.Parent = hrp
-
--- Hiệu ứng hạt sáng
-local particleEmitter = Instance.new("ParticleEmitter")
-particleEmitter.Texture = "rbxassetid://96026267585016" -- Thay bằng ID bạn muốn
-particleEmitter.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(100, 200, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-})
-particleEmitter.Size = NumberSequence.new({
-    NumberSequenceKeypoint.new(0, 0.5),
-    NumberSequenceKeypoint.new(0.5, 1),
-    NumberSequenceKeypoint.new(1, 0.5)
-})
-particleEmitter.Transparency = NumberSequence.new({
-    NumberSequenceKeypoint.new(0, 0.9),
-    NumberSequenceKeypoint.new(0.5, 0.5),
-    NumberSequenceKeypoint.new(1, 0.9)
-})
-particleEmitter.Lifetime = NumberRange.new(1, 2)
-particleEmitter.Rate = 50
-particleEmitter.SpreadAngle = Vector2.new(180, 180)
-particleEmitter.Speed = NumberRange.new(3, 5)
-particleEmitter.Parent = attachment
-
--- Hiệu ứng ánh sáng (PointLight)
-local pointLight = Instance.new("PointLight")
-pointLight.Color = Color3.fromRGB(100, 200, 255)
-pointLight.Range = 15
-pointLight.Brightness = 1
-pointLight.Parent = hrp
-
--- Sóng ánh sáng lan tỏa xung quanh nhân vật
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local Debris = game:GetService("Debris")
-
-local function createLightWave()
-	local wave = Instance.new("Part")
-	wave.Size = Vector3.new(1, 1, 1)
-	wave.CFrame = hrp.CFrame
-	wave.Anchored = true
-	wave.CanCollide = false
-	wave.Transparency = 0.5
-	wave.Material = Enum.Material.Neon
-	wave.Color = Color3.fromRGB(100, 200, 255)
-	wave.Shape = Enum.PartType.Ball
-	wave.Parent = workspace
-
-	local waveTween = TweenService:Create(
-		wave,
-		TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
-		{Size = Vector3.new(20, 20, 20), Transparency = 1}
-	)
-	waveTween:Play()
-
-	Debris:AddItem(wave, 2)
-end
-
--- Tạo sóng ánh sáng liên tục
-local waveConnection
-waveConnection = RunService.Heartbeat:Connect(function()
-	if hrp and hrp.Parent then
-		createLightWave()
-		wait(0.5)
-	else
-		waveConnection:Disconnect()
-	end
 end)
