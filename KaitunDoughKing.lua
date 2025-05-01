@@ -1,162 +1,140 @@
--- Khởi tạo thông báo
-local Notification = require(game:GetService("ReplicatedStorage").Notification)
-Notification.new("<Color=Orange>discord.gg/umaru<Color=/>"):Display()
-task.wait(0.25)
+local player = game.Players.LocalPlayer
+local ContentProvider = game:GetService("ContentProvider")
 
--- Chờ người chơi
-repeat task.wait() until game.Players.LocalPlayer
-task.wait(2.5)
+-- Xóa giao diện cũ nếu đã tồn tại
+local existingGui = player.PlayerGui:FindFirstChild("GreenHubOverlay")
+if existingGui then
+    existingGui:Destroy()
+end
 
--- Khởi tạo UI
-local Converted = {
-	["_ScreenGui"] = Instance.new("ScreenGui");
-	["_Frame"] = Instance.new("Frame");
-	["_UICorner"] = Instance.new("UICorner");
-	["_UIScale"] = Instance.new("UIScale");
-	["_shadowHolder"] = Instance.new("Frame");
-	["_umbraShadow"] = Instance.new("ImageLabel");
-	["_penumbraShadow"] = Instance.new("ImageLabel");
-	["_ambientShadow"] = Instance.new("ImageLabel");
-	["_TextLabel"] = Instance.new("TextLabel");
-	["_UIPadding"] = Instance.new("UIPadding");
-	["_UIGradient"] = Instance.new("UIGradient");
-	["_TextLabel1"] = Instance.new("TextLabel");
-	["_UIGradient1"] = Instance.new("UIGradient");
-	["_UIPadding1"] = Instance.new("UIPadding");
-	["_UIGradient2"] = Instance.new("UIGradient");
-	["_UIStroke"] = Instance.new("UIStroke");
-	["_Frame1"] = Instance.new("Frame");
-	["_TextLabel2"] = Instance.new("TextLabel");
-	["_ImageLabel"] = Instance.new("ImageLabel");
-}
+-- Tạo giao diện mới
+local gui = Instance.new("ScreenGui")
+gui.Name = "GreenHubOverlay"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = player.PlayerGui
 
-Converted["_ScreenGui"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Converted["_ScreenGui"].Parent = game:GetService("CoreGui")
-Converted["_ScreenGui"].Enabled = false
-print("UI initialized: ScreenGui created")
+-- Background chính
+local background = Instance.new("Frame")
+background.Size = UDim2.new(1, 0, 1, 0)
+background.BackgroundColor3 = Color3.new(0, 0, 0)
+background.BackgroundTransparency = 0.4
+background.Visible = true
+background.ZIndex = 1
+background.Parent = gui
 
-Converted["_Frame"].BackgroundColor3 = Color3.fromRGB(51, 52, 49)
-Converted["_Frame"].BackgroundTransparency = 0.3
-Converted["_Frame"].BorderSizePixel = 0
-Converted["_Frame"].Position = UDim2.new(0.142634839, 0, 0.0200501252, 0)
-Converted["_Frame"].Size = UDim2.new(0, 600, 0, 71)
-Converted["_Frame"].Parent = Converted["_ScreenGui"]
+-- Tiêu đề Green Hub
+local titleText = Instance.new("TextLabel")
+titleText.Size = UDim2.new(0, 300, 0, 60)
+titleText.Position = UDim2.new(0.5, -150, 0.16, 0)
+titleText.BackgroundTransparency = 1
+titleText.Text = "GreenZ Hub"
+titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleText.TextSize = 50
+titleText.Font = Enum.Font.GothamBold
+titleText.ZIndex = 2
+titleText.Parent = background
 
-Converted["_UICorner"].CornerRadius = UDim.new(0, 5)
-Converted["_UICorner"].Parent = Converted["_Frame"]
+-- Trạng thái boss
+local statusText = Instance.new("TextLabel")
+statusText.Name = "_TextLabel1" -- Tên cho việc tham chiếu
+statusText.Size = UDim2.new(1, 0, 0.05, 0)
+statusText.Position = UDim2.new(0, 0, 0.29, 0)
+statusText.BackgroundTransparency = 1
+statusText.Text = "GreenZ Kaitun Farm Boss"
+statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
+statusText.TextSize = 24
+statusText.Font = Enum.Font.GothamSemibold
+statusText.ZIndex = 2
+statusText.Parent = background
 
-Converted["_UIScale"].Parent = Converted["_Frame"]
+-- LOGO CHÍNH GIỮA
+local logo = Instance.new("ImageLabel")
+logo.Size = UDim2.new(0, 300, 0, 300)
+logo.Position = UDim2.new(0.5, -150, 0.55, -150)
+logo.BackgroundTransparency = 1
+logo.Image = "rbxassetid://12593712831" -- Sửa lại ID ảnh hợp lệ (generic ID)
+logo.ZIndex = 2
+logo.Parent = background
 
-Converted["_shadowHolder"].BackgroundTransparency = 1
-Converted["_shadowHolder"].Position = UDim2.new(-0.0139239347, 0, -0.0909090936, 0)
-Converted["_shadowHolder"].Size = UDim2.new(1.03037941, 0, 1.16161621, 0)
-Converted["_shadowHolder"].ZIndex = 0
-Converted["_shadowHolder"].Name = "shadowHolder"
-Converted["_shadowHolder"].Parent = Converted["_Frame"]
+-- Thời gian ở dưới
+local timeLabel = Instance.new("TextLabel")
+timeLabel.Size = UDim2.new(0.5, 0, 0.04, 0)
+timeLabel.Position = UDim2.new(0.25, 0, 0.82, 0)
+timeLabel.BackgroundTransparency = 1
+timeLabel.Text = "Time: 0 Hours 0 Minutes 0 Seconds"
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeLabel.TextSize = 20
+timeLabel.Font = Enum.Font.GothamSemibold
+timeLabel.ZIndex = 2
+timeLabel.Parent = background
 
-Converted["_umbraShadow"].Image = "rbxassetid://1316045217"
-Converted["_umbraShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
-Converted["_umbraShadow"].ImageTransparency = 1
-Converted["_umbraShadow"].ScaleType = Enum.ScaleType.Slice
-Converted["_umbraShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
-Converted["_umbraShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
-Converted["_umbraShadow"].BackgroundTransparency = 1
-Converted["_umbraShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
-Converted["_umbraShadow"].Size = UDim2.new(1, 0, 1, 0)
-Converted["_umbraShadow"].ZIndex = 0
-Converted["_umbraShadow"].Name = "umbraShadow"
-Converted["_umbraShadow"].Parent = Converted["_shadowHolder"]
+-- Thông tin người chơi
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(0.6, 0, 0.04, 0)
+infoLabel.Position = UDim2.new(0.2, 0, 0.86, 0)
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextColor3 = Color3.new(1, 1, 1)
+infoLabel.TextSize = 18
+infoLabel.Font = Enum.Font.GothamSemibold
+infoLabel.Text = "Loading..."
+infoLabel.ZIndex = 2
+infoLabel.Parent = background
 
-Converted["_penumbraShadow"].Image = "rbxassetid://1316045217"
-Converted["_penumbraShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
-Converted["_penumbraShadow"].ImageTransparency = 1
-Converted["_penumbraShadow"].ScaleType = Enum.ScaleType.Slice
-Converted["_penumbraShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
-Converted["_penumbraShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
-Converted["_penumbraShadow"].BackgroundTransparency = 1
-Converted["_penumbraShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
-Converted["_penumbraShadow"].Size = UDim2.new(1, 0, 1, 0)
-Converted["_penumbraShadow"].ZIndex = 0
-Converted["_penumbraShadow"].Name = "penumbraShadow"
-Converted["_penumbraShadow"].Parent = Converted["_shadowHolder"]
+-- NÚT BẬT TẮT UI
+local toggleButton = Instance.new("ImageButton")
+toggleButton.Name = "CustomButton"
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(0.015, 0, 0.15, 0)
+toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+toggleButton.BackgroundTransparency = 0.3
+toggleButton.Image = "rbxassetid://12593712831" -- Sử dụng cùng ID ảnh với logo
+toggleButton.ZIndex = 10
+toggleButton.Parent = gui
 
-Converted["_ambientShadow"].Image = "rbxassetid://1316045217"
-Converted["_ambientShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
-Converted["_ambientShadow"].ImageTransparency = 1
-Converted["_ambientShadow"].ScaleType = Enum.ScaleType.Slice
-Converted["_ambientShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
-Converted["_ambientShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
-Converted["_ambientShadow"].BackgroundTransparency = 1
-Converted["_ambientShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
-Converted["_ambientShadow"].Size = UDim2.new(1, 0, 1, 0)
-Converted["_ambientShadow"].ZIndex = 0
-Converted["_ambientShadow"].Name = "ambientShadow"
-Converted["_ambientShadow"].Parent = Converted["_shadowHolder"]
+local toggleButtonCorner = Instance.new("UICorner")
+toggleButtonCorner.CornerRadius = UDim.new(1, 0)
+toggleButtonCorner.Parent = toggleButton
 
-Converted["_TextLabel"].Font = Enum.Font.FredokaOne
-Converted["_TextLabel"].Text = "W-MB | Auto Tyrant of the Skies"
-Converted["_TextLabel"].TextColor3 = Color3.fromRGB(255, 238, 6)
-Converted["_TextLabel"].TextSize = 26
-Converted["_TextLabel"].TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
-Converted["_TextLabel"].Active = true
-Converted["_TextLabel"].BackgroundTransparency = 1
-Converted["_TextLabel"].BorderSizePixel = 0
-Converted["_TextLabel"].Position = UDim2.new(0.25981009, 0, 0.115379117, 0)
-Converted["_TextLabel"].Size = UDim2.new(0, 335, 0, 27)
-Converted["_TextLabel"].Parent = Converted["_Frame"]
+-- Lưu trữ biến chung cho script
+local Converted = {}
+Converted["_TextLabel1"] = statusText -- Lưu trữ tham chiếu đến statusText
 
-Converted["_UIPadding"].PaddingLeft = UDim.new(0, 5)
-Converted["_UIPadding"].Parent = Converted["_TextLabel"]
+-- Cập nhật thông tin người chơi
+spawn(function()
+    while wait(1) do
+        pcall(function()
+            if player and player:FindFirstChild("Data") then
+                local level = player.Data.Level.Value
+                local beli = player.Data.Beli.Value
+                local frags = player.Data.Fragments.Value
+                infoLabel.Text = player.DisplayName .. " | Level: " .. level .. " | Beli: " .. beli .. " | Fragments: " .. frags
+            else
+                infoLabel.Text = "Không thể tải thông tin người chơi"
+            end
+        end)
+    end
+end)
 
-Converted["_UIGradient"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
-Converted["_UIGradient"].Parent = Converted["_TextLabel"]
+-- Xử lý khi nhấn nút bật tắt
+local isOpen = true
+toggleButton.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    background.Visible = isOpen
+    print("Toggle UI: " .. tostring(isOpen))
+end)
 
-Converted["_TextLabel1"].Font = Enum.Font.FredokaOne
-Converted["_TextLabel1"].Text = "Status: Initializing..."
-Converted["_TextLabel1"].TextColor3 = Color3.fromRGB(255, 255, 11)
-Converted["_TextLabel1"].TextSize = 23
-Converted["_TextLabel1"].BackgroundTransparency = 1
-Converted["_TextLabel1"].BorderSizePixel = 0
-Converted["_TextLabel1"].Position = UDim2.new(0.351223648, 0, 0.490965933, 0)
-Converted["_TextLabel1"].Size = UDim2.new(0, 210, 0, 32)
-Converted["_TextLabel1"].Parent = Converted["_Frame"]
-
-Converted["_UIGradient1"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
-Converted["_UIGradient1"].Parent = Converted["_TextLabel1"]
-
-Converted["_UIPadding1"].PaddingLeft = UDim.new(0, 5)
-Converted["_UIPadding1"].Parent = Converted["_TextLabel1"]
-
-Converted["_UIGradient2"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
-Converted["_UIGradient2"].Parent = Converted["_Frame"]
-
-Converted["_UIStroke"].Color = Color3.fromRGB(243, 255, 7)
-Converted["_UIStroke"].Thickness = 3
-Converted["_UIStroke"].Parent = Converted["_Frame"]
-
-Converted["_Frame1"].BackgroundColor3 = Color3.fromRGB(253, 237, 6)
-Converted["_Frame1"].BorderSizePixel = 0
-Converted["_Frame1"].Position = UDim2.new(0.35, 0, -0.11, 0)
-Converted["_Frame1"].Size = UDim2.new(0, 202, 0, 1)
-Converted["_Frame1"].Parent = Converted["_Frame"]
-
-Converted["_TextLabel2"].Font = Enum.Font.FredokaOne
-Converted["_TextLabel2"].Text = "Người Làm Duck"
-Converted["_TextLabel2"].TextColor3 = Color3.fromRGB(247, 247, 6)
-Converted["_TextLabel2"].TextSize = 15
-Converted["_TextLabel2"].Active = true
-Converted["_TextLabel2"].BackgroundTransparency = 1
-Converted["_TextLabel2"].BorderSizePixel = 0
-Converted["_TextLabel2"].Position = UDim2.new(0.0624048226, 0, -14.0275574, 0)
-Converted["_TextLabel2"].Size = UDim2.new(0, 200, 0, 15)
-Converted["_TextLabel2"].Parent = Converted["_Frame1"]
-
-Converted["_ImageLabel"].Image = "http://www.roblox.com/asset/?id=116513993412842"
-Converted["_ImageLabel"].BackgroundTransparency = 1
-Converted["_ImageLabel"].BorderSizePixel = 0
-Converted["_ImageLabel"].Position = UDim2.new(0.142181829, 0, 0.0194310732, 0)
-Converted["_ImageLabel"].Size = UDim2.new(0, 72, 0, 72)
-Converted["_ImageLabel"].Parent = Converted["_ScreenGui"]
+-- Cập nhật thời gian
+local seconds = 0
+spawn(function()
+    while wait(1) do
+        seconds = seconds + 1
+        local hrs = math.floor(seconds / 3600)
+        local mins = math.floor((seconds % 3600) / 60)
+        local secs = seconds % 60
+        timeLabel.Text = "Time: " .. hrs .. " Hours " .. mins .. " Minutes " .. secs .. " Seconds"
+    end
+end)
 
 -- Các cài đặt ban đầu
 setclipboard("")
@@ -167,25 +145,25 @@ require(game.ReplicatedStorage.Util.CameraShaker):Stop()
 local World1, World2, World3
 if game.PlaceId == 2753915549 then
     World1 = true
-    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea!"
+    statusText.Text = "Status: Please go to Third Sea!"
     warn("Script stopped: Not in Third Sea")
     return
 elseif game.PlaceId == 4442272183 then
     World2 = true
-    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea!"
+    statusText.Text = "Status: Please go to Third Sea!"
     warn("Script stopped: Not in Third Sea")
     return
 elseif game.PlaceId == 7449423635 then
     World3 = true
     print("World check: In Third Sea")
 else
-    Converted["_TextLabel1"].Text = "Status: Wrong Sea, please go to Third Sea (PlaceId: " .. game.PlaceId .. ")"
+    statusText.Text = "Status: Wrong Sea, please go to Third Sea (PlaceId: " .. game.PlaceId .. ")"
     warn("Invalid PlaceId: " .. game.PlaceId)
     return
 end
 
 if not World3 then
-    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea"
+    statusText.Text = "Status: Please go to Third Sea"
     return
 end
 
@@ -254,7 +232,7 @@ function topos(pos)
     local plr = game.Players.LocalPlayer
     local hrp = WaitHRP(plr)
     if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
-        Converted["_TextLabel1"].Text = "Status: Waiting for character..."
+        statusText.Text = "Status: Waiting for character..."
         task.wait(1)
         return
     end
@@ -263,6 +241,7 @@ function topos(pos)
     local nearestTeleport = distance > 1000 and CheckNearestTeleporter(pos)
 
     if nearestTeleport then
+        statusText.Text = "Status: Using teleporter..."
         requestEntrance(nearestTeleport)
         task.wait(1)
     end
@@ -288,6 +267,7 @@ function topos(pos)
     end
 
     isTeleporting = true
+    statusText.Text = "Status: Moving to target location..."
     local speed = getgenv().TweenSpeed or 350
     if distance <= 250 then
         speed = speed * 3
@@ -352,10 +332,9 @@ local function onCharacterAdded(character)
     local humanoid = character:WaitForChild("Humanoid")
     humanoid.Died:Connect(function()
         stopTeleport()
+        statusText.Text = "Status: Character died, respawning..."
     end)
 end
-
-
 
 plr.CharacterAdded:Connect(onCharacterAdded)
 if plr.Character then
@@ -528,8 +507,8 @@ if _G.FastAttack then
     end)
 end
 
+-- Load TrollApi
 local TrollApi = loadstring(game:HttpGet("https://raw.githubusercontent.com/PorryDepTrai/exploit/main/SimpleTroll.lua"))()
-
 
 -- Hàm hỗ trợ
 function AutoHaki()
@@ -566,7 +545,8 @@ task.spawn(function()
     end
 end)
 
-_G.AutoTurnOnV3 = Value
+-- V3/V4 race skills
+_G.AutoTurnOnV3 = true
 task.spawn(function()
     local prevState = false
     while true do
@@ -582,7 +562,7 @@ task.spawn(function()
     end
 end)
 
-_G.AutoTurnOnV4 = Value
+_G.AutoTurnOnV4 = true
 task.spawn(function()
     local lastCheckTime = 0
     while true do
@@ -610,6 +590,7 @@ local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 
 local function scrapeAPI()
+    statusText.Text = "Status: Fetching server data from API..."
     local success, response = pcall(function()
         return game:HttpGet("https://hostserver.porry.store/bloxfruit/bot/JobId/conchimkicuc")
     end)
@@ -620,17 +601,21 @@ local function scrapeAPI()
         if data then
             if data.JobId == nil then
                 warn("API returned JobId as nil")
+                statusText.Text = "Status: API returned no JobId"
                 return nil
             elseif type(data.JobId) == "table" then
                 if #data.JobId == 0 then
                     warn("API returned empty JobId array")
+                    statusText.Text = "Status: API returned empty JobId array"
                     return nil
                 end
                 if type(data.JobId[1]) == "string" then
                     print("API success: JobId is a list of strings")
+                    statusText.Text = "Status: Found server JobIDs"
                     return { JobId = data.JobId }
                 elseif type(data.JobId[1]) == "table" then
                     print("API success: JobId is a list of tables")
+                    statusText.Text = "Status: Found server JobIDs"
                     return data
                 else
                     local jobIds = {}
@@ -639,21 +624,26 @@ local function scrapeAPI()
                     end
                     if #jobIds > 0 then
                         print("API success: JobId is a table with keys")
+                        statusText.Text = "Status: Found server JobIDs"
                         return { JobId = jobIds }
                     end
                 end
             elseif type(data.JobId) == "string" then
                 print("API success: JobId is a single string")
+                statusText.Text = "Status: Found single server JobID"
                 return { JobId = {data.JobId} }
             end
             warn("API returned invalid data format")
+            statusText.Text = "Status: API returned invalid data format"
             return nil
         else
             warn("API returned invalid data")
+            statusText.Text = "Status: API returned invalid data"
             return nil
         end
     else
         warn("Failed to fetch API:", response)
+        statusText.Text = "Status: Failed to fetch API data"
         return nil
     end
 end
@@ -663,12 +653,13 @@ local function autoHopIfNeeded()
     local maxAttempts = 8
     local attempt = 1
     while attempt <= maxAttempts do
-        Converted["_TextLabel1"].Text = "Status: Hopping to new server... (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
+        statusText.Text = "Status: Hopping to new server... (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
         local data = scrapeAPI()
         if data and data.JobId and #data.JobId > 0 then
             for _, jobId in ipairs(data.JobId) do
                 for id in pairs(jobId) do jobId = id end
                 print("Hopping to server with JobId:", jobId)
+                statusText.Text = "Status: Trying to join server with JobId: " .. jobId:sub(1, 8) .. "..."
                 pcall(function()
                     game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", TrollApi["Decode JobId API Porry | discord.gg/umaru | MB KHOI"](jobId, "discord.gg/umaru | MB_Bank 9929992999 Phan Dat Khoi"))
                 end)
@@ -676,15 +667,14 @@ local function autoHopIfNeeded()
                 return
             end
         end
-        Converted["_TextLabel1"].Text = "Status: No Tyrant of the Skies server found (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
+        statusText.Text = "Status: No Tyrant of the Skies server found (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
         warn("No JobId found for hopping")
         attempt = attempt + 1
         task.wait(2)
     end
-    Converted["_TextLabel1"].Text = "Status: Failed to find Tyrant of the Skies server"
+    statusText.Text = "Status: Failed to find Tyrant of the Skies server"
 end
 
--- Logic đánh Tyrant of the Skies
 _G.FarmBoss = true
 spawn(function()
     while task.wait() do
