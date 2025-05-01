@@ -1,826 +1,739 @@
-local player = game.Players.LocalPlayer
-local ContentProvider = game:GetService("ContentProvider")
+-- Khởi tạo thông báo
+local Notification = require(game:GetService("ReplicatedStorage").Notification)
+Notification.new("<Color=Orange>discord.gg/umaru<Color=/>"):Display()
+task.wait(0.25)
 
--- Xóa giao diện cũ nếu đã tồn tại
-local existingGui = player.PlayerGui:FindFirstChild("GreenHubOverlay")
-if existingGui then
-    existingGui:Destroy()
+-- Chờ người chơi
+repeat task.wait() until game.Players.LocalPlayer
+task.wait(2.5)
+
+-- Khởi tạo UI
+local Converted = {
+	["_ScreenGui"] = Instance.new("ScreenGui");
+	["_Frame"] = Instance.new("Frame");
+	["_UICorner"] = Instance.new("UICorner");
+	["_UIScale"] = Instance.new("UIScale");
+	["_shadowHolder"] = Instance.new("Frame");
+	["_umbraShadow"] = Instance.new("ImageLabel");
+	["_penumbraShadow"] = Instance.new("ImageLabel");
+	["_ambientShadow"] = Instance.new("ImageLabel");
+	["_TextLabel"] = Instance.new("TextLabel");
+	["_UIPadding"] = Instance.new("UIPadding");
+	["_UIGradient"] = Instance.new("UIGradient");
+	["_TextLabel1"] = Instance.new("TextLabel");
+	["_UIGradient1"] = Instance.new("UIGradient");
+	["_UIPadding1"] = Instance.new("UIPadding");
+	["_UIGradient2"] = Instance.new("UIGradient");
+	["_UIStroke"] = Instance.new("UIStroke");
+	["_Frame1"] = Instance.new("Frame");
+	["_TextLabel2"] = Instance.new("TextLabel");
+	["_ImageLabel"] = Instance.new("ImageLabel");
+}
+
+Converted["_ScreenGui"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Converted["_ScreenGui"].Parent = game:GetService("CoreGui")
+Converted["_ScreenGui"].Enabled = false
+print("UI initialized: ScreenGui created")
+
+Converted["_Frame"].BackgroundColor3 = Color3.fromRGB(51, 52, 49)
+Converted["_Frame"].BackgroundTransparency = 0.3
+Converted["_Frame"].BorderSizePixel = 0
+Converted["_Frame"].Position = UDim2.new(0.142634839, 0, 0.0200501252, 0)
+Converted["_Frame"].Size = UDim2.new(0, 600, 0, 71)
+Converted["_Frame"].Parent = Converted["_ScreenGui"]
+
+Converted["_UICorner"].CornerRadius = UDim.new(0, 5)
+Converted["_UICorner"].Parent = Converted["_Frame"]
+
+Converted["_UIScale"].Parent = Converted["_Frame"]
+
+Converted["_shadowHolder"].BackgroundTransparency = 1
+Converted["_shadowHolder"].Position = UDim2.new(-0.0139239347, 0, -0.0909090936, 0)
+Converted["_shadowHolder"].Size = UDim2.new(1.03037941, 0, 1.16161621, 0)
+Converted["_shadowHolder"].ZIndex = 0
+Converted["_shadowHolder"].Name = "shadowHolder"
+Converted["_shadowHolder"].Parent = Converted["_Frame"]
+
+Converted["_umbraShadow"].Image = "rbxassetid://1316045217"
+Converted["_umbraShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_umbraShadow"].ImageTransparency = 1
+Converted["_umbraShadow"].ScaleType = Enum.ScaleType.Slice
+Converted["_umbraShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
+Converted["_umbraShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
+Converted["_umbraShadow"].BackgroundTransparency = 1
+Converted["_umbraShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
+Converted["_umbraShadow"].Size = UDim2.new(1, 0, 1, 0)
+Converted["_umbraShadow"].ZIndex = 0
+Converted["_umbraShadow"].Name = "umbraShadow"
+Converted["_umbraShadow"].Parent = Converted["_shadowHolder"]
+
+Converted["_penumbraShadow"].Image = "rbxassetid://1316045217"
+Converted["_penumbraShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_penumbraShadow"].ImageTransparency = 1
+Converted["_penumbraShadow"].ScaleType = Enum.ScaleType.Slice
+Converted["_penumbraShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
+Converted["_penumbraShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
+Converted["_penumbraShadow"].BackgroundTransparency = 1
+Converted["_penumbraShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
+Converted["_penumbraShadow"].Size = UDim2.new(1, 0, 1, 0)
+Converted["_penumbraShadow"].ZIndex = 0
+Converted["_penumbraShadow"].Name = "penumbraShadow"
+Converted["_penumbraShadow"].Parent = Converted["_shadowHolder"]
+
+Converted["_ambientShadow"].Image = "rbxassetid://1316045217"
+Converted["_ambientShadow"].ImageColor3 = Color3.fromRGB(0, 0, 0)
+Converted["_ambientShadow"].ImageTransparency = 1
+Converted["_ambientShadow"].ScaleType = Enum.ScaleType.Slice
+Converted["_ambientShadow"].SliceCenter = Rect.new(10, 10, 118, 118)
+Converted["_ambientShadow"].AnchorPoint = Vector2.new(0.5, 0.5)
+Converted["_ambientShadow"].BackgroundTransparency = 1
+Converted["_ambientShadow"].Position = UDim2.new(0.5, 0, 0.5, 0)
+Converted["_ambientShadow"].Size = UDim2.new(1, 0, 1, 0)
+Converted["_ambientShadow"].ZIndex = 0
+Converted["_ambientShadow"].Name = "ambientShadow"
+Converted["_ambientShadow"].Parent = Converted["_shadowHolder"]
+
+Converted["_TextLabel"].Font = Enum.Font.FredokaOne
+Converted["_TextLabel"].Text = "W-MB | Auto Tyrant of the Skies"
+Converted["_TextLabel"].TextColor3 = Color3.fromRGB(255, 238, 6)
+Converted["_TextLabel"].TextSize = 26
+Converted["_TextLabel"].TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+Converted["_TextLabel"].Active = true
+Converted["_TextLabel"].BackgroundTransparency = 1
+Converted["_TextLabel"].BorderSizePixel = 0
+Converted["_TextLabel"].Position = UDim2.new(0.25981009, 0, 0.115379117, 0)
+Converted["_TextLabel"].Size = UDim2.new(0, 335, 0, 27)
+Converted["_TextLabel"].Parent = Converted["_Frame"]
+
+Converted["_UIPadding"].PaddingLeft = UDim.new(0, 5)
+Converted["_UIPadding"].Parent = Converted["_TextLabel"]
+
+Converted["_UIGradient"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
+Converted["_UIGradient"].Parent = Converted["_TextLabel"]
+
+Converted["_TextLabel1"].Font = Enum.Font.FredokaOne
+Converted["_TextLabel1"].Text = "Status: Initializing..."
+Converted["_TextLabel1"].TextColor3 = Color3.fromRGB(255, 255, 11)
+Converted["_TextLabel1"].TextSize = 23
+Converted["_TextLabel1"].BackgroundTransparency = 1
+Converted["_TextLabel1"].BorderSizePixel = 0
+Converted["_TextLabel1"].Position = UDim2.new(0.351223648, 0, 0.490965933, 0)
+Converted["_TextLabel1"].Size = UDim2.new(0, 210, 0, 32)
+Converted["_TextLabel1"].Parent = Converted["_Frame"]
+
+Converted["_UIGradient1"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
+Converted["_UIGradient1"].Parent = Converted["_TextLabel1"]
+
+Converted["_UIPadding1"].PaddingLeft = UDim.new(0, 5)
+Converted["_UIPadding1"].Parent = Converted["_TextLabel1"]
+
+Converted["_UIGradient2"].Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))}
+Converted["_UIGradient2"].Parent = Converted["_Frame"]
+
+Converted["_UIStroke"].Color = Color3.fromRGB(243, 255, 7)
+Converted["_UIStroke"].Thickness = 3
+Converted["_UIStroke"].Parent = Converted["_Frame"]
+
+Converted["_Frame1"].BackgroundColor3 = Color3.fromRGB(253, 237, 6)
+Converted["_Frame1"].BorderSizePixel = 0
+Converted["_Frame1"].Position = UDim2.new(0.35, 0, -0.11, 0)
+Converted["_Frame1"].Size = UDim2.new(0, 202, 0, 1)
+Converted["_Frame1"].Parent = Converted["_Frame"]
+
+Converted["_TextLabel2"].Font = Enum.Font.FredokaOne
+Converted["_TextLabel2"].Text = "Người Làm Duck"
+Converted["_TextLabel2"].TextColor3 = Color3.fromRGB(247, 247, 6)
+Converted["_TextLabel2"].TextSize = 15
+Converted["_TextLabel2"].Active = true
+Converted["_TextLabel2"].BackgroundTransparency = 1
+Converted["_TextLabel2"].BorderSizePixel = 0
+Converted["_TextLabel2"].Position = UDim2.new(0.0624048226, 0, -14.0275574, 0)
+Converted["_TextLabel2"].Size = UDim2.new(0, 200, 0, 15)
+Converted["_TextLabel2"].Parent = Converted["_Frame1"]
+
+Converted["_ImageLabel"].Image = "http://www.roblox.com/asset/?id=116513993412842"
+Converted["_ImageLabel"].BackgroundTransparency = 1
+Converted["_ImageLabel"].BorderSizePixel = 0
+Converted["_ImageLabel"].Position = UDim2.new(0.142181829, 0, 0.0194310732, 0)
+Converted["_ImageLabel"].Size = UDim2.new(0, 72, 0, 72)
+Converted["_ImageLabel"].Parent = Converted["_ScreenGui"]
+
+-- Các cài đặt ban đầu
+setclipboard("")
+game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam", "Marines")
+require(game.ReplicatedStorage.Util.CameraShaker):Stop()
+
+-- Xác định thế giới
+local World1, World2, World3
+if game.PlaceId == 2753915549 then
+    World1 = true
+    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea!"
+    warn("Script stopped: Not in Third Sea")
+    return
+elseif game.PlaceId == 4442272183 then
+    World2 = true
+    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea!"
+    warn("Script stopped: Not in Third Sea")
+    return
+elseif game.PlaceId == 7449423635 then
+    World3 = true
+    print("World check: In Third Sea")
+else
+    Converted["_TextLabel1"].Text = "Status: Wrong Sea, please go to Third Sea (PlaceId: " .. game.PlaceId .. ")"
+    warn("Invalid PlaceId: " .. game.PlaceId)
+    return
 end
 
--- Tạo giao diện mới
-local gui = Instance.new("ScreenGui")
-gui.Name = "GreenHubOverlay"
-gui.ResetOnSpawn = false
-gui.IgnoreGuiInset = true
-gui.Parent = player.PlayerGui
+if not World3 then
+    Converted["_TextLabel1"].Text = "Status: Please go to Third Sea"
+    return
+end
 
--- Background chính
-local background = Instance.new("Frame")
-background.Size = UDim2.new(1, 0, 1, 0)
-background.BackgroundColor3 = Color3.new(0, 0, 0)
-background.BackgroundTransparency = 0.4
-background.Visible = true
-background.ZIndex = 1  -- Thêm ZIndex để đảm bảo nó hiển thị
-background.Parent = gui
+-- Hàm hỗ trợ
+function WaitHRP(player)
+    if not player then return end
+    local character = player.Character
+    if character then
+        return character:WaitForChild("HumanoidRootPart", 9)
+    end
+    return nil
+end
 
--- Tiêu đề Green Hub
-local titleText = Instance.new("TextLabel")
-titleText.Size = UDim2.new(0, 300, 0, 60)
-titleText.Position = UDim2.new(0.5, -150, 0.16, 0)
-titleText.BackgroundTransparency = 1
-titleText.Text = "GreenZ Hub"
-titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleText.TextSize = 50
-titleText.Font = Enum.Font.GothamBold
-titleText.ZIndex = 2  -- Thêm ZIndex cao hơn
-titleText.Parent = background
+-- Hàm teleport
+local isTeleporting = false
+function CheckNearestTeleporter(pos)
+    local vcspos = pos.Position
+    local minDist = math.huge
+    local chosenTeleport = nil
+    local TableLocations = {
+        ["Floating Turtle"] = Vector3.new(-12462, 375, -7552),
+        ["Hydra Island"] = Vector3.new(5662, 1013, -335),
+        ["Mansion"] = Vector3.new(-12462, 375, -7552),
+        ["Castle"] = Vector3.new(-5036, 315, -3179),
+        ["Beautiful Pirate"] = Vector3.new(5319, 23, -93),
+        ["Beautiful Room"] = Vector3.new(5314.58203, 22.5364361, -125.942276),
+        ["Temple of Time"] = Vector3.new(28286, 14897, 103),
+        ["Tiki Outpost"] = Vector3.new(-16600, 62, -17200) -- Tọa độ Tiki Outpost
+    }
 
--- Trạng thái boss (sửa lỗi cú pháp)
-local statusText = Instance.new("TextLabel")
-statusText.Size = UDim2.new(1, 0, 0.05, 0)
-statusText.Position = UDim2.new(0, 0, 0.29, 0)
-statusText.BackgroundTransparency = 1
-statusText.Text = "Status: Auto Farm Boss Tyrant"  -- Sửa lỗi cú pháp thiếu dấu ngoặc kép
-statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
-statusText.TextSize = 24
-statusText.Font = Enum.Font.GothamSemibold
-statusText.ZIndex = 2
-statusText.Parent = background
+    local tikiPos = TableLocations["Tiki Outpost"]
+    local distToTiki = (tikiPos - vcspos).Magnitude
+    if distToTiki < 500 then
+        print("Destination is Tiki Outpost, skipping teleporter check")
+        return nil
+    end
 
--- LOGO CHÍNH GIỮA
-local logo = Instance.new("ImageLabel")
-logo.Size = UDim2.new(0, 300, 0, 300)
-logo.Position = UDim2.new(0.5, -150, 0.55, -150)
-logo.BackgroundTransparency = 1
-logo.Image = "rbxassetid://93927358445739"  -- Sửa lại ID ảnh hợp lệ
-logo.ZIndex = 2
-logo.Parent = background
+    for name, v in pairs(TableLocations) do
+        local dist = (v - vcspos).Magnitude
+        if dist < minDist and name ~= "Tiki Outpost" then
+            minDist = dist
+            chosenTeleport = v
+            print("Nearest teleporter:", name, "Distance:", dist)
+        end
+    end
 
--- Thời gian ở dưới
-local timeLabel = Instance.new("TextLabel")
-timeLabel.Size = UDim2.new(0.5, 0, 0.04, 0)
-timeLabel.Position = UDim2.new(0.25, 0, 0.82, 0)
-timeLabel.BackgroundTransparency = 1
-timeLabel.Text = "Time: 0 Hours 0 Minutes 0 Seconds"
-timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-timeLabel.TextSize = 20
-timeLabel.Font = Enum.Font.GothamSemibold
-timeLabel.ZIndex = 2
-timeLabel.Parent = background
+    local playerPos = WaitHRP(game.Players.LocalPlayer) and game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    if playerPos and minDist <= (vcspos - playerPos).Magnitude then
+        return chosenTeleport
+    end
+    return nil
+end
 
--- Thông tin người chơi
-local infoLabel = Instance.new("TextLabel")
-infoLabel.Size = UDim2.new(0.6, 0, 0.04, 0)
-infoLabel.Position = UDim2.new(0.2, 0, 0.86, 0)
-infoLabel.BackgroundTransparency = 1
-infoLabel.TextColor3 = Color3.new(1, 1, 1)
-infoLabel.TextSize = 18
-infoLabel.Font = Enum.Font.GothamSemibold
-infoLabel.Text = "Loading..."
-infoLabel.ZIndex = 2
-infoLabel.Parent = background
+function requestEntrance(teleportPos)
+    pcall(function()
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance", teleportPos)
+        local char = WaitHRP(game.Players.LocalPlayer)
+        if char then
+            char.CFrame = char.CFrame + Vector3.new(0, 50, 0)
+        end
+    end)
+    task.wait(0.5)
+end
 
--- NÚT BẬT TẮT UI
-local toggleButton = Instance.new("ImageButton")
-toggleButton.Name = "CustomButton"
-toggleButton.Size = UDim2.new(0, 50, 0, 50)
-toggleButton.Position = UDim2.new(0.015, 0, 0.15, 0)
-toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-toggleButton.BackgroundTransparency = 0.3
-toggleButton.Image = "rbxassetid://93927358445739" -- ID ảnh thay vào đây
-toggleButton.ZIndex = 10
-toggleButton.Parent = gui
+function topos(pos)
+    local plr = game.Players.LocalPlayer
+    local hrp = WaitHRP(plr)
+    if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+        Converted["_TextLabel1"].Text = "Status: Waiting for character..."
+        task.wait(1)
+        return
+    end
 
-local toggleButtonCorner = Instance.new("UICorner")
-toggleButtonCorner.CornerRadius = UDim.new(1, 0)
-toggleButtonCorner.Parent = toggleButton
+    local distance = (pos.Position - hrp.Position).Magnitude
+    local nearestTeleport = distance > 1000 and CheckNearestTeleporter(pos)
 
--- Cập nhật thông tin người chơi
+    if nearestTeleport then
+        requestEntrance(nearestTeleport)
+        task.wait(1)
+    end
+
+    local partTele = plr.Character:FindFirstChild("PartTele")
+    if not partTele then
+        partTele = Instance.new("Part", plr.Character)
+        partTele.Size = Vector3.new(10, 1, 10)
+        partTele.Name = "PartTele"
+        partTele.Anchored = true
+        partTele.Transparency = 1
+        partTele.CanCollide = false
+        partTele.CFrame = hrp.CFrame
+
+        partTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+            if not isTeleporting then return end
+            task.wait()
+            if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                local targetCFrame = partTele.CFrame
+                WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, pos.Position.Y, targetCFrame.Position.Z)
+            end
+        end)
+    end
+
+    isTeleporting = true
+    local speed = getgenv().TweenSpeed or 350
+    if distance <= 250 then
+        speed = speed * 3
+    end
+
+    local tween = game:GetService("TweenService"):Create(
+        partTele,
+        TweenInfo.new(distance / speed, Enum.EasingStyle.Linear),
+        {CFrame = pos}
+    )
+    tween:Play()
+
+    tween.Completed:Connect(function(status)
+        if status == Enum.PlaybackState.Completed then
+            if plr.Character:FindFirstChild("PartTele") then
+                plr.Character.PartTele:Destroy()
+            end
+            isTeleporting = false
+            local finalPos = plr.Character.HumanoidRootPart.Position
+            local distToTarget = (finalPos - pos.Position).Magnitude
+            if distToTarget > 50 then
+                warn("Teleport failed: Too far from target. Retrying...")
+                hrp.CFrame = CFrame.new(pos.Position + Vector3.new(0, 10, 0))
+                task.wait(1)
+                topos(pos)
+            end
+        end
+    end)
+end
+
+function stopTeleport()
+    isTeleporting = false
+    local plr = game.Players.LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("PartTele") then
+        plr.Character.PartTele:Destroy()
+    end
+end
+
 spawn(function()
-    while wait(1) do
+    while task.wait() do
+        if not isTeleporting then
+            stopTeleport()
+        end
+    end
+end)
+
+spawn(function()
+    local plr = game.Players.LocalPlayer
+    while task.wait() do
         pcall(function()
-            if player and player:FindFirstChild("Data") then
-                local level = player.Data.Level.Value
-                local beli = player.Data.Beli.Value
-                local frags = player.Data.Fragments.Value
-                infoLabel.Text = player.DisplayName .. " | Level: " .. level .. " | Beli: " .. beli .. " | Fragments: " .. frags
-            else
-                infoLabel.Text = "Không thể tải thông tin người chơi"
+            if plr.Character and plr.Character:FindFirstChild("PartTele") then
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+                    stopTeleport()
+                end
             end
         end)
     end
 end)
 
--- Xử lý khi nhấn nút bật tắt
-local isOpen = true
-toggleButton.MouseButton1Click:Connect(function()
-    isOpen = not isOpen
-    background.Visible = isOpen
-    print("")
-end)
-
--- Cập nhật thời gian
-local seconds = 0
-spawn(function()
-    while wait(1) do
-        seconds = seconds + 1
-        local hrs = math.floor(seconds / 3600)
-        local mins = math.floor((seconds % 3600) / 60)
-        local secs = seconds % 60
-        timeLabel.Text = "Time: " .. hrs .. " Hours " .. mins .. " Minutes " .. secs .. " Seconds"
-    end
-end)
-wait(4)
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetTeam", "Marines")
-
-game:GetService("ReplicatedStorage"):WaitForChild("__ServerBrowser"):InvokeServer("getjob")
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ClientAnalyticsEvent"):FireServer({
-	["Platform"] = "Mobile"
-})
-
-hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death), function()
-end)
-
-hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Respawn), function()
-end)
-
-hookfunction(require(game:GetService("ReplicatedStorage"):WaitForChild("GuideModule")).ChangeDisplayedNPC, function()
-end)
-
-require(game.ReplicatedStorage.Util.CameraShaker):Stop()
-
-if game.PlaceId == 2753915549 then
-	World1 = true
-elseif game.PlaceId == 4442272183 then
-	World2 = true
-elseif game.PlaceId == 7449423635 then
-	World3 = true
-end
-
-local isTeleporting = false
-
-function WaitHRP(q0)
-	if not q0 then
-		return
-	end
-	return q0.Character:WaitForChild("HumanoidRootPart", 9)
-
-end
-
-function CheckNearestTeleporter(aI)
-	local vcspos = aI.Position
-	local minDist = math.huge
-	local chosenTeleport = nil
-	local y = game.PlaceId
-	local TableLocations = {}
-	if y == 2753915549 then
-		TableLocations = {
-			["Sky3"] = Vector3.new(-7894, 5547, -380),
-			["Sky3Exit"] = Vector3.new(-4607, 874, -1667),
-			["UnderWater"] = Vector3.new(61163, 11, 1819),
-			["UnderwaterExit"] = Vector3.new(4050, -1, -1814)
-		}
-	elseif y == 4442272183 then
-		TableLocations = {
-			["Swan Mansion"] = Vector3.new(-390, 332, 673),
-			["Swan Room"] = Vector3.new(2285, 15, 905),
-			["Cursed Ship"] = Vector3.new(923, 126, 32852),
-			["Zombie Island"] = Vector3.new(-6509, 83, -133)
-		}
-	elseif y == 7449423635 then
-		TableLocations = {
-			["Floating Turtle"] = Vector3.new(-12462, 375, -7552),
-			["Hydra Island"] = Vector3.new(5662, 1013, -335),
-			["Mansion"] = Vector3.new(-12462, 375, -7552),
-			["Castle"] = Vector3.new(-5036, 315, -3179),
-			["Beautiful Pirate"] = Vector3.new(5319, 23, -93),
-			["Beautiful Room"] = Vector3.new(
-
-                5314.58203,
-
-                22.5364361,
-
-                -125.942276,
-
-                1,
-
-                2.14762768e-08,
-
-                -1.99111154e-13,
-
-                -2.14762768e-08,
-
-                1,
-
-                -3.0510602e-08,
-
-                1.98455903e-13,
-
-                3.0510602e-08,
-
-                1
-
-            ),
-			["Temple of Time"] = Vector3.new(28286, 14897, 103)
-		}
-	end
-	for _, v in pairs(TableLocations) do
-		local dist = (v - vcspos).Magnitude
-		if dist < minDist then
-			minDist = dist
-			chosenTeleport = v
-		end
-	end
-	local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-	if minDist <= (vcspos - playerPos).Magnitude then
-		return chosenTeleport
-	end
-
-end
-
-function requestEntrance(teleportPos)
-	game.ReplicatedStorage.Remotes.CommF_:InvokeServer("requestEntrance", teleportPos)
-	local char = game.Players.LocalPlayer.Character.HumanoidRootPart
-	char.CFrame = char.CFrame + Vector3.new(0, 50, 0)
-	task.wait(0.5)
-
-end
-
-
-
-function topos(Pos)
-	local plr = game.Players.LocalPlayer
-	if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-		if not Pos then
-			return
-		end
-		local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-		local nearestTeleport = CheckNearestTeleporter(Pos)
-		if nearestTeleport then
-			requestEntrance(nearestTeleport)
-		end
-		if not plr.Character:FindFirstChild("PartTele") then
-			local PartTele = Instance.new("Part", plr.Character)
-			PartTele.Size = Vector3.new(10, 1, 10)
-			PartTele.Name = "PartTele"
-			PartTele.Anchored = true
-			PartTele.Transparency = 1
-			PartTele.CanCollide = false
-			PartTele.CFrame = WaitHRP(plr).CFrame
-			PartTele:GetPropertyChangedSignal("CFrame"):Connect(
-
-                function()
-				if not isTeleporting then
-					return
-				end
-				task.wait()
-				if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-					local targetCFrame = PartTele.CFrame
-					WaitHRP(plr).CFrame =
-
-                            CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
-				end
-			end
-
-            )
-		end
-		isTeleporting = true
-		local SpeedTw = getgenv().TweenSpeed
-		if Distance <= 250 then
-			SpeedTw = SpeedTw * 3
-		end
-		local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
-		local Tween =
-
-            game:GetService("TweenService"):Create(
-
-            plr.Character.PartTele,
-
-            TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear),
-
-            {
-			CFrame = Pos
-		}
-
-        )
-		Tween:Play()
-		Tween.Completed:Connect(
-
-            function(status)
-			if status == Enum.PlaybackState.Completed then
-				if plr.Character:FindFirstChild("PartTele") then
-					plr.Character.PartTele:Destroy()
-				end
-				isTeleporting = false
-			end
-		end
-
-        )
-	end
-
-end
-
-
-
-getgenv().TweenSpeed = 350
-
-
-
-function stopTeleport()
-	isTeleporting = false
-	local plr = game.Players.LocalPlayer
-	if plr.Character:FindFirstChild("PartTele") then
-		plr.Character.PartTele:Destroy()
-	end
-
-end
-
-
-
-spawn(
-
-    function()
-	while task.wait() do
-		if not isTeleporting then
-			stopTeleport()
-		end
-	end
-end
-
-)
-
-
-
-spawn(
-
-    function()
-	local plr = game.Players.LocalPlayer
-	while task.wait() do
-		pcall(
-
-                function()
-			if plr.Character:FindFirstChild("PartTele") then
-				if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-					stopTeleport()
-				end
-			end
-		end
-
-            )
-	end
-end
-
-)
-
-
-
 local plr = game.Players.LocalPlayer
-
-
-
 local function onCharacterAdded(character)
-	local humanoid = character:WaitForChild("Humanoid")
-	humanoid.Died:Connect(
-
-        function()
-		stopTeleport()
-	end
-
-    )
-
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Died:Connect(function()
+        stopTeleport()
+    end)
 end
 
 
 
 plr.CharacterAdded:Connect(onCharacterAdded)
-
-
-
 if plr.Character then
-	onCharacterAdded(plr.Character)
-
+    onCharacterAdded(plr.Character)
 end
 
+-- Noclip
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            if _G.FarmBoss then
+                if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+                    local noclip = Instance.new("BodyVelocity")
+                    noclip.Name = "BodyClip"
+                    noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+                    noclip.MaxForce = Vector3.new(100000, 100000, 100000)
+                    noclip.Velocity = Vector3.new(0, 0, 0)
+                end
+            end
+        end
+    end)
+end)
 
+spawn(function()
+    pcall(function()
+        game:GetService("RunService").Stepped:Connect(function()
+            if _G.FarmBoss then
+                for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                    end
+                end
+            end
+        end)
+    end)
+end)
 
-spawn(
+-- Vị trí tấn công
+local PosY = 25
+local Type = 1
+local Pos = CFrame.new(0, PosY, 0) -- Biến Pos khởi tạo mặc định
+spawn(function()
+    while task.wait() do
+        if Type == 1 then
+            Pos = CFrame.new(0, PosY, -19)
+        elseif Type == 2 then
+            Pos = CFrame.new(19, PosY, 0)
+        elseif Type == 3 then
+            Pos = CFrame.new(0, PosY, 19)
+        elseif Type == 4 then
+            Pos = CFrame.new(-19, PosY, 0)
+        end
+    end
+end)
 
-    function()
-	pcall(
+spawn(function()
+    while task.wait(0.1) do
+        Type = 1
+        task.wait(0.2)
+        Type = 2
+        task.wait(0.2)
+        Type = 3
+        task.wait(0.2)
+        Type = 4
+        task.wait(0.2)
+    end
+end)
 
-            function()
-		while wait() do
-			if _G.FarmBoss then
-				if
-
-                            not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild(
-
-                                "BodyClip"
-
-                            )
-
-                         then
-					local Noclip = Instance.new("BodyVelocity")
-					Noclip.Name = "BodyClip"
-					Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-					Noclip.MaxForce = Vector3.new(100000, 100000, 100000)
-					Noclip.Velocity = Vector3.new(0, 0, 0)
-				end
-			end
-		end
-	end
-
-        )
-end
-
-)
-
-
-
-spawn(
-
-    function()
-	pcall(
-
-            function()
-		game:GetService("RunService").Stepped:Connect(
-
-                    function()
-			if _G.FarmBoss then
-				for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-					if v:IsA("BasePart") then
-						v.CanCollide = false
-					end
-				end
-			end
-		end
-
-                )
-	end
-
-        )
-end
-
-)
-
-
-
-PosY = 25
-
-
-
-Type = 1
-
-
-
-spawn(
-
-    function()
-	while wait() do
-		if Type == 1 then
-			Pos = CFrame.new(0, PosY, -19)
-		elseif Type == 2 then
-			Pos = CFrame.new(19, PosY, 0)
-		elseif Type == 3 then
-			Pos = CFrame.new(0, PosY, 19)
-		elseif Type == 4 then
-			Pos = CFrame.new(-19, PosY, 0)
-		end
-	end
-end
-
-)
-
-
-
-spawn(
-
-    function()
-	while wait(.1) do
-		Type = 1
-		wait(0.2)
-		Type = 2
-		wait(0.2)
-		Type = 3
-		wait(0.2)
-		Type = 4
-		wait(0.2)
-	end
-end
-
-)
-
-
-
+-- Tấn công nhanh
 _G.FastAttack = true
-
-
-
 if _G.FastAttack then
-	local _ENV = (getgenv or getrenv or getfenv)()
-	local function SafeWaitForChild(parent, childName)
-		local success, result =
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    local CollectionService = game:GetService("CollectionService")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local RunService = game:GetService("RunService")
+    local Players = game:GetService("Players")
+    local Player = Players.LocalPlayer
 
-            pcall(
+    local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+    local Validator = Remotes:WaitForChild("Validator")
+    local CommF = Remotes:WaitForChild("CommF_")
+    local CommE = Remotes:WaitForChild("CommE")
+    local Net = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Net")
+    local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
+    local RegisterHit = Net:WaitForChild("RE/RegisterHit")
 
-            function()
-			return parent:WaitForChild(childName)
-		end
+    local Settings = {
+        AutoClick = true,
+        ClickDelay = 0
+    }
 
-        )
-		if not success or not result then
-			warn("noooooo: " .. childName)
-		end
-		return result
-	end
-	local function WaitChilds(path, ...)
-		local last = path
-		for _, child in {
-			...
-		} do
-			last = last:FindFirstChild(child) or SafeWaitForChild(last, child)
-			if not last then
-				break
-			end
-		end
-		return last
-	end
-	local VirtualInputManager = game:GetService("VirtualInputManager")
-	local CollectionService = game:GetService("CollectionService")
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local TeleportService = game:GetService("TeleportService")
-	local RunService = game:GetService("RunService")
-	local Players = game:GetService("Players")
-	local Player = Players.LocalPlayer
-	if not Player then
-		warn("Khõng tím th�[y ngƱḓi chƦi c�[c bḟ.")
-		return
-	end
-	local Remotes = SafeWaitForChild(ReplicatedStorage, "Remotes")
-	if not Remotes then
-		return
-	end
-	local Validator = SafeWaitForChild(Remotes, "Validator")
-	local CommF = SafeWaitForChild(Remotes, "CommF_")
-	local CommE = SafeWaitForChild(Remotes, "CommE")
-	local ChestModels = SafeWaitForChild(workspace, "ChestModels")
-	local WorldOrigin = SafeWaitForChild(workspace, "_WorldOrigin")
-	local Characters = SafeWaitForChild(workspace, "Characters")
-	local Enemies = SafeWaitForChild(workspace, "Enemies")
-	local Map = SafeWaitForChild(workspace, "Map")
-	local EnemySpawns = SafeWaitForChild(WorldOrigin, "EnemySpawns")
-	local Locations = SafeWaitForChild(WorldOrigin, "Locations")
-	local RenderStepped = RunService.RenderStepped
-	local Heartbeat = RunService.Heartbeat
-	local Stepped = RunService.Stepped
-	local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
-	local Net = SafeWaitForChild(Modules, "Net")
-	local sethiddenproperty = sethiddenproperty or function(...)
-		return ...
-	end
-	local setupvalue = setupvalue or (debug and debug.setupvalue)
-	local getupvalue = getupvalue or (debug and debug.getupvalue)
-	local Settings = {
-		AutoClick = true,
-		ClickDelay = 0
-	}
-	local Module = {}
-	Module.FastAttack =
+    local FastAttack = {
+        Distance = 100,
+        attackMobs = true,
+        attackPlayers = false,
+        Equipped = nil
+    }
 
-        (function()
-		if _ENV.rz_FastAttack then
-			return _ENV.rz_FastAttack
-		end
-		local FastAttack = {
-			Distance = 100,
-			attackMobs = true,
-			attackPlayers = true,
-			Equipped = nil
-		}
-		local RegisterAttack = SafeWaitForChild(Net, "RE/RegisterAttack")
-		local RegisterHit = SafeWaitForChild(Net, "RE/RegisterHit")
-		local function IsAlive(character)
-			return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
-		end
-		local function ProcessEnemies(OthersEnemies, Folder)
-			local BasePart = nil
-			for _, Enemy in Folder:GetChildren() do
-				local Head = Enemy:FindFirstChild("Head")
-				if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
-					if Enemy ~= Player.Character then
-						table.insert(OthersEnemies, {
-							Enemy,
-							Head
-						})
-						BasePart = Head
-					end
-				end
-			end
-			return BasePart
-		end
-		function FastAttack:Attack(BasePart, OthersEnemies)
-			if not BasePart or #OthersEnemies == 0 then
-				return
-			end
-			RegisterAttack:FireServer(Settings.ClickDelay or 0)
-			RegisterHit:FireServer(BasePart, OthersEnemies)
-		end
-		function FastAttack:AttackNearest()
-			local OthersEnemies = {}
-			local Part1 = ProcessEnemies(OthersEnemies, Enemies)
-			local Part2 = ProcessEnemies(OthersEnemies, Characters)
-			local character = Player.Character
-			if not character then
-				return
-			end
-			local equippedWeapon = character:FindFirstChildOfClass("Tool")
-			if equippedWeapon and equippedWeapon:FindFirstChild("LeftClickRemote") then
-				for _, enemyData in ipairs(OthersEnemies) do
-					local enemy = enemyData[1]
-					local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
-					pcall(
+    local function IsAlive(character)
+        return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
+    end
 
-                        function()
-						equippedWeapon.LeftClickRemote:FireServer(direction, 1)
-					end
+    local function ProcessEnemies(OthersEnemies, Folder)
+        local BasePart = nil
+        for _, Enemy in Folder:GetChildren() do
+            local Head = Enemy:FindFirstChild("Head")
+            if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
+                if Enemy ~= Player.Character then
+                    table.insert(OthersEnemies, {Enemy, Head})
+                    BasePart = Head
+                end
+            end
+        end
+        return BasePart
+    end
 
-                    )
-				end
-			elseif #OthersEnemies > 0 then
-				self:Attack(Part1 or Part2, OthersEnemies)
-			else
-				task.wait(0)
-			end
-		end
-		function FastAttack:BladeHits()
-			local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
-			if Equipped and Equipped.ToolTip ~= "Gun" then
-				self:AttackNearest()
-			else
-				task.wait(0)
-			end
-		end
-		task.spawn(
+    function FastAttack:Attack(BasePart, OthersEnemies)
+        if not BasePart or #OthersEnemies == 0 then
+            return
+        end
+        pcall(function()
+            RegisterAttack:FireServer(Settings.ClickDelay or 0)
+            RegisterHit:FireServer(BasePart, OthersEnemies)
+        end)
+    end
 
-            function()
-			while task.wait(Settings.ClickDelay) do
-				if Settings.AutoClick then
-					FastAttack:BladeHits()
-				end
-			end
-		end
+    function FastAttack:AttackNearest()
+        local OthersEnemies = {}
+        local Part1 = ProcessEnemies(OthersEnemies, game:GetService("Workspace").Enemies)
+        local Part2 = ProcessEnemies(OthersEnemies, game:GetService("Workspace").Characters)
 
-        )
-		_ENV.rz_FastAttack = FastAttack
-		return FastAttack
-	end)()
+        local character = Player.Character
+        if not character then
+            return
+        end
 
+        local equippedWeapon = character:FindFirstChildOfClass("Tool")
+        if equippedWeapon and equippedWeapon:FindFirstChild("LeftClickRemote") then
+            for _, enemyData in ipairs(OthersEnemies) do
+                local enemy = enemyData[1]
+                local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
+                pcall(function()
+                    equippedWeapon.LeftClickRemote:FireServer(direction, 1)
+                end)
+            end
+        elseif #OthersEnemies > 0 then
+            self:Attack(Part1 or Part2, OthersEnemies)
+        else
+            task.wait(0)
+        end
+    end
+
+    function FastAttack:BladeHits()
+        local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
+        if Equipped and Equipped.ToolTip ~= "Gun" then
+            self:AttackNearest()
+        else
+            task.wait(0)
+        end
+    end
+
+    task.spawn(function()
+        while task.wait(Settings.ClickDelay) do
+            if Settings.AutoClick then
+                pcall(function()
+                    FastAttack:BladeHits()
+                end)
+            end
+        end
+    end)
 end
 
+local TrollApi = loadstring(game:HttpGet("https://raw.githubusercontent.com/PorryDepTrai/exploit/main/SimpleTroll.lua"))()
 
 
+-- Hàm hỗ trợ
 function AutoHaki()
-	if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
-		game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
-	end
-
+    pcall(function()
+        if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
+        end
+    end)
 end
-
-
 
 function EquipWeapon(ToolSe)
-	if not Nill then
-		if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
-			Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
-			wait(.1)
-			game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
-		end
-	end
-
+    pcall(function()
+        if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
+            local Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
+            task.wait(0.1)
+            game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
+        end
+    end)
 end
-
-
 
 _G.SelectWeapon = "Melee"
+task.spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.SelectWeapon == "Melee" then
+                for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if v.ToolTip == "Melee" then
+                        _G.SelectWeapon = v.Name
+                        break
+                    end
+                end
+            end
+        end)
+    end
+end)
 
+_G.AutoTurnOnV3 = Value
+task.spawn(function()
+    local prevState = false
+    while true do
+        task.wait(0.1)
+        pcall(function()
+            if _G.AutoTurnOnV3 ~= prevState then
+                if _G.AutoTurnOnV3 then
+                    game:GetService("ReplicatedStorage").Remotes.CommE:FireServer("ActivateAbility")
+                end
+                prevState = _G.AutoTurnOnV3
+            end
+        end)
+    end
+end)
 
+_G.AutoTurnOnV4 = Value
+task.spawn(function()
+    local lastCheckTime = 0
+    while true do
+        task.wait(0.1)
+        if _G.AutoTurnOnV4 then
+            local currentTime = tick()
+            if currentTime - lastCheckTime >= 0.5 then
+                lastCheckTime = currentTime
+                local character = game.Players.LocalPlayer.Character
+                if character and character:FindFirstChild("RaceEnergy") and
+                   character.RaceEnergy.Value >= 1 and
+                   not character.RaceTransformed.Value then
+                    local be = game:GetService("VirtualInputManager")
+                    be:SendKeyEvent(true, "Y", false, game)
+                    task.wait(0.1)
+                    be:SendKeyEvent(false, "Y", false, game)
+                end
+            end
+        end
+    end
+end)
 
-task.spawn(
+-- Hàm gọi API
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
 
-    function()
-	while wait() do
-		pcall(
+local function scrapeAPI()
+    local success, response = pcall(function()
+        return game:HttpGet("https://hostserver.porry.store/bloxfruit/bot/JobId/conchimkicuc")
+    end)
 
-                function()
-			if _G.SelectWeapon == "Melee" then
-				for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-					if v.ToolTip == "Melee" then
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-							_G.SelectWeapon = v.Name
-						end
-					end
-				end
-			elseif _G.SelectWeapon == "Sword" then
-				for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-					if v.ToolTip == "Sword" then
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-							_G.SelectWeapon = v.Name
-						end
-					end
-				end
-			elseif _G.SelectWeapon == "Gun" then
-				for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-					if v.ToolTip == "Gun" then
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-							_G.SelectWeapon = v.Name
-						end
-					end
-				end
-			elseif _G.SelectWeapon == "Fruit" then
-				for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-					if v.ToolTip == "Blox Fruit" then
-						if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-							_G.SelectWeapon = v.Name
-						end
-					end
-				end
-			end
-		end
-
-            )
-	end
+    if success then
+        local data = HttpService:JSONDecode(response)
+        print("API response:", response) -- Debug dữ liệu trả về
+        if data then
+            if data.JobId == nil then
+                warn("API returned JobId as nil")
+                return nil
+            elseif type(data.JobId) == "table" then
+                if #data.JobId == 0 then
+                    warn("API returned empty JobId array")
+                    return nil
+                end
+                if type(data.JobId[1]) == "string" then
+                    print("API success: JobId is a list of strings")
+                    return { JobId = data.JobId }
+                elseif type(data.JobId[1]) == "table" then
+                    print("API success: JobId is a list of tables")
+                    return data
+                else
+                    local jobIds = {}
+                    for jobId, _ in pairs(data.JobId) do
+                        table.insert(jobIds, jobId)
+                    end
+                    if #jobIds > 0 then
+                        print("API success: JobId is a table with keys")
+                        return { JobId = jobIds }
+                    end
+                end
+            elseif type(data.JobId) == "string" then
+                print("API success: JobId is a single string")
+                return { JobId = {data.JobId} }
+            end
+            warn("API returned invalid data format")
+            return nil
+        else
+            warn("API returned invalid data")
+            return nil
+        end
+    else
+        warn("Failed to fetch API:", response)
+        return nil
+    end
 end
 
-)
+-- Hàm nhảy server
+local function autoHopIfNeeded()
+    local maxAttempts = 8
+    local attempt = 1
+    while attempt <= maxAttempts do
+        Converted["_TextLabel1"].Text = "Status: Hopping to new server... (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
+        local data = scrapeAPI()
+        if data and data.JobId and #data.JobId > 0 then
+            for _, jobId in ipairs(data.JobId) do
+                for id in pairs(jobId) do jobId = id end
+                print("Hopping to server with JobId:", jobId)
+                pcall(function()
+                    game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", TrollApi["Decode JobId API Porry | discord.gg/umaru | MB KHOI"](jobId, "discord.gg/umaru | MB_Bank 9929992999 Phan Dat Khoi"))
+                end)
+                task.wait(1)
+                return
+            end
+        end
+        Converted["_TextLabel1"].Text = "Status: No Tyrant of the Skies server found (Attempt " .. attempt .. "/" .. maxAttempts .. ")"
+        warn("No JobId found for hopping")
+        attempt = attempt + 1
+        task.wait(2)
+    end
+    Converted["_TextLabel1"].Text = "Status: Failed to find Tyrant of the Skies server"
+end
 
-
-
+-- Logic đánh Tyrant of the Skies
 _G.FarmBoss = true
+spawn(function()
+    while task.wait() do
+        if _G.FarmBoss then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                local plr = game.Players.LocalPlayer
+                local hrp = WaitHRP(plr)
+                if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                    Converted["_TextLabel1"].Text = "Status: Waiting for character..."
+                    task.wait(1)
+                    return
+                end
 
+                -- Kiểm tra và đánh Tyrant of the Skies
+                local foundBoss = false
+                for _, v in pairs(enemies:GetChildren()) do
+                    if v.Name == "Tyrant of the Skies" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        foundBoss = true
+                        Converted["_TextLabel1"].Text = "Status: Fighting Tyrant of the Skies"
+                        repeat
+                            task.wait()
+                            if not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                                break
+                            end
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            topos(v.HumanoidRootPart.CFrame * Pos)
+                            sethiddenproperty(plr, "SimulationRadius", math.huge)
+                        until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
+                    end
+                end
 
-
-spawn(
-
-    function()
-	while wait() do
-		if _G.FarmBoss and not BypassTP then
-			pcall(
-
-                    function()
-				local enemies = game:GetService("Workspace").Enemies
-				if enemies:FindFirstChild("Tyrant of the Skies") then
-					for _, v in pairs(enemies:GetChildren()) do
-						if
-
-                                    v.Name == "Tyrant of the Skies" and v:FindFirstChild("Humanoid") and
-
-                                        v:FindFirstChild("HumanoidRootPart") and
-
-                                        v.Humanoid.Health > 0
-
-                                 then
-							repeat
-								task.wait()
-								AutoHaki()
-								EquipWeapon(_G.SelectWeapon)
-								v.HumanoidRootPart.CanCollide = false
-								v.Humanoid.WalkSpeed = 0
-								topos(v.HumanoidRootPart.CFrame * Pos)
-								sethiddenproperty(
-
-                                            game:GetService("Players").LocalPlayer,
-
-                                            "SimulationRadius",
-
-                                            math.huge
-
-                                        )
-							until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
-						end
-					end
-				else
-					local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
-					if doughKing then
-						topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-					else
-						loadstring(
-
-                                    game:HttpGet(
-
-                                        "https://pastefy.app/98pinmw8/raw"
-
-                                    )
-
-                                )()
-					end
-				end
-			end
-
-                )
-		end
-	end
-end
-
-)
+                -- Teleport hoặc nhảy server nếu không tìm thấy boss
+                if not foundBoss then
+                    local tyrant = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
+                    if tyrant then
+                        Converted["_TextLabel1"].Text = "Status: Moving to Tyrant of the Skies"
+                        topos(tyrant.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                    else
+                        topos(CFrame.new(-16600, 62, -17200)) -- Teleport đến Tiki Outpost
+                        Converted["_TextLabel1"].Text = "Status: Waiting at Tiki Outpost"
+                        task.wait(5)
+                        autoHopIfNeeded()
+                    end
+                end
+            end)
+        end
+    end
+end)
