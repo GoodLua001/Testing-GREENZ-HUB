@@ -40,7 +40,7 @@ local statusText = Instance.new("TextLabel")
 statusText.Size = UDim2.new(1, 0, 0.05, 0)
 statusText.Position = UDim2.new(0, 0, 0.29, 0)
 statusText.BackgroundTransparency = 1
-statusText.Text = "Status: Auto Farm Boss Dough King"  -- Sửa lỗi cú pháp thiếu dấu ngoặc kép
+statusText.Text = "Status: Auto Farm Boss Tyrant"  -- Sửa lỗi cú pháp thiếu dấu ngoặc kép
 statusText.TextColor3 = Color3.fromRGB(255, 255, 255)
 statusText.TextSize = 24
 statusText.Font = Enum.Font.GothamSemibold
@@ -1025,46 +1025,68 @@ end)
 
 _G.FarmBoss = true
 
-spawn(function()
-    while wait() do
-        if _G.FarmBoss and not BypassTP then
-            pcall(function()
-                local enemies = game:GetService("Workspace").Enemies
 
-                if enemies:FindFirstChild("Tyrant of the Skies") then
-                    for _, v in pairs(enemies:GetChildren()) do
-                        if v.Name == "Tyrant of the Skies" 
-                        and v:FindFirstChild("Humanoid") 
-                        and v:FindFirstChild("HumanoidRootPart") 
-                        and v.Humanoid.Health > 0 then
-                            
-                            repeat
-                                task.wait()
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
 
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * Pos)
+spawn(
 
-                                sethiddenproperty(
-                                    game:GetService("Players").LocalPlayer,
-                                    "SimulationRadius",
-                                    math.huge
-                                )
-                            until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
-                        end
-                    end
-                else
-                    local Tyrant = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
-                    
-                    if Tyrant then
-                        topos(Tyrant.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-                    else
-                        loadstring(game:HttpGet("https://pastefy.app/98pinmw8/raw"))()
-                    end
-                end
-            end)
-        end
-    end
-end)
+    function()
+	while wait() do
+		if _G.FarmBoss and not BypassTP then
+			pcall(
+
+                    function()
+				local enemies = game:GetService("Workspace").Enemies
+				if enemies:FindFirstChild("Tyrant of the Skies") then
+					for _, v in pairs(enemies:GetChildren()) do
+						if
+
+                                    v.Name == "Tyrant of the Skies" and v:FindFirstChild("Humanoid") and
+
+                                        v:FindFirstChild("HumanoidRootPart") and
+
+                                        v.Humanoid.Health > 0
+
+                                 then
+							repeat
+								task.wait()
+								AutoHaki()
+								EquipWeapon(_G.SelectWeapon)
+								v.HumanoidRootPart.CanCollide = false
+								v.Humanoid.WalkSpeed = 0
+								topos(v.HumanoidRootPart.CFrame * Pos)
+								sethiddenproperty(
+
+                                            game:GetService("Players").LocalPlayer,
+
+                                            "SimulationRadius",
+
+                                            math.huge
+
+                                        )
+							until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
+						end
+					end
+				else
+					local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
+					if doughKing then
+						topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+					else
+						loadstring(
+
+                                    game:HttpGet(
+
+                                        "https://pastefy.app/98pinmw8/raw"
+
+                                    )
+
+                                )()
+					end
+				end
+			end
+
+                )
+		end
+	end
+end
+
+)
