@@ -3185,64 +3185,83 @@ ToggleBringMob:OnChanged(function(Value)
 end)
 Options.ToggleBringMob:SetValue(true)
 
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
+local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
+    Title = "Bring Mob",
+    Description = "",
+    Default = true
+})
+ToggleBringMob:OnChanged(function(Value)
+    _G.BringMob = Value
+end)
+Options.ToggleBringMob:SetValue(true)
+
+local function TweenObject(object, targetCFrame, speed)
+    speed = speed or 350
+    local distance = (targetCFrame.Position - object.Position).Magnitude
+    local info = TweenInfo.new(distance / speed, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(object, info, {CFrame = targetCFrame})
+    tween:Play()
+end
+
+local function GetMobPosition(enemyName)
+    local pos, count = nil, 0
+    for _, enemy in ipairs(Workspace.Enemies:GetChildren()) do
+        if enemy.Name == enemyName and enemy:FindFirstChild("HumanoidRootPart") then
+            if not pos then
+                pos = enemy.HumanoidRootPart.Position
+            else
+                pos = pos + enemy.HumanoidRootPart.Position
+            end
+            count = count + 1
+        end
+    end
+    return count > 0 and pos / count or nil
+end
+
 spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            CheckLevel()
-            local enemies = Workspace.Enemies:GetChildren()
-            local MonsterCount = 0
+    while task.wait() do
+        if HRP then
+            BringMob(_G.BringMob)
+        end
+    end
+end)
+
+BringMob = function(value)
+    if value then
+        local enemies = Workspace.Enemies:GetChildren()
+        if #enemies > 0 then
+            local totalPos = {}
             for _, enemy in ipairs(enemies) do
-                if MonsterCount >= 2 then
-                    break
-                end                
-                if _G.BringMob and enemy:FindFirstChild("Humanoid") and enemy:FindFirstChild("HumanoidRootPart") then
-                    local humanoid = enemy:FindFirstChild("Humanoid")
-                    local rootPart = enemy:FindFirstChild("HumanoidRootPart")
-                    if humanoid and rootPart and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local distance = (rootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                        if getgenv().StartMagnet and (enemy.Name == MonFarm or enemy.Name == Mon) and humanoid.Health > 0 and distance <= 350 then
-                            if enemy.Name == "Factory Staff" and PosMon and (rootPart.Position - PosMon.Position).Magnitude <= 5000 then
-                                if rootPart.Parent then
-                                    rootPart.CanCollide = false
-                                    rootPart.Size = Vector3.new(60, 60, 60)
-                                    rootPart.CFrame = PosMon
-                                    enemy.Head.CanCollide = false
-                                    local animator = humanoid:FindFirstChild("Animator")
-                                    if animator then
-                                        pcall(function()
-                                            animator:Destroy()
-                                        end)
-                                    end
-                                    sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-                                    MonsterCount = MonsterCount + 1
-                                end
-                            elseif (enemy.Name == MonFarm or enemy.Name == Mon) and PosMon and (rootPart.Position - PosMon.Position).Magnitude <= 4500 then
-                                if rootPart.Parent then
-                                    rootPart.CanCollide = false
-                                    rootPart.Size = Vector3.new(60, 60, 60)
-                                    rootPart.CFrame = PosMon
-                                    enemy.Head.CanCollide = false
-                                    local animator = humanoid:FindFirstChild("Animator")
-                                    if animator then
-                                        pcall(function()
-                                            animator:Destroy()
-                                        end)
-                                    end
-                                    sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-                                    MonsterCount = MonsterCount + 1
-                                end
+                if not totalPos[enemy.Name] then
+                    local avgPos = GetMobPosition(enemy.Name)
+                    if avgPos then
+                        totalPos[enemy.Name] = avgPos
+                    end
+                end
+            end
+            for _, enemy in ipairs(enemies) do
+                if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and enemy:FindFirstChild("HumanoidRootPart") then
+                    if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
+                        local avgPos = totalPos[enemy.Name]
+                        if avgPos then
+                            local targetCFrame = CFrame.new(avgPos)
+                            local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
+                            if offsetMag > 3 and offsetMag <= 280 then
+                                TweenObject(enemy.HumanoidRootPart, targetCFrame, 300)
+                                enemy.HumanoidRootPart.CanCollide = false
+                                enemy.Humanoid.WalkSpeed = 0
+                                enemy.Humanoid.JumpPower = 0
+                                enemy.Humanoid:ChangeState(14)
+                                pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) 
+                                end)
                             end
                         end
                     end
                 end
             end
-        end)
+        end
     end
-end)
+end
 local ToggleAutoT = Tabs.Setting:AddToggle("ToggleAutoT", {Title="Auto Turn On V3", Description="", Default=false })
 ToggleAutoT:OnChanged(function(Value)
     _G.AutoV3=Value
@@ -3363,158 +3382,65 @@ Tabs.Setting:AddButton({
 	end;
 end
 })
-
-_G.AutoFindPrehistoric = false
-_G.SelectedBoat = "Guardian"
-_G.BoatSpeed = 300
-_G.BoatBought = false
-getgenv().HasAttemptedBuy = false
-_G.IsOnBoat = false
 local Gay = Tabs.Vocalno:AddSection("Tab Volcano")
 local v1 = Tabs.Vocalno:AddToggle("v1", {
     Title = "Auto Find Prehistoric",
     Default = false
 })
-v1:OnChanged(function(v)
-    _G.AutoFindPrehistoric = v
-    _G.IsOnBoat = false
+v1:OnChanged(function(Value)
+    _G.AutoFindPrehistoric = Value
 end)
-
-local v2 = Tabs.Vocalno:AddDropdown("v2", {
-    Title = "Choose Boat",
-    Values = {
-        "Beast Hunter", "Sleigh", "Miracle", "The Sentinel", "Guardian", "Lantern", "Dinghy", "PirateSloop", "PirateBrigade", "PirateGrandBrigade", "MarineGrandBrigade", "MarineBrigade", "MarineSloop"
-    },
-    Multi = false,
-    Default = 1
-})
-v2:OnChanged(function(v)
-    _G.SelectedBoat = v
-    _G.BoatBought = false
-    _G.IsOnBoat = false
-end)
-
-local v3 = Tabs.Vocalno:AddDropdown("v3", {
-    Title = "Boat Speed",
-    Values = {"100", "150", "200", "300", "400"},
-    Multi = false,
-    Default = "300"
-})
-v3:OnChanged(function(v)
-    _G.BoatSpeed = tonumber(v)
-end)
-
--- Service
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local VirtualInput = game:GetService("VirtualInputManager")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
-
--- Position
-local NPC_Boat_Pos = Vector3.new(-16915.744, 9.949, 510.939)
--- Check Boat
-function GetSpawnedBoat()
-    for _, boat in pairs(workspace.Boats:GetChildren()) do
-        if boat.Name == _G.SelectedBoat and boat:FindFirstChild("VehicleSeat") then
-            return boat
-        end
-    end
-    return nil
+    function TPP(targetCFrame)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 end
 
--- Sit on Boat
-function FindAndSitBoat()
-    local boat = GetSpawnedBoat()
-    if boat then
-        local seat = boat:FindFirstChild("VehicleSeat")
-        if seat then
-            if seat.Occupant == nil then
-                Tween(seat.CFrame + Vector3.new(0, 5, 0))
-                task.wait(1)
-                local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                if humanoid then
-                    seat:Sit(humanoid)
-                    _G.IsOnBoat = true
-                    return seat
-                end
-            elseif seat.Occupant == LocalPlayer.Character:FindFirstChild("Humanoid") then
-                _G.IsOnBoat = true
-                return seat
+function TPB2(CFgo)
+    local tween_s = game:GetService("TweenService")
+    for _, v in pairs(game:GetService("Workspace").Boats:GetChildren()) do
+        if v:FindFirstChild("VehicleSeat") and v.Owner.Value == game.Players.LocalPlayer then
+            local seat = v.VehicleSeat
+            if (seat.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5 then
+                local tween = tween_s:Create(seat, TweenInfo.new((seat.Position - CFgo.Position).Magnitude / 300, Enum.EasingStyle.Linear), {CFrame = CFgo})
+                tween:Play()
+                spawn(function()
+                    while tween and tween.PlaybackState == Enum.PlaybackState.Playing do
+                        task.wait(0.1)
+                        if (seat.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 or not _G.LionFixDrive then
+                            tween:Cancel()
+                            break
+                        end
+                    end
+                end)
+                return tween
             end
         end
     end
-    return nil
 end
 
--- Buy Boat
-function TryBuyBoat()
-    if not _G.BoatBought and not getgenv().HasAttemptedBuy then
-        getgenv().HasAttemptedBuy = true
-        local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if HRP and (HRP.Position - NPC_Boat_Pos).Magnitude > 10 then
-            Tween(CFrame.new(NPC_Boat_Pos))
-            task.wait(2)
-        end
-        local success, result = pcall(function()
-            return ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyBoat", _G.SelectedBoat)
-        end)
-        if success and result then
-            _G.BoatBought = true
-            getgenv().HasAttemptedBuy = false
-        end
-    end
-end
-
--- Dọn đảo khi AutoFind bật
-local IslandFound = false
-local IslandNames = {
-    "ShipwreckIsland",
-    "SandIsland",
-    "TreeIsland",
-    "TinyIsland",
-    "MysticIsland",
-    "KitsuneIsland",
-    "FrozenDimension"
-}
-
--- Auto Drive
-RunService.RenderStepped:Connect(function()
-    if not _G.AutoFindPrehistoric then
-        VirtualInput:SendKeyEvent(false, "W", false, game)
-        return
-    end
-
-    if not _G.BoatBought then
-        TryBuyBoat()
-        return
-    end
-
-    if not _G.IsOnBoat then
-        local seat = FindAndSitBoat()
-        if not seat then
-            _G.BoatBought = false
-        end
-        return
-    end
-
-    -- Khi đã ngồi lên thuyền
-    local boat = GetSpawnedBoat()
-    if boat then
-        local seat = boat:FindFirstChild("VehicleSeat")
-        if seat and seat.Occupant == LocalPlayer.Character:FindFirstChild("Humanoid") then
-            seat.MaxSpeed = _G.BoatSpeed
-
-            -- Dọn các đảo không cần
-            for _, islandName in ipairs(IslandNames) do
-                local Island = Workspace.Map:FindFirstChild(islandName)
-                if Island and Island:IsA("Model") then
-                    Island:Destroy()
-                end
+function BoatControl(SelectBoat)
+    local boat = game.Workspace.Boats:FindFirstChild(SelectBoat)
+    
+    if not boat then
+        if Sea3 then
+            Tween(CFrame.new(-16927, 9, 433))
+            
+            if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(-16927, 9, 433)).Magnitude <= 10 then
+                game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyBoat", Guardian)
+                boat = game.Workspace.Boats:FindFirstChild(SelectBoat)
             end
-
+        end
+    end
+    
+    if boat then
+        if not game.Players.LocalPlayer.Character.Humanoid.Sit then
+            Tween2(boat.VehicleSeat.CFrame * CFrame.new(0, 1, 0))
+        else
+            TPB2(CFrame.new(-999999, 999, -999999))
+        end
+    end
+    
+    return boat
+end
             -- Nếu đảo cổ đại xuất hiện
             local PrehistoricIsland = Workspace.Map:FindFirstChild("PrehistoricIsland")
             if PrehistoricIsland then
