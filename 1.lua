@@ -3390,7 +3390,8 @@ local v1 = Tabs.Vocalno:AddToggle("v1", {
 v1:OnChanged(function(Value)
     _G.AutoFindPrehistoric = Value
 end)
-    function TPP(targetCFrame)
+
+function TPP(targetCFrame)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 end
 
@@ -3441,6 +3442,11 @@ function BoatControl(SelectBoat)
     
     return boat
 end
+
+-- Hàm kiểm tra đảo cổ đại (Prehistoric Island)
+task.spawn(function()
+    while task.wait() do
+        if _G.AutoFindPrehistoric then
             -- Nếu đảo cổ đại xuất hiện
             local PrehistoricIsland = Workspace.Map:FindFirstChild("PrehistoricIsland")
             if PrehistoricIsland then
@@ -3462,7 +3468,6 @@ end
         end
     end
 end)
-
  local Prehistoric = Tabs.Vocalno:AddParagraph({
     Title="Status Prehistoric",
     Content=""
