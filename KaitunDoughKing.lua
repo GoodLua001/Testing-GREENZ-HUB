@@ -909,35 +909,39 @@ if _G.FastAttack then
     end)()
 
 end
-function SetSpawn()
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")
-    print("Đã đặt điểm hồi sinh thành công")
-end
 
--- Khi nhân vật spawn lại (sau khi chết hoặc reset)
-player.CharacterAdded:Connect(function()
-    wait(1) -- đợi load game một chút
-    SetSpawn()
-end)
 
--- Nếu đang online rồi thì cũng gọi một lần luôn
-if player.Character then
-    SetSpawn()
-end
 
 function AutoHaki()
-    if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
-        game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+
+    if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("HasBuso") then
+
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
+
     end
+
 end
--- Tự động sử dụng Haki
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            AutoHaki()
-        end)
+
+
+
+function EquipWeapon(ToolSe)
+
+    if not Nill then
+
+        if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
+
+            Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
+
+            wait(.1)
+
+            game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
+
+        end
+
     end
-end)
+
+end
+
 
 
 _G.SelectWeapon = "Melee"
@@ -1023,70 +1027,69 @@ task.spawn(function()
 end)
 
 
+
 _G.FarmBoss = true
 
 
 
-spawn(
+spawn(function()
 
-    function()
-	while wait() do
-		if _G.FarmBoss and not BypassTP then
-			pcall(
+    while wait() do
 
-                    function()
-				local enemies = game:GetService("Workspace").Enemies
-				if enemies:FindFirstChild("Tyrant of the Skies") then
-					for _, v in pairs(enemies:GetChildren()) do
-						if
+        if _G.FarmBoss and not BypassTP then
 
-                                    v.Name == "Tyrant of the Skies" and v:FindFirstChild("Humanoid") and
+            pcall(function()
 
-                                        v:FindFirstChild("HumanoidRootPart") and
+                local enemies = game:GetService("Workspace").Enemies
 
-                                        v.Humanoid.Health > 0
+                if enemies:FindFirstChild("Tyrant of the Skies") then
 
-                                 then
-							repeat
-								task.wait()
-								AutoHaki()
-								EquipWeapon(_G.SelectWeapon)
-								v.HumanoidRootPart.CanCollide = false
-								v.Humanoid.WalkSpeed = 0
-								topos(v.HumanoidRootPart.CFrame * Pos)
-								sethiddenproperty(
+                    for _, v in pairs(enemies:GetChildren()) do
 
-                                            game:GetService("Players").LocalPlayer,
+                        if v.Name == "Tyrant of the Skies" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
 
-                                            "SimulationRadius",
+                            repeat
 
-                                            math.huge
+                                task.wait()
 
-                                        )
-							until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
-						end
-					end
-				else
-					local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
-					if doughKing then
-						topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
-					else
-						loadstring(
+                                AutoHaki()
 
-                                    game:HttpGet(
+                                EquipWeapon(_G.SelectWeapon)
 
-                                        "https://pastefy.app/98pinmw8/raw"
+                                v.HumanoidRootPart.CanCollide = false
 
-                                    )
+                                v.Humanoid.WalkSpeed = 0
 
-                                )()
-					end
-				end
-			end
+                                topos(v.HumanoidRootPart.CFrame * Pos)
 
-                )
-		end
-	end
-end
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
 
-)
+                            until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
+
+                        end
+
+                    end
+
+                else
+
+                    local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Tyrant of the Skies")
+
+                    if doughKing then
+
+                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+
+                    else
+
+                        loadstring(game:HttpGet("https://pastefy.app/98pinmw8/raw"))()
+
+                    end
+
+                end
+
+            end)
+
+        end
+
+    end
+
+end)
