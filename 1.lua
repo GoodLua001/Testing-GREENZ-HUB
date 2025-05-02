@@ -3185,73 +3185,100 @@ ToggleBringMob:OnChanged(function(Value)
 end)
 Options.ToggleBringMob:SetValue(true)
 
-local function TweenObject(object, targetCFrame, speed)
-    speed = speed or 350
-    local distance = (targetCFrame.Position - object.Position).Magnitude
-    local info = TweenInfo.new(distance / speed, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(object, info, {CFrame = targetCFrame})
-    tween:Play()
-end
-
-local function GetMobPosition(enemyName)
-    local pos, count = nil, 0
-    for _, enemy in ipairs(Workspace.Enemies:GetChildren()) do
-        if enemy.Name == enemyName and enemy:FindFirstChild("HumanoidRootPart") then
-            if not pos then
-                pos = enemy.HumanoidRootPart.Position
-            else
-                pos = pos + enemy.HumanoidRootPart.Position
-            end
-            count = count + 1
-        end
-    end
-    return count > 0 and pos / count or nil
-end
-
 spawn(function()
-    while task.wait() do
-        if HRP then
-            BringMob(_G.BringMob)
-        end
-    end
-end)
-
-BringMob = function(value)
-    if value then
-        local enemies = Workspace.Enemies:GetChildren()
-        if #enemies > 0 then
-            local totalPos = {}
-            for _, enemy in ipairs(enemies) do
-                if not totalPos[enemy.Name] then
-                    local avgPos = GetMobPosition(enemy.Name)
-                    if avgPos then
-                        totalPos[enemy.Name] = avgPos
+    while wait() do
+        pcall(function()
+            if _G.BringMob then
+                -- Phương pháp 1: Dịch chuyển trực tiếp
+                for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                    if v.Name == MonFarm and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CFrame = FarmPos
+                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                        v.HumanoidRootPart.Transparency = 1
+                        v.HumanoidRootPart.CanCollide = false
+                        
+                        if v:FindFirstChild("Head") then
+                            v.Head.CanCollide = false
+                        end
+                        
+                        v.Humanoid.JumpPower = 0
+                        v.Humanoid.WalkSpeed = 0
+                        
+                        if v.Humanoid:FindFirstChild("Animator") then
+                            v.Humanoid.Animator:Destroy()
+                        end
+                        
+                        v.Humanoid:ChangeState(11)
+                        v.Humanoid:ChangeState(14)
+                        
+                        pcall(function() 
+                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) 
+                        end)
                     end
                 end
-            end
-            for _, enemy in ipairs(enemies) do
-                if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and enemy:FindFirstChild("HumanoidRootPart") then
-                    if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
-                        local avgPos = totalPos[enemy.Name]
-                        if avgPos then
-                            local targetCFrame = CFrame.new(avgPos)
-                            local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
-                            if offsetMag > 3 and offsetMag <= 280 then
-                                TweenObject(enemy.HumanoidRootPart, targetCFrame, 300)
-                                enemy.HumanoidRootPart.CanCollide = false
-                                enemy.Humanoid.WalkSpeed = 0
-                                enemy.Humanoid.JumpPower = 0
-                                enemy.Humanoid:ChangeState(14)
-                                pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) 
-                                end)
+                
+                -- Phương pháp 2: Tween mượt mà
+                local HRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                local enemies = game:GetService("Workspace").Enemies:GetChildren()
+                
+                if #enemies > 0 and HRP then
+                    -- Tính vị trí trung bình cho mỗi loại quái vật
+                    local totalPos = {}
+                    for _, enemy in ipairs(enemies) do
+                        if not totalPos[enemy.Name] and enemy:FindFirstChild("HumanoidRootPart") then
+                            local pos, count = nil, 0
+                            for _, e in ipairs(enemies) do
+                                if e.Name == enemy.Name and e:FindFirstChild("HumanoidRootPart") then
+                                    if not pos then
+                                        pos = e.HumanoidRootPart.Position
+                                    else
+                                        pos = pos + e.HumanoidRootPart.Position
+                                    end
+                                    count = count + 1
+                                end
+                            end
+                            if count > 0 then
+                                totalPos[enemy.Name] = pos / count
+                            end
+                        end
+                    end
+                    
+                    -- Áp dụng tween cho quái vật
+                    for _, enemy in ipairs(enemies) do
+                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and 
+                           enemy:FindFirstChild("HumanoidRootPart") then
+                            
+                            if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
+                                local avgPos = totalPos[enemy.Name]
+                                if avgPos then
+                                    local targetCFrame = CFrame.new(avgPos)
+                                    local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
+                                    
+                                    if offsetMag > 3 and offsetMag <= 280 then
+                                        -- Sử dụng TweenService trực tiếp thay vì hàm TweenObject
+                                        local distance = (targetCFrame.Position - enemy.HumanoidRootPart.Position).Magnitude
+                                        local info = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+                                        local tween = game:GetService("TweenService"):Create(enemy.HumanoidRootPart, info, {CFrame = targetCFrame})
+                                        tween:Play()
+                                        
+                                        enemy.HumanoidRootPart.CanCollide = false
+                                        enemy.Humanoid.WalkSpeed = 0
+                                        enemy.Humanoid.JumpPower = 0
+                                        enemy.Humanoid:ChangeState(14)
+                                        
+                                        pcall(function() 
+                                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) 
+                                        end)
+                                    end
+                                end
                             end
                         end
                     end
                 end
             end
-        end
+        end)
     end
-end
+end)
 local ToggleAutoT = Tabs.Setting:AddToggle("ToggleAutoT", {Title="Auto Turn On V3", Description="", Default=false })
 ToggleAutoT:OnChanged(function(Value)
     _G.AutoV3=Value
@@ -3380,7 +3407,6 @@ local v1 = Tabs.Vocalno:AddToggle("v1", {
 })
 v1:OnChanged(function(Value)
     _G.AutoFindPrehistoric = Value
-    _G.Settings.FindPre = Value
 end)
 
 local seatHistory = {}
