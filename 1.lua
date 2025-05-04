@@ -3153,7 +3153,6 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
           if v.Name==Ms then
           repeat wait(_G.Fast_Delay)
           AttackNoCoolDown()
-          bringmob=true
           AutoHaki()
           EquipTool(SelectWeapon)
           Tween(v.HumanoidRootPart.CFrame*Pos)
@@ -3165,7 +3164,6 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
           FarmPos=v.HumanoidRootPart.CFrame
           MonFarm=v.Name
           until not _G.AutoLevel or not v.Parent or v.Humanoid.Health<=0 or not game:GetService("Workspace").Enemies:FindFirstChild(v.Name) or game.Players.LocalPlayer.PlayerGui.Main.Quest.Visible==false
-          bringmob=false
         end   
           end
           end
@@ -3183,67 +3181,19 @@ local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
         end
         end)
 local MiscFarm = Tabs.Main:AddSection("Bone Farm")
-        local ToggleBone = Tabs.Main:AddToggle("ToggleBone", {
+local ToggleBoneNoQuest = Tabs.Main:AddToggle("ToggleBoneNoQuest", {
     Title="Auto Farm Bone",
     Description="", 
     Default=false })
-ToggleBone:OnChanged(function(Value)
-    _G.AutoBone=Value
+ToggleBoneNoQuest:OnChanged(function(Value)
+    _G.AutoBoneNoQuest=Value
     if Value==false then
         wait()
         Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
         wait()
     end
 end)
-Options.ToggleBone:SetValue(false)
-local BoneCFrame = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
-spawn(function()
-    while wait() do
-        if _G.AutoBone then
-            pcall(function()
-                local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
-                if not string.find(QuestTitle, "Demonic Soul") then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                end
-                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible==false then
-                 Tween(BoneCFrame)
-                if (BoneCFrame.Position-game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude<=3 then    
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest","HauntedQuest2",1)
-                    end
-                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible==true then
-                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health>0 then
-                                if v.Name=="Reborn Skeleton" or v.Name=="Living Zombie" or v.Name=="Demonic Soul" or v.Name=="Posessed Mummy" then
-                                    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, "Posessed Mummy") then
-                                        repeat wait(_G.Fast_Delay)
-                                            AttackNoCoolDown()
-                                            AutoHaki()
-                                            bringmob=true
-                                            EquipTool(SelectWeapon)
-                                            Tween(v.HumanoidRootPart.CFrame*Pos)
-                                            v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
-                                            v.HumanoidRootPart.Transparency=1
-                                            v.Humanoid.JumpPower=0
-                                            v.Humanoid.WalkSpeed=0
-                                            v.HumanoidRootPart.CanCollide=false
-                                            FarmPos=v.HumanoidRootPart.CFrame
-                                            MonFarm=v.Name
-                                        until not _G.AutoBone or v.Humanoid.Health<=0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible==false
-                                    else
-                                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                                        bringmob=false
-                                    end
-                                end
-                            end
-                        end
-                    else
-                    end
-                end
-            end)
-        end
-    end
-end)
+Options.ToggleBoneNoQuest:SetValue(false)
 local BoneNoQuest = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
 spawn(function()
     while wait() do
@@ -3259,7 +3209,6 @@ spawn(function()
                                 repeat wait(_G.Fast_Delay)
                                     AttackNoCoolDown()
                                     AutoHaki()
-                                    bringmob=true
                                     EquipTool(SelectWeapon)
                                     Tween(v.HumanoidRootPart.CFrame*Pos)
                                     v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
@@ -3346,7 +3295,6 @@ spawn(function()
                                     AutoHaki()  
                                     AttackNoCoolDown()
                                     EquipTool(SelectWeapon)  
-                                    bringmob = true  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
                                     POSCAKE = v.HumanoidRootPart.CFrame  
                                     Tween(v.HumanoidRootPart.CFrame * Pos)  
@@ -3355,7 +3303,6 @@ spawn(function()
                             end
                         end
                     else
-                        bringmob = false
                         Tween(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
                         saveSettings() 
                     end
@@ -3412,7 +3359,6 @@ spawn(function()
                                     wait(_G.Fast_Delay)  
                                     AutoHaki()  
                                     EquipTool(SelectWeapon)  
-                                    bringmob = true  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
                                     POSCAKE = v.HumanoidRootPart.CFrame  
                                     Tween(v.HumanoidRootPart.CFrame * Pos)  
@@ -3421,7 +3367,6 @@ spawn(function()
                             end
                         end
                     else
-                        bringmob = false
                         Tween(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375)) 
                     end
                 end
@@ -3497,27 +3442,6 @@ task.spawn(function()
     end
 end)
 local Djtme = Tabs.Setting:AddSection("Tab Settings")
-local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
-    Title = "Bring Mob",
-    Description = "",
-    Default = true
-})
-ToggleBringMob:OnChanged(function(Value)
-    _G.BringMob = Value
-end)
-Options.ToggleBringMob:SetValue(true)
-
-local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
-    Title = "Bring Mob",
-    Description = "",
-    Default = true
-})
-
-ToggleBringMob:OnChanged(function(Value)
-    _G.BringMob = Value
-end)
-
-Options.ToggleBringMob:SetValue(true)
 local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
     Title = "Bring Mob",
     Description = "",
