@@ -245,9 +245,8 @@ local Tabs = {
     Shop=Window:AddTab({ Title="Tab Shop" }),
     Main=Window:AddTab({ Title="Tab Farming" }),
     Setting=Window:AddTab({ Title="Tab Setting" }),
-    Vocalno=Window:AddTab({ Title="Tab Volcano" }),
     Stack=Window:AddTab({ Title="Tab Stack Farming" }),
-    Sub=Window:AddTab({ Title="Tab Sub Farming(Updating)" }),
+    Sub=Window:AddTab({ Title="Tab Sub Farming" }),
     Raid=Window:AddTab({ Title="Raid And Fruits" }),
 }
 local Options = Fluent.Options
@@ -2168,6 +2167,189 @@ function EquipTool(ToolSe)
             game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
         end
     end
+    function topos(Pos)
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+        if not Pos then 
+
+            return 
+
+        end
+
+        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+
+        local nearestTeleport = CheckNearestTeleporter(Pos)
+
+        if nearestTeleport then
+
+            requestEntrance(nearestTeleport)
+
+        end
+
+        if not plr.Character:FindFirstChild("PartTele") then
+
+            local PartTele = Instance.new("Part", plr.Character)
+
+            PartTele.Size = Vector3.new(10,1,10)
+
+            PartTele.Name = "PartTele"
+
+            PartTele.Anchored = true
+
+            PartTele.Transparency = 1
+
+            PartTele.CanCollide = false
+
+            PartTele.CFrame = WaitHRP(plr).CFrame 
+
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+
+                if not isTeleporting then return end
+
+                task.wait()
+
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+                    local targetCFrame = PartTele.CFrame
+
+                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
+
+                end
+
+            end)
+
+        end
+
+        isTeleporting = true
+
+        local SpeedTw = getgenv().TweenSpeed
+
+        if Distance <= 250 then
+
+            SpeedTw = SpeedTw * 3
+
+        end
+
+        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
+
+        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
+
+        Tween:Play()
+
+        Tween.Completed:Connect(function(status)
+
+            if status == Enum.PlaybackState.Completed then
+
+                if plr.Character:FindFirstChild("PartTele") then
+
+                    plr.Character.PartTele:Destroy()
+
+                end
+
+                isTeleporting = false
+
+            end
+
+        end)
+
+    end
+
+end
+
+
+
+getgenv().TweenSpeed = 350
+
+
+
+function stopTeleport()
+
+    isTeleporting = false
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character:FindFirstChild("PartTele") then
+
+        plr.Character.PartTele:Destroy()
+
+    end
+
+end
+
+
+
+spawn(function()
+
+    while task.wait() do
+
+        if not isTeleporting then
+
+            stopTeleport()
+
+        end
+
+    end
+
+end)
+
+
+
+spawn(function()
+
+    local plr = game.Players.LocalPlayer
+
+    while task.wait() do
+
+        pcall(function()
+
+            if plr.Character:FindFirstChild("PartTele") then
+
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+
+                    stopTeleport()
+
+                end
+
+            end
+
+        end)
+
+    end
+
+end)
+
+
+
+local plr = game.Players.LocalPlayer
+
+
+
+local function onCharacterAdded(character)
+
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Died:Connect(function()
+
+        stopTeleport()
+
+    end)
+
+end
+
+
+
+plr.CharacterAdded:Connect(onCharacterAdded)
+
+
+
+if plr.Character then
+
+    onCharacterAdded(plr.Character)
+
+end
    spawn(function()
             while task.wait() do
                 pcall(function()
@@ -2352,6 +2534,144 @@ function to(P)
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=P
     until (P.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude<=2000
 end
+function TweenBoat(pos)
+	local TweenService = game:GetService("TweenService");
+	local Boat = workspace.Boats[_G.Settings.SeaEvent["Selected Boat"]];
+	if not Boat or (not Boat:FindFirstChild("VehicleSeat")) then
+		warn("Boat atau VehicleSeat tidak ditemukan!");
+		return {
+			Stop = function()
+			end
+		};
+	end;
+	local targetCFrame = pos;
+	if typeof(pos) == "Instance" and pos:IsA("BasePart") then
+		targetCFrame = pos.CFrame;
+	elseif typeof(pos) ~= "CFrame" then
+		warn("Argumen 'pos' harus berupa CFrame atau BasePart!");
+		return {
+			Stop = function()
+			end
+		};
+	end;
+	local startPosition = Boat.VehicleSeat.Position;
+	local endPosition = targetCFrame.Position;
+	local distance = (startPosition - endPosition).Magnitude;
+	local tween = nil;
+	local duration = distance / (_G.Settings.SeaEvent["Boat Tween Speed"] or 100);
+	local info = TweenInfo.new(duration, Enum.EasingStyle.Linear);
+	tween = TweenService:Create(Boat.VehicleSeat, info, {
+		CFrame = targetCFrame
+	});
+	if distance > 25 then
+		tween:Play();
+	else
+		warn("Jarak terlalu dekat, tween dibatalkan.");
+	end;
+	local StopTweenBoat = {};
+	function StopTweenBoat:Stop()
+		if tween and tween.PlaybackState == Enum.PlaybackState.Playing then
+			tween:Cancel();
+		end;
+	end;
+	return StopTweenBoat;
+end;
+function TweenPlayer(pos)
+	task.spawn(function()
+		pcall(function()
+			if game.Players.LocalPlayer.Character.Humanoid.Sit == true then
+				game.Players.LocalPlayer.Character.Humanoid.Sit = true;
+			end;
+			local player = (game:GetService("Players")).LocalPlayer;
+			local character = player.Character;
+			local humanoidRootPart = character.HumanoidRootPart;
+			if player:DistanceFromCharacter(pos.Position) <= 50 then
+				humanoidRootPart.CFrame = pos;
+				if character:FindFirstChild("Root") then
+					character.Root:Destroy();
+					wait();
+					TweenPlayer(humanoidRootPart.CFrame);
+					wait();
+				end;
+				if character:FindFirstChild("Root") then
+					character.Root:Remove();
+				end;
+			elseif not character:FindFirstChild("Root") then
+				local rootPart = Instance.new("Part", character);
+				rootPart.Size = Vector3.new(1, 0.5, 1);
+				rootPart.Name = "Root";
+				rootPart.Anchored = true;
+				rootPart.Transparency = 1;
+				rootPart.CanCollide = false;
+				rootPart.CFrame = humanoidRootPart.CFrame;
+			end;
+			local distance = (humanoidRootPart.Position - pos.Position).Magnitude;
+			local tweenService = game:GetService("TweenService");
+			local tweenInfo = TweenInfo.new(distance / _G.Settings.Setting["Player Tween Speed"], Enum.EasingStyle.Linear);
+			local success, tweenError = pcall(function()
+				local tween = tweenService:Create(character.Root, tweenInfo, {
+					CFrame = pos
+				});
+				tween:Play();
+			end);
+			if _G.StopTween == true then
+				tween:Cancel();
+				_G.Clip = false;
+			end;
+			if not success then
+				return tweenError;
+			end;
+			character.Root.CFrame = humanoidRootPart.CFrame;
+			if success and character:FindFirstChild("Root") then
+				pcall(function()
+					local distanceFromTarget = (humanoidRootPart.Position - pos.Position).Magnitude;
+					if distanceFromTarget >= 50 then
+						task.spawn(function()
+							pcall(function()
+								if (character.Root.Position - humanoidRootPart.Position).Magnitude > 200 then
+									character.Root.CFrame = humanoidRootPart.CFrame;
+								else
+									humanoidRootPart.CFrame = character.Root.CFrame;
+								end;
+							end);
+						end);
+					elseif distanceFromTarget >= 25 and distanceFromTarget < 40 then
+						humanoidRootPart.CFrame = pos;
+					elseif distanceFromTarget < 25 then
+						humanoidRootPart.CFrame = pos;
+					end;
+				end);
+			end;
+			local stoppos = {};
+			function stoppos:Stop()
+				tween:Cancel();
+			end;
+			return stoppos;
+		end);
+	end);
+end;
+task.spawn(function()
+	while task.wait() do
+		pcall(function()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.Root.CFrame;
+			if (game.Players.LocalPlayer.Character.Root.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude >= 1 then
+				game.Players.LocalPlayer.Character.Root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame;
+			end;
+		end);
+	end;
+end);
+spawn(function()
+	(game:GetService("RunService")).RenderStepped:Connect(function()
+		pcall(function()
+			if setscriptable then
+				setscriptable(game.Players.LocalPlayer, "SimulationRadius", true);
+			end;
+			if sethiddenproperty then
+				sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge);
+			end;
+		end);
+	end);
+end);
 function UnEquipWeapon(Weapon)
         if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
             _G.NotAutoEquip = true
@@ -2787,7 +3107,7 @@ Tabs.Shop:AddButton({
     Description="Only To Sea 3",
     Callback=function()
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(5661.5322265625, 1013.0907592773438,-334.9649963378906))
-        Tween2(CFrame.new(5814.42724609375, 1208.3267822265625, 884.5785522460938))
+        topos(CFrame.new(5814.42724609375, 1208.3267822265625, 884.5785522460938))
         local targetPosition = Vector3.new(5814.42724609375, 1208.3267822265625, 884.5785522460938)
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
@@ -3003,7 +3323,8 @@ spawn(function()
                             if v.Name == "Cake Prince" or v.Name == "Dough King" then
                                 repeat
                                     wait(_G.Fast_Delay)  
-                                    AutoHaki()  
+                                    AutoHaki() 
+                                    AttackNoCoolDown() 
                                     EquipTool(SelectWeapon)  
                                     v.HumanoidRootPart.CanCollide = false  
                                     v.Humanoid.WalkSpeed = 0  
@@ -3023,6 +3344,7 @@ spawn(function()
                                 repeat
                                     wait(_G.Fast_Delay)  
                                     AutoHaki()  
+                                    AttackNoCoolDown()
                                     EquipTool(SelectWeapon)  
                                     bringmob = true  
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
@@ -3185,100 +3507,65 @@ ToggleBringMob:OnChanged(function(Value)
 end)
 Options.ToggleBringMob:SetValue(true)
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.BringMob then
-                -- Phương pháp 1: Dịch chuyển trực tiếp
-                for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                    if v.Name == MonFarm and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CFrame = FarmPos
-                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                        v.HumanoidRootPart.Transparency = 1
-                        v.HumanoidRootPart.CanCollide = false
-                        
-                        if v:FindFirstChild("Head") then
-                            v.Head.CanCollide = false
-                        end
-                        
-                        v.Humanoid.JumpPower = 0
-                        v.Humanoid.WalkSpeed = 0
-                        
-                        if v.Humanoid:FindFirstChild("Animator") then
-                            v.Humanoid.Animator:Destroy()
-                        end
-                        
-                        v.Humanoid:ChangeState(11)
-                        v.Humanoid:ChangeState(14)
-                        
-                        pcall(function() 
-                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) 
-                        end)
-                    end
-                end
-                
-                -- Phương pháp 2: Tween mượt mà
-                local HRP = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                local enemies = game:GetService("Workspace").Enemies:GetChildren()
-                
-                if #enemies > 0 and HRP then
-                    -- Tính vị trí trung bình cho mỗi loại quái vật
-                    local totalPos = {}
-                    for _, enemy in ipairs(enemies) do
-                        if not totalPos[enemy.Name] and enemy:FindFirstChild("HumanoidRootPart") then
-                            local pos, count = nil, 0
-                            for _, e in ipairs(enemies) do
-                                if e.Name == enemy.Name and e:FindFirstChild("HumanoidRootPart") then
-                                    if not pos then
-                                        pos = e.HumanoidRootPart.Position
-                                    else
-                                        pos = pos + e.HumanoidRootPart.Position
-                                    end
-                                    count = count + 1
-                                end
-                            end
-                            if count > 0 then
-                                totalPos[enemy.Name] = pos / count
-                            end
-                        end
-                    end
-                    
-                    -- Áp dụng tween cho quái vật
-                    for _, enemy in ipairs(enemies) do
-                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and 
-                           enemy:FindFirstChild("HumanoidRootPart") then
-                            
-                            if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
-                                local avgPos = totalPos[enemy.Name]
-                                if avgPos then
-                                    local targetCFrame = CFrame.new(avgPos)
-                                    local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
-                                    
-                                    if offsetMag > 3 and offsetMag <= 280 then
-                                        -- Sử dụng TweenService trực tiếp thay vì hàm TweenObject
-                                        local distance = (targetCFrame.Position - enemy.HumanoidRootPart.Position).Magnitude
-                                        local info = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
-                                        local tween = game:GetService("TweenService"):Create(enemy.HumanoidRootPart, info, {CFrame = targetCFrame})
-                                        tween:Play()
-                                        
-                                        enemy.HumanoidRootPart.CanCollide = false
-                                        enemy.Humanoid.WalkSpeed = 0
-                                        enemy.Humanoid.JumpPower = 0
-                                        enemy.Humanoid:ChangeState(14)
-                                        
-                                        pcall(function() 
-                                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) 
-                                        end)
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
+local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
+    Title = "Bring Mob",
+    Description = "",
+    Default = true
+})
+
+ToggleBringMob:OnChanged(function(Value)
+    _G.BringMob = Value
 end)
+
+Options.ToggleBringMob:SetValue(true)
+local ToggleBringMob = Tabs.Setting:AddToggle("ToggleBringMob", {
+    Title = "Bring Mob",
+    Description = "",
+    Default = true
+})
+
+ToggleBringMob:OnChanged(function(Value)
+    _G.BringMob = Value
+end)
+
+Options.ToggleBringMob:SetValue(true)
+
+-- Bring Mob Function
+local function Bring(Enemy)
+    if not _G.BringMob then return end -- Check if BringMob is enabled
+    
+    local PlayerRootPart = (Player.Character or Player.CharacterAdded()):WaitForChild("HumanoidRootPart")
+    local RootPart = Enemy:WaitForChild("HumanoidRootPart")
+    local Humanoid = Enemy:WaitForChild("Humanoid")
+    local EnemyName = Enemy.Name
+    
+    while _G.BringMob and PlayerRootPart and RootPart and Humanoid and Humanoid.Health > 0 and Enemy do task.wait()
+        local Target = CachedBring[Module.IsSuperBring and "ALL_MOBS" or EnemyName]
+        local DistanceFromRootPart = (PlayerRootPart.Position - RootPart.Position).Magnitude 
+        
+        if Target and DistanceFromRootPart <= Settings.BringDistance then
+            if DistanceFromRootPart <= 35 then
+                RootPart.CFrame, Humanoid.WalkSpeed = Target, 0
+            else
+                Humanoid.WalkSpeed = 100
+                Humanoid:MoveTo(Target.Position)
+            end
+        end
+    end
+    
+    if Enemy and Enemy:HasTag(BRING_TAG) then
+        Enemy:RemoveTag(BRING_TAG)
+    end
+end
+
+-- When a new enemy is spawned or detected, you would call the Bring function
+-- For example:
+local function OnEnemyAdded(Enemy)
+    if _G.BringMob then
+        Enemy:AddTag(BRING_TAG)
+        task.spawn(Bring, Enemy)
+    end
+end
 local ToggleAutoT = Tabs.Setting:AddToggle("ToggleAutoT", {Title="Auto Turn On V3", Description="", Default=false })
 ToggleAutoT:OnChanged(function(Value)
     _G.AutoV3=Value
@@ -3399,399 +3686,6 @@ Tabs.Setting:AddButton({
 	end;
 end
 })
-local Gay = Tabs.Vocalno:AddSection("Tab Volcano")
-local v1 = Tabs.Vocalno:AddToggle("v1", {
-    Title = "Auto Find Prehistoric",
-    Default = false,
-    Description = ""
-})
-v1:OnChanged(function(Value)
-    _G.AutoFindPrehistoric = Value
-end)
-
-local seatHistory = {}
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local Workspace = game:GetService("Workspace")
-local SetSpeedBoat = 350  
-
-RunService.RenderStepped:Connect(function()
-    for boatName, seat in pairs(seatHistory) do
-        if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-            seatHistory[boatName] = seat
-        end
-    end
-end)
-
-local function tpToMyBoat()
-    for boatName, seat in pairs(seatHistory) do
-        if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-            Tween2(seat.CFrame)
-        end
-    end
-end
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.BoatPrehis then
-                local LocalPlayer = game.Players.LocalPlayer
-                local MyBoat = nil
-
-                for _, boat in pairs(Workspace.Boats:GetChildren()) do
-                    if boat.Name == "Guardian" and boat:FindFirstChild("Owner") and boat.Owner.Value == LocalPlayer then
-                        MyBoat = boat
-                        break
-                    end
-                end
-
-                if not MyBoat then
-                    buyb = Tween(CFrame.new(-16933.3535, -0.591003418, 520.89801))
-                    if (LocalPlayer.Character.HumanoidRootPart.Position - Vector3.new(-16933.3535, -0.591003418, 520.89801)).Magnitude <= 10 then
-                        if buyb then buyb:Stop() end
-                        local args = {
-                            [1] = "BuyBoat",
-                            [2] = "Guardian"
-                        }
-                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                    end
-                elseif MyBoat then
-                    local seat = MyBoat:FindFirstChild("VehicleSeat")
-                    if seat and LocalPlayer.Character:FindFirstChild("Humanoid").Sit == false then
-                        Tween(seat.CFrame * CFrame.new(0,1,0))
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isTeleporting = false
-local notified = false
-RunService.RenderStepped:Connect(function()
-    if not _G.AutoFindPrehistoric then
-        notified = false
-        return
-    end
-    local player = Players.LocalPlayer
-    local character = player.Character
-    if not character or not character:FindFirstChild("Humanoid") then return end
-    
-    local function tpToMyBoat()
-        if isTeleporting then return end
-        isTeleporting = true
-        for boatName, seat in pairs(seatHistory) do
-            if seat and seat.Parent and seat.Name == "VehicleSeat" and not seat.Occupant then
-                Tween2(seat.CFrame)
-                break
-            end
-        end
-        isTeleporting = false
-    end
-    
-    local humanoid = character.Humanoid
-    local boatFound = false
-    local currentBoat = nil
-    
-    for _, b in pairs(Workspace.Boats:GetChildren()) do
-        local seat = b:FindFirstChild("VehicleSeat")
-        if seat and seat.Occupant == humanoid then
-            boatFound = true
-            currentBoat = seat
-            seatHistory[b.Name] = seat
-        elseif seat and seat.Occupant == nil then
-            tpToMyBoat()
-        end
-    end
-
-    if not boatFound then return end
-    
-    currentBoat.MaxSpeed = SetSpeedBoat
-    currentBoat.CFrame = CFrame.new(Vector3.new(currentBoat.Position.X, currentBoat.Position.Y, currentBoat.Position.Z)) * currentBoat.CFrame.Rotation
-    VirtualInputManager:SendKeyEvent(true, "W", false, game)
-
-    for _, v in pairs(Workspace.Boats:GetDescendants()) do
-        if v:IsA("BasePart") then v.CanCollide = false end
-    end
-    for _, v in pairs(character:GetDescendants()) do
-        if v:IsA("BasePart") then v.CanCollide = false end
-    end
-
-    local islandsToDelete = { 
-        "ShipwreckIsland", 
-        "SandIsland", 
-        "TreeIsland",
-        "TinyIsland", 
-        "MysticIsland", 
-        "KitsuneIsland", 
-        "FrozenDimension" 
-    }
-    for _, islandName in ipairs(islandsToDelete) do
-        local island = Workspace.Map:FindFirstChild(islandName)
-        if island and island:IsA("Model") then
-            island:Destroy()
-        end
-    end
-
-    local prehistoricIsland = Workspace.Map:FindFirstChild("PrehistoricIsland")
-    if prehistoricIsland then
-        VirtualInputManager:SendKeyEvent(false, "W", false, game)
-        
-        _G.BoatPrehis = false
-        _G.AutoFindPrehistoric = false
-        v1:SetValue(false) -- Update the toggle state in the UI
-        
-        Fluent:Notify({
-            Title = "Notification",
-            Content = "Prehistoric Island Spawn",
-            Duration = 5
-        })
-                if not notified then
-            notified = true
-        end
-        return
-    end
-end)
- local Prehistoric = Tabs.Vocalno:AddParagraph({
-    Title="Status Prehistoric",
-    Content=""
-})
-spawn(function()
-    pcall(function()
-        while wait() do
-            if game:GetService("Workspace").Map:FindFirstChild("PrehistoricIsland") then
-                Prehistoric:SetDesc("Prehistoric: ✅️")
-            else
-                Prehistoric:SetDesc("Prehistoric: ❌️")
-            end
-        end
-    end)
-end)
-local v4 = Tabs.Vocalno:AddToggle("v4", {
-    Title = "Teleport Prehistoric",
-    Default = false
-})
-v4:OnChanged(function(Value)
-    _G.TweenPrehistoric = Value
-end)
-    spawn(function()
-	local v411
-	while  not v411 do
-		v411 = game:GetService("Workspace").Map:FindFirstChild("PrehistoricIsland")
-		wait()
-	end
-	while wait() do
-		if _G.TpPrehistoric then
-			local v1558 = game:GetService("Workspace").Map:FindFirstChild("PrehistoricIsland")
-			if v1558 then
-				local v1737 = v1558:FindFirstChild("Core") and v1558.Core:FindFirstChild("PrehistoricRelic") 
-				local v1738 = v1737 and v1737:FindFirstChild("Skull") 
-				if v1738 then
-					Tween(CFrame.new(v1738.Position))
-					_G.TweenPrehistoric = false
-				end
-			end
-		end
-	end
-end)
-    
-local ToggleDefendVolcano = Tabs.Vocalno:AddToggle("ToggleDefendVolcano", {
-    Title = "Defend Volcano", 
-    Description = "", 
-    Default = false
-})
-ToggleDefendVolcano:OnChanged(function(Value)
-    _G.AutoDefendVolcano = Value
-end)
-local ToggleMelee = Tabs.Vocalno:AddToggle("ToggleMelee", {
-    Title = "Use Melee(Dragon Talon Is Good)", 
-    Description = "", 
-    Default = false
-})
-ToggleMelee:OnChanged(function(Value)
-    _G.UseMelee = Value
-end)
-local ToggleSword = Tabs.Vocalno:AddToggle("ToggleSword", {
-    Title = "Use Sword", 
-    Description = "", 
-    Default = false
-})
-ToggleSword:OnChanged(function(Value)
-    _G.UseSword = Value
-end)
-local ToggleGun = Tabs.Vocalno:AddToggle("ToggleGun", {
-    Title = "Use Gun(Error)", 
-    Description = "", 
-    Default = false
-})
-ToggleGun:OnChanged(function(Value)
-    _G.UseGun = Value
-end)
-local function useSkill(skillKey)
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, skillKey, false, game)
-    game:GetService("VirtualInputManager"):SendKeyEvent(false, skillKey, false, game)
-end
-local function removeLava()
-    local interiorLavaModel = game.Workspace.Map.PrehistoricIsland.Core:FindFirstChild("InteriorLava")
-    if interiorLavaModel and interiorLavaModel:IsA("Model") then
-        interiorLavaModel:Destroy()
-    end
-    local prehistoricIsland1 = game.Workspace.Map:FindFirstChild("PrehistoricIsland")
-    if prehistoricIsland1 then
-        for _, descendant in pairs(prehistoricIsland1:GetDescendants()) do
-            if descendant:IsA("Part") and descendant.Name:lower():find("lava") then
-                descendant:Destroy()
-            end
-        end
-    end
-    local prehistoricIsland2 = game.Workspace.Map:FindFirstChild("PrehistoricIsland")
-    if prehistoricIsland2 then
-        for _, model in pairs(prehistoricIsland2:GetDescendants()) do
-            if model:IsA("Model") then
-                for _, child in pairs(model:GetDescendants()) do
-                    if child:IsA("MeshPart") and child.Name:lower():find("lava") then
-                        child:Destroy()
-                    end
-                end
-            end
-        end
-    end
-end
-local function findValidRock()
-    local volcanoRocksFolder = game.Workspace.Map.PrehistoricIsland.Core.VolcanoRocks
-    for _, Rock in pairs(volcanoRocksFolder:GetChildren()) do
-        if Rock:IsA("Model") then
-            local volcanorock = Rock:FindFirstChild("volcanorock")
-            if volcanorock and volcanorock:IsA("MeshPart") then
-                local color = volcanorock.Color
-                if color == Color3.fromRGB(185, 53, 56) or color == Color3.fromRGB(185, 53, 57) then
-                    return volcanorock
-                end
-            end
-        end
-    end
-    return nil 
-end
-local function equipAndUseSkill(toolType)
-    local player = game.Players.LocalPlayer
-    local backpack = player.Backpack
-    for _, item in pairs(backpack:GetChildren()) do
-        if item:IsA("Tool") and item.ToolTip == toolType then
-            item.Parent = player.Character 
-            for _, skill in ipairs({"Z", "X", "C", "V", "F"}) do
-                wait() 
-                pcall(function() useSkill(skill) end) 
-            end
-            item.Parent = backpack
-            break
-        end
-    end
-end
-spawn(function()
-    while wait() do
-        if _G.AutoDefendVolcano then
-            AutoHaki() 
-            pcall(removeLava) 
-            local currentTarget = findValidRock() 
-            if currentTarget then
-                local targetPosition = CFrame.new(currentTarget.Position + Vector3.new(0, 0, 0))
-                Tween2(targetPosition) 
-                local color = currentTarget.Color
-                if color ~= Color3.fromRGB(185, 53, 56) and color ~= Color3.fromRGB(185, 53, 57) then
-                    currentTarget = findValidRock() 
-                else
-                    local currentPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                    local distance = (currentPosition - currentTarget.Position - Vector3.new(0, 0, 0)).Magnitude
-                    if distance <= 1 then
-                        if _G.UseMelee then
-                            equipAndUseSkill("Melee")
-                        end
-                        if _G.UseSword then
-                            equipAndUseSkill("Sword")
-                        end
-                        if _G.UseGun then
-                            equipAndUseSkill("Gun")
-                        end
-                    end
-                    _G.TweenToPrehistoric = false
-                end
-            else
-                _G.TweenToPrehistoric = true
-            end
-        end
-    end
-end)
-local ToggleKillAura = Tabs.Vocalno:AddToggle("ToggleKillAura", {Title="Kill Golem",Description="", Default=false })
-ToggleKillAura:OnChanged(function(Value)
-    KillAura=Value
-end)
-Options.ToggleKillAura:SetValue(false)
-spawn(function()
-    while wait() do
-        if KillAura then
-            pcall(function()
-                for i,v in pairs(game.Workspace.Enemies:GetDescendants()) do
-                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health>0 then
-                        repeat task.wait()
-                            sethiddenproperty(game:GetService('Players').LocalPlayer,"SimulationRadius",math.huge)
-                            v.Humanoid.Health=0
-                            v.HumanoidRootPart.CanCollide=false
-                        until not KillAura or not v.Parent or v.Humanoid.Health<=0
-                    end
-                end
-            end)
-        end
-    end
-end)
-local ToggleCollectBone = Tabs.Vocalno:AddToggle("ToggleCollectBone", {
-    Title="Collect Bone", 
-    Description="", 
-    Default=false
-})
-ToggleCollectBone:OnChanged(function(Value)
-    _G.AutoCollectBone=Value
-end)
-spawn(function()
-    while wait() do
-        if _G.AutoCollectBone then
-            for _, obj in pairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") and obj.Name=="DinoBone" then
-                    Tween2(CFrame.new(obj.Position))
-                end
-            end
-        end
-    end
-end)
-local ToggleCollectEgg = Tabs.Vocalno:AddToggle("ToggleCollectEgg", {
-    Title = "Collect Egg",
-    Description = "",
-    Default = false
-})
-ToggleCollectEgg:OnChanged(function(Value)
-    _G.AutoCollectEgg = Value
-end)
-spawn(function()
-    while wait() do
-        if _G.AutoCollectEgg then
-            local dragonEggs = workspace.Map.PrehistoricIsland.Core.SpawnedDragonEggs:GetChildren()
-            if #dragonEggs > 0 then
-                local randomEgg = dragonEggs[math.random(1, #dragonEggs)]
-                if randomEgg:IsA("Model") and randomEgg.PrimaryPart then
-                    Tween2(randomEgg.PrimaryPart.CFrame)
-                    local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                    local eggPosition = randomEgg.PrimaryPart.Position
-                    local distance = (playerPosition - eggPosition).Magnitude
-                    if distance <= 1 then
-                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, game)
-                        wait(1.5)
-                        game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, game)
-                    end
-                end
-            end
-        end
-    end
-end)
 local ToggleCollectTP = Tabs.Fruit:AddToggle("ToggleCollectTP", {Title="Teleport To Fruits",Description="", Default=false })
 ToggleCollectTP:OnChanged(function(Value)
     _G.CollectFruitTP=Value
@@ -3828,10 +3722,11 @@ spawn(function()
                                 task.wait()
                                 AutoHaki()
                                 AutoV3()
+                                AttackNoCoolDown()
                                 EquipWeapon(_G.SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
                                 v.Humanoid.WalkSpeed = 0
-                                Tween(v.HumanoidRootPart.CFrame * Pos)
+                                topos(v.HumanoidRootPart.CFrame * Pos)
                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
                             until not _G.AutoRipIndra or not v.Parent or v.Humanoid.Health <= 0
                         end
@@ -3839,7 +3734,7 @@ spawn(function()
                 else
                     local ripindra = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
                     if ripindra then
-                        Tween(ripindra.HumanoidRootPart.CFrame * CFrame.new(-5562.37255859375, 314.0408630371094, -2659.544189453125)) 
+                        topos(ripindra.HumanoidRootPart.CFrame * CFrame.new(5, 7, 10)) 
                     end
                 end
             end)
@@ -3866,10 +3761,11 @@ spawn(function()
                                 task.wait()
                                 AutoHaki()
                                 AutoV3()
+                                AttackNoCoolDown()
                                 EquipWeapon(_G.SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
                                 v.Humanoid.WalkSpeed = 0
-                                Tween(v.HumanoidRootPart.CFrame * Pos)
+                                topos(v.HumanoidRootPart.CFrame * Pos)
                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
                             until not _G.AutoDoughKing or not v.Parent or v.Humanoid.Health <= 0
                         end
@@ -3877,7 +3773,7 @@ spawn(function()
                 else
                     local doughKing = game:GetService("ReplicatedStorage"):FindFirstChild("Dough King")
                     if Gay then
-                        Tween(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7)) 
+                        topos(doughKing.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7)) 
                     end
                 end
             end)
@@ -3904,10 +3800,11 @@ spawn(function()
                                 task.wait()
                                 AutoHaki()
                                 AutoV3()
+                                AttackNoCoolDown()
                                 EquipWeapon(_G.SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
                                 v.Humanoid.WalkSpeed = 0
-                                Tween(v.HumanoidRootPart.CFrame * Pos)
+                                topos(v.HumanoidRootPart.CFrame * Pos)
                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
                             until not _G.AutoDark or not v.Parent or v.Humanoid.Health <= 0
                         end
@@ -3915,7 +3812,7 @@ spawn(function()
                 else
                     local Dark = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
                     if Cac then
-                        Tween(Dark.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7)) 
+                        topos(Dark.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7)) 
                     end
                 end
             end)
@@ -4162,146 +4059,70 @@ Fluent:Notify({
     Content="Done Load Code",
     Duration=1
 })
-_G.FastAttack = true
-
-if _G.FastAttack then
-    local _ENV = (getgenv or getrenv or getfenv)()
-
-    local function SafeWaitForChild(parent, childName)
-        local success, result = pcall(function()
-            return parent:WaitForChild(childName)
-        end)
-        if not success or not result then
-            warn("noooooo: " .. childName)
+local player = game.Players.LocalPlayer
+function AttackNoCoolDown()
+    local character = player.Character
+    if not character then return end
+    local equippedWeapon = nil
+    for _, item in ipairs(character:GetChildren()) do
+        if item:IsA("Tool") then
+            equippedWeapon = item
+            break
         end
-        return result
     end
-
-    local function WaitChilds(path, ...)
-        local last = path
-        for _, child in {...} do
-            last = last:FindFirstChild(child) or SafeWaitForChild(last, child)
-            if not last then break end
-        end
-        return last
+    if not equippedWeapon then return end
+    local function IsEntityAlive(entity)
+        return entity and entity:FindFirstChild("Humanoid") and entity.Humanoid.Health > 0
     end
-
-    local VirtualInputManager = game:GetService("VirtualInputManager")
-    local CollectionService = game:GetService("CollectionService")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local TeleportService = game:GetService("TeleportService")
-    local RunService = game:GetService("RunService")
-    local Players = game:GetService("Players")
-    local Player = Players.LocalPlayer
-
-    if not Player then
-        warn("Không tìm thấy người chơi cục bộ.")
-        return
+    local function GetEnemiesInRange(range)
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        local targets = {}
+        local playerPos = character:GetPivot().Position
+        for _, enemy in ipairs(enemies) do
+            local primaryPart = enemy:FindFirstChild("HumanoidRootPart")
+            if primaryPart and IsEntityAlive(enemy) and (primaryPart.Position - playerPos).Magnitude <= range then
+                table.insert(targets, enemy)
+            end
+        end
+        return targets
     end
-
-    local Remotes = SafeWaitForChild(ReplicatedStorage, "Remotes")
-    if not Remotes then return end
-
-    local Validator = SafeWaitForChild(Remotes, "Validator")
-    local CommF = SafeWaitForChild(Remotes, "CommF_")
-    local CommE = SafeWaitForChild(Remotes, "CommE")
-
-    local ChestModels = SafeWaitForChild(workspace, "ChestModels")
-    local WorldOrigin = SafeWaitForChild(workspace, "_WorldOrigin")
-    local Characters = SafeWaitForChild(workspace, "Characters")
-    local Enemies = SafeWaitForChild(workspace, "Enemies")
-    local Map = SafeWaitForChild(workspace, "Map")
-
-    local EnemySpawns = SafeWaitForChild(WorldOrigin, "EnemySpawns")
-    local Locations = SafeWaitForChild(WorldOrigin, "Locations")
-
-    local RenderStepped = RunService.RenderStepped
-    local Heartbeat = RunService.Heartbeat
-    local Stepped = RunService.Stepped
-
-    local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
-    local Net = SafeWaitForChild(Modules, "Net")
-
-    local sethiddenproperty = sethiddenproperty or function(...) return ... end
-    local setupvalue = setupvalue or (debug and debug.setupvalue)
-    local getupvalue = getupvalue or (debug and debug.getupvalue)
-
-    local Settings = {
-        AutoClick = true,
-        ClickDelay = 0,
-    }
-
-    local Module = {}
-
-    Module.FastAttack = (function()
-        if _ENV.rz_FastAttack then
-            return _ENV.rz_FastAttack
+    if equippedWeapon:FindFirstChild("LeftClickRemote") then
+        local attackCount = 1  
+        local enemiesInRange = GetEnemiesInRange(60)
+        for _, enemy in ipairs(enemiesInRange) do
+            local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
+            pcall(function()
+                equippedWeapon.LeftClickRemote:FireServer(direction, attackCount)
+            end)
+            attackCount = attackCount + 1
+            if attackCount > 1000000000 then attackCount = 1 end
         end
-
-        local FastAttack = {
-            Distance = 250,
-            attackMobs = true,
-            attackPlayers = true,
-            Equipped = nil
-        }
-
-        local RegisterAttack = SafeWaitForChild(Net, "RE/RegisterAttack")
-        local RegisterHit = SafeWaitForChild(Net, "RE/RegisterHit")
-
-        local function IsAlive(character)
-        return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
-        end
-
-        local function ProcessEnemies(OthersEnemies, Folder)
-            local BasePart = nil
-            for _, Enemy in Folder:GetChildren() do
-                local Head = Enemy:FindFirstChild("Head")
-                if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
-                    if Enemy ~= Player.Character then
-                        table.insert(OthersEnemies, { Enemy, Head })
-                        BasePart = Head
-                    end
+    else
+        local targets = {}
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        local playerPos = character:GetPivot().Position
+        local mainTarget = nil
+        for _, enemy in ipairs(enemies) do
+            if not enemy:GetAttribute("IsBoat") and IsEntityAlive(enemy) then
+                local head = enemy:FindFirstChild("Head")
+                if head and (playerPos - head.Position).Magnitude <= 60 then
+                    table.insert(targets, { enemy, head })
+                    mainTarget = head
                 end
             end
-            return BasePart
         end
-
-        function FastAttack:Attack(BasePart, OthersEnemies)
-            if not BasePart or #OthersEnemies == 0 then return end
-            RegisterAttack:FireServer(Settings.ClickDelay or 0)
-            RegisterHit:FireServer(BasePart, OthersEnemies)
-        end
-
-        function FastAttack:AttackNearest()
-            local OthersEnemies = {}
-            local Part1 = ProcessEnemies(OthersEnemies, Enemies)
-            local Part2 = ProcessEnemies(OthersEnemies, Characters)
-            if #OthersEnemies > 0 then
-                self:Attack(Part1 or Part2, OthersEnemies)
+        if not mainTarget then return end
+        pcall(function()
+            local storage = game:GetService("ReplicatedStorage")
+            local attackEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack")
+            local hitEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit")
+            if #targets > 0 then
+                attackEvent:FireServer(0.000000001)
+                hitEvent:FireServer(mainTarget, targets)
             else
-                task.wait(0.5)
-            end
-        end
-
-        function FastAttack:BladeHits()
-            local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
-            if Equipped and Equipped.ToolTip ~= "Gun" then
-                self:AttackNearest()
-            else
-                task.wait(0.5)
-            end
-        end
-
-        task.spawn(function()
-            while task.wait(Settings.ClickDelay) do
-                if Settings.AutoClick then
-                    FastAttack:BladeHits()
-                end
+                task.wait(0.000000001)
             end
         end)
-
-        _ENV.rz_FastAttack = FastAttack
-        return FastAttack
-    end)()
+    end
 end
 setclipboard("https://discord.gg/fRg2P9CpzW")
