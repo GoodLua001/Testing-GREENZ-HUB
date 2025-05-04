@@ -1816,7 +1816,7 @@ task.spawn(function()
         end)
     end
 end)
-local BringMob = Tabs.Main:AddToggle("BringMob", {
+local BringMob = Tabs.Setting:AddToggle("BringMob", {
         Title="Bring Mob",
         Description="",
         Default=true })
@@ -1969,7 +1969,7 @@ function AttackNoCoolDown()
         end)
     end
 end
-    local SelectFarm = Tabs.Setting:AddDropdown("SelectFarm", {
+    local SelectFarm = Tabs.Main:AddDropdown("SelectFarm", {
     Title = "Select Farm",
     Description = "",
     Values = {'Farm Level','Farm Bone','Farm Katakuri'},
