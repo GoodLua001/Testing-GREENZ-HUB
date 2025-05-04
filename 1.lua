@@ -1890,7 +1890,7 @@ local function FastAttackLoop()
         task.wait(0.1)
     end
 end
-local FastAttack = Tabs.Main:AddToggle("FastAttack", {
+local FastAttack = Tabs.Setting:AddToggle("FastAttack", {
         Title="Fast Attack",
         Description="",
         Default=true })
