@@ -2041,11 +2041,6 @@ local Level = Tabs.Main:AddSection("Level Farm")
         Default=false })
     ToggleLevel:OnChanged(function(Value)
         _G.AutoLevel=Value
-        if Value==false then
-            wait()
-            topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-        end
     end)
     Options.ToggleLevel:SetValue(false)
     spawn(function()
