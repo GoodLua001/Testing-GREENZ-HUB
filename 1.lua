@@ -2035,16 +2035,6 @@ Tabs.Setting:AddButton({
     end
 })
 local Level = Tabs.Main:AddSection("Level Farm")
-local player = game.Players.LocalPlayer
-local playerStats = player:WaitForChild("leaderstats")
-local levelValue = playerStats:WaitForChild("Level")
-local currentLevel = levelValue.Value
-levelValue.Changed:Connect(function()
-    Tabs.Tong:AddParagraph({
-        Title = "Your Level",
-        Content = "" .. levelValue.Value
-    })
-end)
      local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
         Title="Auto Farm Level",
         Description="",
