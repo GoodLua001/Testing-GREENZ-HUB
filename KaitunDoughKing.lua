@@ -532,12 +532,7 @@ function AttackModule:BladeHits()
 end;
 function Attack()
 			AttackModule:BladeHits();
-		else
-			wait(0.5);
-			AttackModule:BladeHits();
-		end;
 	end;
-end;
 function NormalAttack()
 	AttackModule:BladeHits();
 end;
