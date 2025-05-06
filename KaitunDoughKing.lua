@@ -474,109 +474,63 @@ spawn(function()
 end)
 
 -- Tấn công nhanh
-_G.FastAttack = true
-if _G.FastAttack then
-    local VirtualInputManager = game:GetService("VirtualInputManager")
-    local CollectionService = game:GetService("CollectionService")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local RunService = game:GetService("RunService")
-    local Players = game:GetService("Players")
-    local Player = Players.LocalPlayer
-
-    local Remotes = ReplicatedStorage:WaitForChild("Remotes")
-    local Validator = Remotes:WaitForChild("Validator")
-    local CommF = Remotes:WaitForChild("CommF_")
-    local CommE = Remotes:WaitForChild("CommE")
-    local Net = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Net")
-    local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
-    local RegisterHit = Net:WaitForChild("RE/RegisterHit")
-
-    local Settings = {
-        AutoClick = true,
-        ClickDelay = 0
-    }
-
-    local FastAttack = {
-        Distance = 100,
-        attackMobs = true,
-        attackPlayers = false,
-        Equipped = nil
-    }
-
-    local function IsAlive(character)
-        return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
-    end
-
-    local function ProcessEnemies(OthersEnemies, Folder)
-        local BasePart = nil
-        for _, Enemy in Folder:GetChildren() do
-            local Head = Enemy:FindFirstChild("Head")
-            if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
-                if Enemy ~= Player.Character then
-                    table.insert(OthersEnemies, {Enemy, Head})
-                    BasePart = Head
-                end
-            end
-        end
-        return BasePart
-    end
-
-    function FastAttack:Attack(BasePart, OthersEnemies)
-        if not BasePart or #OthersEnemies == 0 then
-            return
-        end
-        pcall(function()
-            RegisterAttack:FireServer(Settings.ClickDelay or 0)
-            RegisterHit:FireServer(BasePart, OthersEnemies)
-        end)
-    end
-
-    function FastAttack:AttackNearest()
-        local OthersEnemies = {}
-        local Part1 = ProcessEnemies(OthersEnemies, game:GetService("Workspace").Enemies)
-        local Part2 = ProcessEnemies(OthersEnemies, game:GetService("Workspace").Characters)
-
-        local character = Player.Character
-        if not character then
-            return
-        end
-
-        local equippedWeapon = character:FindFirstChildOfClass("Tool")
-        if equippedWeapon and equippedWeapon:FindFirstChild("LeftClickRemote") then
-            for _, enemyData in ipairs(OthersEnemies) do
-                local enemy = enemyData[1]
-                local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
-                pcall(function()
-                    equippedWeapon.LeftClickRemote:FireServer(direction, 1)
-                end)
-            end
-        elseif #OthersEnemies > 0 then
-            self:Attack(Part1 or Part2, OthersEnemies)
-        else
-            task.wait(0)
-        end
-    end
-
-    function FastAttack:BladeHits()
-        local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
-        if Equipped and Equipped.ToolTip ~= "Gun" then
-            self:AttackNearest()
-        else
-            task.wait(0)
-        end
-    end
-
-    task.spawn(function()
-        while task.wait(Settings.ClickDelay) do
-            if Settings.AutoClick then
-                pcall(function()
-                    FastAttack:BladeHits()
-                end)
-            end
-        end
-    end)
-end
-
+local env = (getgenv or getrenv or getfenv)();
+local rs = game:GetService("ReplicatedStorage");
+local players = game:GetService("Players");
+local client = players.LocalPlayer;
+local modules = rs:WaitForChild("Modules");
+local net = modules:WaitForChild("Net");
+local charFolder = workspace:WaitForChild("Characters");
+local enemyFolder = workspace:WaitForChild("Enemies");
+local playerFolder = game:GetService("Players");
+local AttackModule = {};
+local RegisterAttack = net:WaitForChild("RE/RegisterAttack");
+local RegisterHit = net:WaitForChild("RE/RegisterHit");
+function AttackModule:AttackEnemy(EnemyHead, Table)
+	if EnemyHead then
+		RegisterAttack:FireServer(0);
+		RegisterAttack:FireServer(1);
+		RegisterAttack:FireServer(2);
+		RegisterAttack:FireServer(3);
+		RegisterHit:FireServer(EnemyHead, Table or {});
+	end;
+end;
+function AttackModule:AttackNearest()
+	local mon = {
+		nil,
+		{}
+	};
+	for _, Enemy in enemyFolder:GetChildren() do
+		if not mon[1] and Enemy:FindFirstChild("HumanoidRootPart", true) and client:DistanceFromCharacter(Enemy.HumanoidRootPart.Position) < 60 then
+			mon[1] = Enemy:FindFirstChild("HumanoidRootPart");
+		elseif Enemy:FindFirstChild("HumanoidRootPart", true) and client:DistanceFromCharacter(Enemy.HumanoidRootPart.Position) < 60 then
+			table.insert(mon[2], {
+				[1] = Enemy,
+				[2] = Enemy:FindFirstChild("HumanoidRootPart")
+			});
+		end;
+	end;
+	self:AttackEnemy(unpack(mon));
+	local player = {
+		nil,
+		{}
+	};
+	for _, Player in playerFolder:GetChildren() do
+		if not player[1] and Player:FindFirstChild("HumanoidRootPart", true) and client:DistanceFromCharacter(Player.Character.HumanoidRootPart.Position) < 60 then
+			player[1] = Player.Character:FindFirstChild("HumanoidRootPart");
+		elseif Player.Character:FindFirstChild("HumanoidRootPart", true) and client:DistanceFromCharacter(Player.Character.HumanoidRootPart.Position) < 60 then
+			table.insert(player[2], {
+				[1] = Player,
+				[2] = Player.Character:FindFirstChild("HumanoidRootPart")
+			});
+		end;
+	end;
+	self:AttackEnemy(unpack(player));
+end;
+function AttackModule:BladeHits()
+	self:AttackNearest();
+end;
+function Attack()
 -- Load TrollApi
 local TrollApi = loadstring(game:HttpGet("https://raw.githubusercontent.com/PorryDepTrai/exploit/main/SimpleTroll.lua"))()
 
@@ -771,6 +725,7 @@ spawn(function()
                                 break
                             end
                             AutoHaki()
+                            Attack()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
