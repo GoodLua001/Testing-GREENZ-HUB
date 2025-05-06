@@ -730,11 +730,11 @@ spawn(function()
                                 break
                             end
                             AutoHaki()
-                            Attack()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
                             topos(v.HumanoidRootPart.CFrame * Pos)
+                            Attack();
                             sethiddenproperty(plr, "SimulationRadius", math.huge)
                         until not _G.FarmBoss or not v.Parent or v.Humanoid.Health <= 0
                     end
