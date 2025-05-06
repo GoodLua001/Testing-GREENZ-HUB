@@ -531,6 +531,16 @@ function AttackModule:BladeHits()
 	self:AttackNearest();
 end;
 function Attack()
+			AttackModule:BladeHits();
+		else
+			wait(0.5);
+			AttackModule:BladeHits();
+		end;
+	end;
+end;
+function NormalAttack()
+	AttackModule:BladeHits();
+end;
 -- Load TrollApi
 local TrollApi = loadstring(game:HttpGet("https://raw.githubusercontent.com/PorryDepTrai/exploit/main/SimpleTroll.lua"))()
 
