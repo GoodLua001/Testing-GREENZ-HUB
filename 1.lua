@@ -468,7 +468,7 @@ elseif getexecutorname then
     executorName=getexecutorname()
 end
 if executorName then
-    Tabs.Info:AddParagraph({
+    Tabs.Gay:AddParagraph({
         Title="Client Bạn Đang Dùng",
         Content=executorName
     })
