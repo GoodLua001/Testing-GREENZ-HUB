@@ -8019,21 +8019,17 @@ Pullever = Race:AddParagraph({
     Title = "Pull Lever Done",
     Content = "Status: "
 })
-spawn(function()
-    local previousStatus = ""
-    while task.wait(1) do
-        local success, result = pcall(function()
-            return game.ReplicatedStorage.Remotes.CommF_:InvokeServer("templedoorcheck")
-        end)
-        if success then
-            local currentStatus = result and "✅" or "❌"
-            if currentStatus ~= previousStatus then
-                Pullever:SetDesc("Status: " .. currentStatus)
-                previousStatus = currentStatus
-            end
-        end
-    end
-end)
+   task.spawn(function()
+    while wait() do
+        pcall(function()
+            if game.ReplicatedStorage.Remotes.CommF_:InvokeServer("CheckTempleDoor") then
+                Pullever:SetDesc("Pull Level: Done  ✅")
+            else
+                Pullever:SetDesc("Pull Level: Done  ❌")
+               end
+            end)
+          end
+       end)
 Race:AddButton({
     Title = "Tween To Top Of Great Tree",
     Callback = function()
@@ -9073,4 +9069,3 @@ if currentTime - lastNotificationTime >= notificationCooldown then
     })
     lastNotificationTime = currentTime
 end
-loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaAnarchist/GreenZ-Hub/refs/heads/main/GreenZFastUnban.lua"))()
