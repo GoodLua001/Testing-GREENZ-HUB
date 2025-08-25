@@ -1,18 +1,3 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local Window = Fluent:CreateWindow({
-    Title="Erader Hub",
-    SubTitle="", 
-    TabWidth=160, 
-    Theme="Darker",
-    Acrylic=false,
-    Size=UDim2.fromOffset(500, 320), 
-    MinimizeKey=Enum.KeyCode.End
-})
-local Tabs = {
-  S=Window:AddTab({ Title="Tab Shop" }),
-  M=Window:AddTab({ Title="Tab Farming"}),
-  Se=Window:AddTab({ Title="Tab Setting"}),
-}
 if game.PlaceId == 2753915549 then
         World1 = true
     elseif game.PlaceId == 4442272183 then
@@ -1031,6 +1016,22 @@ task.defer(function()
         end
     end
 end)
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title="Erader Hub",
+    SubTitle="", 
+    TabWidth=160, 
+    Theme="Darker",
+    Acrylic=false,
+    Size=UDim2.fromOffset(500, 320), 
+    MinimizeKey=Enum.KeyCode.End
+})
+local Tabs = {
+  S=Window:AddTab({ Title="Tab Shop" }),
+  M=Window:AddTab({ Title="Tab Farming"}),
+  Se=Window:AddTab({ Title="Tab Setting"}),
+}
+
 Tabs.S:AddButton({
 	Title = "Buy Black Leg",
 	Description = "",
