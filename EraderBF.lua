@@ -1031,7 +1031,6 @@ task.defer(function()
         end
     end
 end)
-Tabs.S:AddSeperator("Fighting Style")
 Tabs.S:AddButton({
 	Title = "Buy Black Leg",
 	Description = "",
