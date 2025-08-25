@@ -2155,7 +2155,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
                                     end
                                     NeedAttacking = true
-                                until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
+                                until not getgenv().StartFarm or FarmMode == "Farm Katakuri" or World3 or not v.Parent or v.Humanoid.Health <= 0
                                 wait(1)
                             end
                         end
@@ -2238,7 +2238,7 @@ local v3 = Tabs.Se:AddDropdown("v3", {
     Multi = false,
 })
 v3:SetValue("Melee")
-v3:OnChraged(function(Value)
+v3:OnCharged(function(Value)
     _G.SelectWeapon = Value
 end)
     task.spawn(function()
