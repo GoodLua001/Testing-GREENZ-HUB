@@ -2009,7 +2009,7 @@ spawn(function()
                                                 EquipWeapon(_G.SelectWeapon)
                                                 
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.Humanoid.WalkSpeed = 0
                                                 v.Head.CanCollide = false
@@ -2042,7 +2042,7 @@ spawn(function()
                                                     EquipWeapon(_G.SelectWeapon)
                                                      AutoHaki()                                            
                                                     PosMon = v.HumanoidRootPart.CFrame
-                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                                    TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                                     v.HumanoidRootPart.CanCollide = false
                                                     v.Humanoid.WalkSpeed = 0
                                                     v.Head.CanCollide = false
@@ -2107,7 +2107,7 @@ spawn(function()
                                         StartBring = true
                                         MonFarm = v.Name                
                                         PosMon = v.HumanoidRootPart.CFrame
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
                                     until not getgenv().StartFarm or FarmMode == "Farm Bone" or World3 or not v.Parent or v.Humanoid.Health <= 0
                                 end
@@ -2115,16 +2115,16 @@ spawn(function()
                         end
                     else
                         StartBring = false
-    					topos(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
+    					TP("Tween", CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
                         for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
                             if v.Name == "Reborn Skeleton" then
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Living Zombie" then
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Demonic Soul" then
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Posessed Mummy" then
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             end
                         end
                     end
@@ -2150,9 +2150,9 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                     v.Humanoid.WalkSpeed = 0
                                     v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
                                     else
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
                                     end
                                     NeedAttacking = true
                                 until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
@@ -2183,7 +2183,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2202,24 +2202,24 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                     else
                         local RandomTele = math.random(1, 3)
                         if RandomTele == 1 then
-                            topos(CFrame.new(-1436.86011, 167.753616, -12296.9512))
+                            TP("Tween", CFrame.new(-1436.86011, 167.753616, -12296.9512))
                         elseif RandomTele == 2 then
-                            topos(CFrame.new(-2383.78979, 150.450592, -12126.4961))
+                            TP("Tween", CFrame.new(-2383.78979, 150.450592, -12126.4961))
                         elseif RandomTele == 3 then
-                            topos(CFrame.new(-2231.2793, 168.256653, -12845.7559))
+                            TP("Tween", CFrame.new(-2231.2793, 168.256653, -12845.7559))
                         end
                     end
                     if BypassTP then
                         if (playerPos - CakePos.Position).Magnitude > 1500 then
                             BTP(CakePos)
                         else
-                            topos(CakePos)
+                            TP("Tween", CakePos)
                         end
                     else
-                        topos(CakePos)
+                        TP("Tween", CakePos)
                     end
                     UnEquipWeapon(_G.Selectweapon)
-                    topos(CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
+                    TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
                 end
             end)
         end
