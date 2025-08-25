@@ -2236,7 +2236,6 @@ local v3 = Tabs.Se:AddDropdown("v3", {
     Title = "Select Weapon",
     Values = {"Melee", "Sword", "Fruits"},
     Multi = false,
-end
 })
 v3:SetValue("Melee")
 v3:OnChraged(function(Value)
