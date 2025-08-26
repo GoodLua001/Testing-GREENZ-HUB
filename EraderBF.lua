@@ -2098,8 +2098,6 @@ spawn(function()
                                 if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                                     repeat task.wait()
                                         AutoHaki()
-                                        NoAttackAnimation = true
-                                        NeedAttacking = true
                                         EquipWeapon(_G.SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
                                         v.Humanoid.WalkSpeed = 0
