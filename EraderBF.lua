@@ -2212,7 +2212,7 @@ local v3 = Tabs.Se:AddDropdown("v3", {
     Multi = false,
 })
 v3:SetValue("Melee")
-v3:OnCharged(function(Value)
+v3:OnChanged(function(Value)
     _G.SelectWeapon = Value
 end)
     task.spawn(function()
