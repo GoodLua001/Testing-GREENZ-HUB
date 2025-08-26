@@ -2072,64 +2072,40 @@ spawn(function()
             end
         end
     end)
+local BoneNoQuest = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
 spawn(function()
-        while wait() do 
-            local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-            if getgenv().StartFarm and FarmMode == "Farm Bone" and World3 then
+    while wait() do
+        if getgenv().StartFarm and FarmMode == "Farm Bone" and World3 then
             pcall(function()
-                    if BypassTP then
-                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                            TP1(boneframe)
-                            wait(.1)
-                            for i = 1, 8 do
-                                game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
-			                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
-                                wait(.1)		
-                            end
-                        elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
-                            TP1(boneframe)
-                        end
-                    else
-                        TP1(boneframe)
-                    end
-                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
-                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                    repeat task.wait()
-                                        AutoHaki()
-                                        EquipWeapon(_G.SelectWeapon)
-                                        v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
-                                        v.Head.CanCollide = false 
-                                        StartBring = true
-                                        MonFarm = v.Name                
-                                        PosMon = v.HumanoidRootPart.CFrame
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                        sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                    until not getgenv().StartFarm or FarmMode == "Farm Bone" or World3 or not v.Parent or v.Humanoid.Health <= 0
-                                end
-                            end
-                        end
-                    else
-                        StartBring = false
-    					TP("Tween", CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
-                        for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                            if v.Name == "Reborn Skeleton" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Living Zombie" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Demonic Soul" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Posessed Mummy" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                TP("Tween", BoneNoQuest)
+                if (BoneNoQuest.Position-game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude<=3 then
+                end
+                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health>0 then
+                            if v.Name=="Reborn Skeleton" or v.Name=="Living Zombie" or v.Name=="Demonic Soul" or v.Name=="Posessed Mummy" or v.Name=="Soul Reaper" then
+                                repeat
+                                    task.wait()
+                                    AutoHaki()
+                                    StartBring = true
+                                    EquipTool(_G.SelectWeapon)
+                                    TP("Tween", v.HumanoidRootPart.CFrame*Pos)
+                                    v.HumanoidRootPart.Size=Vector3.new(60, 60, 60)
+                                    v.HumanoidRootPart.Transparency=1
+                                    v.Humanoid.JumpPower=0
+                                    v.Humanoid.WalkSpeed=0
+                                    v.HumanoidRootPart.CanCollide=false
+                                    FarmPos=v.HumanoidRootPart.CFrame
+                                    MonFarm=v.Name
+                                until not getgenv().StartFarm or FarmMode == "Farm Bone" or World3 or v.Humanoid.Health<=0 or not v.Parent
                             end
                         end
                     end
-                end)
-            end
+                end
+            end)
         end
-    end)  
+    end
+end)
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
     local Plsmon = game:GetService("Workspace").Enemies
      task.spawn(function()
