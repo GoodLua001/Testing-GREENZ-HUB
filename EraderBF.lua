@@ -2280,3 +2280,58 @@ end)
      		end)
      	end
     end)
+local v4 = Tabs.Se:AddToggle("v4", {
+    Title = "Bring Mob",
+    Description = "",
+    Callback = function(Value)
+        _G.BringMonster = Value
+end
+})
+    spawn(function()
+	while task.wait() do
+		pcall(function()
+            CheckQuest()
+			for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+				if _G.BringMonster then
+					if StartBring and v.Name == MonFarm or v.Name == Mon and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
+						if v.Name == "Factory Staff" then
+							if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 250 then
+								v.Head.CanCollide = false
+								v.HumanoidRootPart.CanCollide = false
+								v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+								v.HumanoidRootPart.CFrame = PosMon
+								if v.Humanoid:FindFirstChild("Animator") then
+									v.Humanoid.Animator:Destroy()
+								end
+								sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
+							end
+						elseif v.Name == MonFarm or v.Name == Mon then
+							if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 340 then
+                                v.HumanoidRootPart.Size = Vector3.new(60,60,60)
+                                v.HumanoidRootPart.CFrame = PosMon
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Head.CanCollide = false
+                                if v.Humanoid:FindFirstChild("Animator") then
+                                    v.Humanoid.Animator:Destroy()
+                                end
+                               sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+      							end
+     						end
+    					end
+     				end
+	    		end
+    		end)
+     	end
+    end)
+
+
+        function InMyNetWork(object)
+      	if isnetworkowner then
+		return isnetworkowner(object)
+      	else
+	  	if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then 
+ 			return true
+    		end
+ 		return false
+      	end
+   end    
