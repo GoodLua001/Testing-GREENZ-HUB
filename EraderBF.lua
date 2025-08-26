@@ -2071,7 +2071,7 @@ end
       	end
    end    
 local v15 = Tabs.M:AddSection("Tab Farming")
-local v16 = Taba.M:AddToggle("v16", {
+local v16 = Tabs.M:AddToggle("v16", {
     Title = "Auto Farm Level",
     Description = "",
     Default = false,
