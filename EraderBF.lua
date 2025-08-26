@@ -2075,9 +2075,9 @@ local v16 = Tabs.M:AddToggle("v16", {
     Title = "Auto Farm Level",
     Description = "",
     Default = false,
-    Callback = (function(Value)
+    Callback = function(Value)
         _G.AutoFarm = Value
-end)
+end
 })
 spawn(function()
         while wait() do
@@ -2180,9 +2180,9 @@ local v17 = Tabs.M:AddToggle("v17", {
     Title = "Auto Farm Bone",
     Description = "",
     Default = false,
-    Callback = (function(Value)
+    Callback = function(Value)
         _G.AutoFarmBone = Value
-end)
+end
 })
 spawn(function()
         while wait() do 
@@ -2251,9 +2251,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Katakuri",
     Description = "",
     Default = false,
-    Callback = (function(Value)
+    Callback = function(Value)
         _G.FarmCake = Value
-end) 
+end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
     local Plsmon = game:GetService("Workspace").Enemies
