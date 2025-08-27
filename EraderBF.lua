@@ -2058,7 +2058,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
     end
 end)
 local ccbeo = Tabs.M:AddSection("Lightning Event")
-local eventlightning = Tabs.M:AddToggle("eventlightning" {
+local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Summer Token",
     Description = "",
     Default = false,
