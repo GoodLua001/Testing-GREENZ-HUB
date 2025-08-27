@@ -1779,6 +1779,25 @@ spawn(function()
 		end
 	end
 end)
+local djtme = Tabs.Se:AddToggle("djtme", {
+    Title = "Auto Teleport To Y 200",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoTeleportY = Value
+end
+})
+spawn(function()
+    while wait() do
+        if _G.AutoTeleportY then
+            pcall(function()
+                if game.Players.Localplayer.Character.Humanoid.Health < 4000 then
+            TP("Tween", 0, 200, 0)
+                end
+            end)
+        end
+    end
+end)
 local v15 = Tabs.M:AddSection("Full Farm")
 local v16 = Tabs.M:AddToggle("v16", {
     Title = "Auto Farm Level",
@@ -2069,41 +2088,21 @@ end
 spawn(function()
     while wait() do 
         if _G.AutoSummerToken then
-        pcall(function()
-                local foundElectrified = false
-                for _, monlightning in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                    if monlightning.Name == "Electrified " .. MonName then
-                        foundElectrified = true
-                        break
-                    end
-                end
-                
-                if foundElectrified then
-                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v.Name == "Electrified " .. MonName then
-                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                repeat task.wait()
-                                    AutoHaki()
-                                    NoAttackAnimation = true
-                                    NeedAttacking = true
-                                    EquipWeapon(_G.SelectWeapon)
-                                    v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
-                                    v.Head.CanCollide = false 
-                                    StartBring = true
-                                    MonFarm = v.Name                
-                                    PosMon = v.HumanoidRootPart.CFrame
-                                    TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                    sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                until not _G.AutoSummerToken or not v.Parent or v.Humanoid.Health <= 0
-                            end
-                        end
-                    end
-                else
-                    for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                        if v.Name == "Electrified " .. MonName then
-                            TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                        end
+            pcall(function()
+                for _,v in pairs(workspace.enemies) do
+if v:Findfirstchild("ElectrifiedVFXLightning") then
+                    elseif v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        repeat
+                            task.wait()
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
+                            TP("Tween", Lightning) 
+                            TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                        until not _G.AutoSummerToken or not v.Parent or v.Humanoid.Health <= 0
+                        wait(1)
                     end
                 end
             end)
