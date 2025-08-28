@@ -2076,7 +2076,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
         end
     end
 end)
-local ccbeo = Tabs.M:AddSection("Lightning Event")
+local djtmecl = Tabs.M:AddSection("Lightning Event")
 local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Summer Token",
     Description = "",
@@ -2090,7 +2090,7 @@ spawn(function()
         if _G.AutoSummerToken then
             pcall(function()
                 for _,v in pairs(workspace.enemies) do
-if v:Findfirstchild("ElectrifiedVFXLightning") then
+if v:FindFirstChild("ElectrifiedVFXLightning") then
                     elseif v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                         repeat
                             task.wait()
