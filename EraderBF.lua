@@ -1916,6 +1916,7 @@ local v17 = Tabs.M:AddToggle("v17", {
         _G.StopTweenP = false
     if Value == false then
         _G.StopTweenP = true
+        end
     end
 end
 })
@@ -1992,6 +1993,7 @@ local v18 = Tabs.M:AddToggle("v18", {
         _G.StopTweenP = false
     if Value == false then
         _G.StopTweenP = true
+        end
     end
 end
 })
