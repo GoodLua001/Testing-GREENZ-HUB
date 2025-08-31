@@ -1403,7 +1403,7 @@ function TP(mode, CF)
                     _G.CurrentTween:Cancel()
                 end
                 local distance = (hrp.Position - CF.Position).Magnitude
-                local time = math.clamp(distance / 350, 0.2, 2.5)
+                local time = math.clamp(distance / 350)
                 local tween = game:GetService("TweenService"):Create(
                     hrp,
                     TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
@@ -1802,7 +1802,7 @@ local v16 = Tabs.M:AddToggle("v16", {
     Callback = function(Value)
         _G.AutoFarm = Value
     if Value == false then
-        _G.StopTween = true
+        _G.StopTweenP = true
     end
 end
 })
@@ -1910,7 +1910,7 @@ local v17 = Tabs.M:AddToggle("v17", {
     Callback = function(Value)
         _G.AutoFarmBone = Value
     if Value == false then
-        _G.StopTween = true
+        _G.StopTweenP = true
     end
 end
 })
@@ -1984,7 +1984,7 @@ local v18 = Tabs.M:AddToggle("v18", {
     Callback = function(Value)
         _G.FarmCake = Value
     if Value == false then
-        _G.StopTween = true
+        _G.StopTweenP = true
     end
 end
 })
