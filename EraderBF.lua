@@ -1803,9 +1803,8 @@ local v16 = Tabs.M:AddToggle("v16", {
         _G.AutoFarm = Value
     if Value == true then
         _G.StopTweenP = false
-    if Value == false then
+    elseif Value == false then
         _G.StopTweenP = true
-        end
     end
 end
 })
@@ -1914,9 +1913,8 @@ local v17 = Tabs.M:AddToggle("v17", {
         _G.AutoFarmBone = Value
     if Value == true then
         _G.StopTweenP = false
-    if Value == false then
+    elseif Value == false then
         _G.StopTweenP = true
-        end
     end
 end
 })
@@ -1991,11 +1989,10 @@ local v18 = Tabs.M:AddToggle("v18", {
         _G.FarmCake = Value
     if Value == true then
         _G.StopTweenP = false
-    if Value == false then
+    elseif Value == false then
         _G.StopTweenP = true
         end
     end
-end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
 local Plsmon = game:GetService("Workspace").Enemies
