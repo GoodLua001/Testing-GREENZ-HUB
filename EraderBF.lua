@@ -1399,18 +1399,38 @@ function TP(mode, CF)
         elseif mode == "Tween" then
             local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
+                if _G.CurrentTween then
+                    _G.CurrentTween:Cancel()
+                end
                 local distance = (hrp.Position - CF.Position).Magnitude
-                local tween = game:GetService("TweenService"):Create(hrp, TweenInfo.new(distance / 200, Enum.EasingStyle.Linear), {CFrame = CF})
+                local time = math.clamp(distance / 350, 0.2, 2.5)
+                local tween = game:GetService("TweenService"):Create(
+                    hrp,
+                    TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
+                    {CFrame = CF}
+                )
+                _G.StopTweenP = false
+                _G.CurrentTween = tween
                 tween:Play()
+                tween.Completed:Connect(function()
+                    _G.CurrentTween = nil
+                end)
+                task.spawn(function()
+                    while tween.PlaybackState == Enum.PlaybackState.Playing do
+                        if _G.StopTweenP then
+                            tween:Cancel()
+                            _G.CurrentTween = nil
+                            break
+                        end
+                        task.wait(0.03)
+                    end
+                end)
             end
         end
         getgenv().NoClip = true
     end
     if getgenv().StopTween then
         getgenv().NoClip = false
-    if _G.StopTween then
-        tween:Cancel()
-        end
     end
 end
 getgenv().NoClip = false
@@ -1781,7 +1801,7 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
-    if not Value then
+    if Value == false then
         _G.StopTween = true
     end
 end
@@ -1889,7 +1909,7 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
-    if not Value then
+    if Value == false then
         _G.StopTween = true
     end
 end
@@ -1963,7 +1983,7 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
-    if not Value then
+    if Value == false then
         _G.StopTween = true
     end
 end
