@@ -1651,55 +1651,43 @@ spawn(function()
     while task.wait() do
         pcall(function()
             CheckQuest()
+            local basePos = PosMon.Position
+            local spacing = 3
+            local count = 0
             for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                if _G.BringMonster then
-                    if StartBring 
-                    and (v.Name == MonFarm or v.Name == Mon or v.Name == "Factory Staff") 
-                    and v:FindFirstChild("Humanoid") 
-                    and v:FindFirstChild("HumanoidRootPart") 
-                    and v.Humanoid.Health > 0 
-                    and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
+                if _G.BringMonster and StartBring
+                and (v.Name == MonFarm or v.Name == Mon or v.Name == "Factory Staff")
+                and v:FindFirstChild("Humanoid")
+                and v:FindFirstChild("HumanoidRootPart")
+                and v.Humanoid.Health > 0
+                and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
 
-                        if v.Name == "Factory Staff" then
-                            if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 250 then
-                                v.Head.CanCollide = false
-                                v.HumanoidRootPart.CanCollide = false
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                local tween = TweenService:Create(
-                                    v.HumanoidRootPart,
-                                    TweenInfo.new(1, Enum.EasingStyle.Linear),
-                                    {CFrame = PosMon}
-                                )
-                                tween:Play()
-                                if v.Humanoid:FindFirstChild("Animator") then
-                                    v.Humanoid.Animator:Destroy()
-                                end
-                                sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
-                            end
-                        elseif v.Name == MonFarm or v.Name == Mon then
-                            if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 340 then
-                                v.HumanoidRootPart.Size = Vector3.new(60,60,60)
-                                local tween = TweenService:Create(
-                                    v.HumanoidRootPart,
-                                    TweenInfo.new(1, Enum.EasingStyle.Linear),
-                                    {CFrame = PosMon}
-                                )
-                                tween:Play()
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Head.CanCollide = false
-                                if v.Humanoid:FindFirstChild("Animator") then
-                                    v.Humanoid.Animator:Destroy()
-                                end
-                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-                            end
-                        end
+                    local row = math.floor(count / 6)
+                    local col = count % 6
+                    local targetPos = basePos + Vector3.new(spacing * col, 0, spacing * row)
+                    local targetCFrame = CFrame.new(targetPos)
 
+                    local tween = TweenService:Create(
+                        v.HumanoidRootPart,
+                        TweenInfo.new(1, Enum.EasingStyle.Linear),
+                        {CFrame = targetCFrame}
+                    )
+                    tween:Play()
+
+                    v.HumanoidRootPart.CanCollide = false
+                    v.Head.CanCollide = false
+                    if v.Humanoid:FindFirstChild("Animator") then
+                        v.Humanoid.Animator:Destroy()
                     end
+                    sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+
+                    count = count + 1
                 end
             end
         end)
     end
 end)
+
         function InMyNetWork(object)
       	if isnetworkowner then
 		return isnetworkowner(object)
