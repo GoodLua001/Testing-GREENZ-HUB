@@ -1801,8 +1801,11 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
+    if Value == true then
+        _G.StopTweenP = false
     if Value == false then
         _G.StopTweenP = true
+        end
     end
 end
 })
@@ -1909,6 +1912,8 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
+    if Value == true then
+        _G.StopTweenP = false
     if Value == false then
         _G.StopTweenP = true
     end
@@ -1983,6 +1988,8 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
+    if Value == true then
+        _G.StopTweenP = false
     if Value == false then
         _G.StopTweenP = true
     end
