@@ -1682,6 +1682,7 @@ spawn(function()
                     v.Head.CanCollide = false
                     if v.Humanoid:FindFirstChild("Animator") then
                         v.Humanoid.Animator:Destroy()
+                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                     end
                     sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
 
@@ -1691,7 +1692,7 @@ spawn(function()
         end)
     end
 end)
-        function InMyNetWork(object)
+    function InMyNetWork(object)
       	if isnetworkowner then
 		return isnetworkowner(object)
       	else
@@ -1740,7 +1741,7 @@ spawn(function()
 	end
 end)
 local djtme = Tabs.Se:AddToggle("djtme", {
-    Title = "Auto Teleport To Y 200",
+    Title = "Auto Teleport Y 200 If Low on Health",
     Description = "",
     Default = false,
     Callback = function(Value)
@@ -2066,7 +2067,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 PosGay = hrp.CFrame
-                                topos(hrp.CFrame * Pos)
+                                TP("Tween", hrp.CFrame * Pos)
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
