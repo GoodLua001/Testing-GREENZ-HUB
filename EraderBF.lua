@@ -1650,10 +1650,14 @@ local v2 = Tabs.Se:AddToggle("v2", {
         _G.BringMonster = Value
 end
 })
+local TweenService = game:GetService("TweenService")
 spawn(function()
     while task.wait() do
         pcall(function()
             CheckQuest()
+            local basePos = PosMon.Position
+            local spacing = 3
+            local count = 0
             for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                 if _G.BringMonster and StartBring
                 and (v.Name == MonFarm or v.Name == Mon or v.Name == "Factory Staff")
@@ -1661,13 +1665,27 @@ spawn(function()
                 and v:FindFirstChild("HumanoidRootPart")
                 and v.Humanoid.Health > 0
                 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
-                    v.Humanoid:MoveTo(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position)
+
+                    local row = math.floor(count / 6)
+                    local col = count % 6
+                    local targetPos = basePos + Vector3.new(spacing * col, 0, spacing * row)
+                    local targetCFrame = CFrame.new(targetPos)
+
+                    local tween = TweenService:Create(
+                        v.HumanoidRootPart,
+                        TweenInfo.new(1, Enum.EasingStyle.Linear),
+                        {CFrame = targetCFrame}
+                    )
+                    tween:Play()
+
                     v.HumanoidRootPart.CanCollide = false
                     v.Head.CanCollide = false
                     if v.Humanoid:FindFirstChild("Animator") then
                         v.Humanoid.Animator:Destroy()
                     end
                     sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+
+                    count = count + 1
                 end
             end
         end)
