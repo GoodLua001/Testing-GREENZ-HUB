@@ -1399,32 +1399,9 @@ function TP(mode, CF)
         elseif mode == "Tween" then
             local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
-                if _G.CurrentTween then
-                    _G.CurrentTween:Cancel()
-                end
                 local distance = (hrp.Position - CF.Position).Magnitude
-                local time = math.clamp(distance / 350)
-                local tween = game:GetService("TweenService"):Create(
-                    hrp,
-                    TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
-                    {CFrame = CF}
-                )
-                _G.StopTweenP = false
-                _G.CurrentTween = tween
+                local tween = game:GetService("TweenService"):Create(hrp, TweenInfo.new(distance / 200, Enum.EasingStyle.Linear), {CFrame = CF})
                 tween:Play()
-                tween.Completed:Connect(function()
-                    _G.CurrentTween = nil
-                end)
-                task.spawn(function()
-                    while tween.PlaybackState == Enum.PlaybackState.Playing do
-                        if _G.StopTweenP then
-                            tween:Cancel()
-                            _G.CurrentTween = nil
-                            break
-                        end
-                        task.wait(0.03)
-                    end
-                end)
             end
         end
         getgenv().NoClip = true
