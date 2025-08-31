@@ -1646,44 +1646,60 @@ local v2 = Tabs.Se:AddToggle("v2", {
         _G.BringMonster = Value
 end
 })
-    spawn(function()
-	while task.wait() do
-		pcall(function()
+local TweenService = game:GetService("TweenService")
+spawn(function()
+    while task.wait() do
+        pcall(function()
             CheckQuest()
-			for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-				if _G.BringMonster then
-					if StartBring and v.Name == MonFarm or v.Name == Mon and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
-						if v.Name == "Factory Staff" then
-							if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 250 then
-								v.Head.CanCollide = false
-								v.HumanoidRootPart.CanCollide = false
-								v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-								v.HumanoidRootPart.CFrame = PosMon
-								if v.Humanoid:FindFirstChild("Animator") then
-									v.Humanoid.Animator:Destroy()
-								end
-								sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
-							end
-						elseif v.Name == MonFarm or v.Name == Mon then
-							if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 340 then
+            for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                if _G.BringMonster then
+                    if StartBring 
+                    and (v.Name == MonFarm or v.Name == Mon or v.Name == "Factory Staff") 
+                    and v:FindFirstChild("Humanoid") 
+                    and v:FindFirstChild("HumanoidRootPart") 
+                    and v.Humanoid.Health > 0 
+                    and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
+
+                        if v.Name == "Factory Staff" then
+                            if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 250 then
+                                v.Head.CanCollide = false
+                                v.HumanoidRootPart.CanCollide = false
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                local tween = TweenService:Create(
+                                    v.HumanoidRootPart,
+                                    TweenInfo.new(1, Enum.EasingStyle.Linear),
+                                    {CFrame = PosMon}
+                                )
+                                tween:Play()
+                                if v.Humanoid:FindFirstChild("Animator") then
+                                    v.Humanoid.Animator:Destroy()
+                                end
+                                sethiddenproperty(game:GetService("Players").LocalPlayer,"SimulationRadius",math.huge)
+                            end
+                        elseif v.Name == MonFarm or v.Name == Mon then
+                            if (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= 340 then
                                 v.HumanoidRootPart.Size = Vector3.new(60,60,60)
-                                v.HumanoidRootPart.CFrame = PosMon
+                                local tween = TweenService:Create(
+                                    v.HumanoidRootPart,
+                                    TweenInfo.new(1, Enum.EasingStyle.Linear),
+                                    {CFrame = PosMon}
+                                )
+                                tween:Play()
                                 v.HumanoidRootPart.CanCollide = false
                                 v.Head.CanCollide = false
                                 if v.Humanoid:FindFirstChild("Animator") then
                                     v.Humanoid.Animator:Destroy()
                                 end
-                               sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-      							end
-     						end
-    					end
-     				end
-	    		end
-    		end)
-     	end
-    end)
+                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                            end
+                        end
 
-
+                    end
+                end
+            end
+        end)
+    end
+end)
         function InMyNetWork(object)
       	if isnetworkowner then
 		return isnetworkowner(object)
@@ -2039,29 +2055,28 @@ local v18 = Tabs.M:AddToggle("v18", {
 end
 })
 spawn(function()
-    while wait() do 
+    while wait() do
         if _G.AutoSummerToken then
             pcall(function()
-                for _,v in pairs(workspace.enemies) do
-if v:FindFirstChild("ElectrifiedVFXLightning") then
-                    elseif v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                for _,v in pairs(workspace.enemies:GetChildren()) do
+                    if v:FindFirstChild("ElectrifiedVFXLightning") and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                         repeat
-                            task.wait()
                             AutoHaki()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
                             v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                            TP("Tween", Lightning) 
+                            MonFarm = v.Name
+                            PosMon = v.HumanoidRootPart.CFrame
                             TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                         until not _G.AutoSummerToken or not v.Parent or v.Humanoid.Health <= 0
-                        wait(1)
                     end
                 end
             end)
         end
     end
 end)
+
 local remote, idremote
 for _, v in next, ({game.ReplicatedStorage.Util, game.ReplicatedStorage.Common, game.ReplicatedStorage.Remotes, game.ReplicatedStorage.Assets, game.ReplicatedStorage.FX}) do
     for _, n in next, v:GetChildren() do
