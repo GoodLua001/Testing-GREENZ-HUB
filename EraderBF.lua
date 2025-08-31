@@ -902,7 +902,11 @@ function CancelTween23()
     NoClip = false
     return Tween23(plr.Character.HumanoidRootPart.CFrame)
 end
-
+function TP_Random_Around(originCFrame, radius)
+    local angle = math.rad(math.random(0,359))
+    local offset = Vector3.new(math.cos(angle)*radius, 0, math.sin(angle)*radius)
+    return originCFrame * CFrame.new(offset)
+end
 function KillMob(V1, StopFunction)
     pcall(function()
         thismob = DetectMob2(V1)
@@ -1646,14 +1650,10 @@ local v2 = Tabs.Se:AddToggle("v2", {
         _G.BringMonster = Value
 end
 })
-local TweenService = game:GetService("TweenService")
 spawn(function()
     while task.wait() do
         pcall(function()
             CheckQuest()
-            local basePos = PosMon.Position
-            local spacing = 3
-            local count = 0
             for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                 if _G.BringMonster and StartBring
                 and (v.Name == MonFarm or v.Name == Mon or v.Name == "Factory Staff")
@@ -1661,33 +1661,18 @@ spawn(function()
                 and v:FindFirstChild("HumanoidRootPart")
                 and v.Humanoid.Health > 0
                 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
-
-                    local row = math.floor(count / 6)
-                    local col = count % 6
-                    local targetPos = basePos + Vector3.new(spacing * col, 0, spacing * row)
-                    local targetCFrame = CFrame.new(targetPos)
-
-                    local tween = TweenService:Create(
-                        v.HumanoidRootPart,
-                        TweenInfo.new(1, Enum.EasingStyle.Linear),
-                        {CFrame = targetCFrame}
-                    )
-                    tween:Play()
-
+                    v.Humanoid:MoveTo(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position)
                     v.HumanoidRootPart.CanCollide = false
                     v.Head.CanCollide = false
                     if v.Humanoid:FindFirstChild("Animator") then
                         v.Humanoid.Animator:Destroy()
                     end
                     sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
-
-                    count = count + 1
                 end
             end
         end)
     end
 end)
-
         function InMyNetWork(object)
       	if isnetworkowner then
 		return isnetworkowner(object)
@@ -1870,68 +1855,68 @@ local v17 = Tabs.M:AddToggle("v17", {
 end
 })
 spawn(function()
-        while wait() do 
-            local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-            if _G.AutoFarmBone and World3 then
+    while wait() do 
+        local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
+        if _G.AutoFarmBone and World3 then
             pcall(function()
-                    if BypassTP then
-                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                            TP1(boneframe)
-                            wait(.1)
-                            for i = 1, 8 do
-                                game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
-			                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
-                                wait(.1)		
-                            end
-                        elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
-                            TP1(boneframe)
+                if BypassTP then
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
+                        TP1(boneframe)
+                        wait(.1)
+                        for i = 1, 8 do
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
+                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
+                            wait(.1)		
                         end
-                    else
+                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
                         TP1(boneframe)
                     end
-                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") or
-  game:GetService("Workspace").Enemies:FindFirtsChild("Soul Reaper") then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
-                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                    repeat task.wait()
-                                        AutoHaki()
-                                        NoAttackAnimation = true
-                                        NeedAttacking = true
-                                        EquipWeapon(_G.SelectWeapon)
-                                        v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
-                                        v.Head.CanCollide = false 
-                                        StartBring = true
-                                        MonFarm = v.Name                
-                                        PosMon = v.HumanoidRootPart.CFrame
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                        sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                    until not _G.AutoFarmBone or not v.Parent or v.Humanoid.Health <= 0
-                                end
-                            end
-                        end
-                    else
-                        StartBring = false
-    					TP("Tween", CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
-                        for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                            if v.Name == "Reborn Skeleton" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Living Zombie" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Demonic Soul" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Posessed Mummy" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                            elseif v.Name == "Soul Reaper" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                else
+                    TP1(boneframe)
+                end
+                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                                repeat task.wait()
+                                    AutoHaki()
+                                    NoAttackAnimation = true
+                                    NeedAttacking = true
+                                    EquipWeapon(_G.SelectWeapon)
+                                    v.HumanoidRootPart.CanCollide = false
+                                    v.Humanoid.WalkSpeed = 0
+                                    v.Head.CanCollide = false 
+                                    StartBring = true
+                                    MonFarm = v.Name                
+                                    PosMon = v.HumanoidRootPart.CFrame
+                                    local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
+                                    cf = TP_Random_Around(cf, 18)
+                                    TP("Tween", cf)
+                                    sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
+                                until not _G.AutoFarmBone or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
                     end
-                end)
-            end
+                else
+                    StartBring = false
+                    local cf = TP_Random_Around(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375), 18)
+                    TP("Tween", cf)
+                    for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                            local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
+                            mobcf = TP_Random_Around(mobcf, 10)
+                            TP("Tween", mobcf)
+                        end
+                    end
+                end
+            end)
         end
-    end)
+    end
+end)
 local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Katakuri",
     Description = "",
@@ -1941,13 +1926,13 @@ local v18 = Tabs.M:AddToggle("v18", {
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
-    local Plsmon = game:GetService("Workspace").Enemies
-     task.spawn(function()
+local Plsmon = game:GetService("Workspace").Enemies
+task.spawn(function()
     while task.wait() do
         if _G.FarmCake and World3 then
             pcall(function()
                 if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
-                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                         if v.Name == "Cake Prince" then
                             if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                                 repeat
@@ -1957,11 +1942,16 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                     v.HumanoidRootPart.CanCollide = false
                                     v.Humanoid.WalkSpeed = 0
                                     v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                                    if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
+                                    local cf
+                                    if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring")
+                                    or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist")
+                                    or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
+                                        cf = v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0)
                                     else
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
+                                        cf = v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10)
                                     end
+                                    cf = TP_Random_Around(cf, 18)
+                                    TP("Tween", cf)
                                     NeedAttacking = true
                                 until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
                                 wait(1)
@@ -1991,7 +1981,9 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
+                                        cf = TP_Random_Around(cf, 18)
+                                        TP("Tween", cf)
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2008,14 +2000,9 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                             end
                         end
                     else
-                        local RandomTele = math.random(1, 3)
-                        if RandomTele == 1 then
-                            TP("Tween", CFrame.new(-1436.86011, 167.753616, -12296.9512))
-                        elseif RandomTele == 2 then
-                            TP("Tween", CFrame.new(-2383.78979, 150.450592, -12126.4961))
-                        elseif RandomTele == 3 then
-                            TP("Tween", CFrame.new(-2231.2793, 168.256653, -12845.7559))
-                        end
+                        local baseCf = CakePos
+                        local cf = TP_Random_Around(baseCf, 20)
+                        TP("Tween", cf)
                     end
                     if BypassTP then
                         if (playerPos - CakePos.Position).Magnitude > 1500 then
@@ -2027,7 +2014,6 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                         TP("Tween", CakePos)
                     end
                     UnEquipWeapon(_G.Selectweapon)
-                    TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
                 end
             end)
         end
@@ -2042,73 +2028,300 @@ local v18 = Tabs.M:AddToggle("v18", {
         _G.AutoSummerToken = Value
 end
 })
-spawn(function()
-    while wait() do
-        if _G.AutoSummerToken then
-            pcall(function()
-                for _,v in pairs(workspace.enemies:GetChildren()) do
-                    if v:FindFirstChild("ElectrifiedVFXLightning") and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                        repeat
-                            AutoHaki()
-                            EquipWeapon(_G.SelectWeapon)
-                            v.HumanoidRootPart.CanCollide = false
-                            v.Humanoid.WalkSpeed = 0
-                            v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                            MonFarm = v.Name
-                            PosMon = v.HumanoidRootPart.CFrame
-                            TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                        until not _G.AutoSummerToken or not v.Parent or v.Humanoid.Health <= 0
+spawn(function() 
+    while task.wait() do 
+        if _G.AutoSummerToken then 
+            pcall(function() 
+                local enemyFolder = game:GetService("Workspace").Enemies 
+                
+                for i, v in pairs(enemyFolder:GetChildren()) do
+                    local humanoid = v:FindFirstChild("Humanoid")
+                    local hrp = v:FindFirstChild("HumanoidRootPart")
+                    if humanoid and hrp and humanoid.Health > 0 then                        
+                        if humanoid.DisplayName:find("%[Electrified%]") then
+                            repeat task.wait()
+                                AutoHaki()                   
+                                EquipWeapon(_G.SelectWeapon)
+                                hrp.CanCollide = false
+                                humanoid.WalkSpeed = 0
+                                if v:FindFirstChild("Head") then
+                                    v.Head.CanCollide = false
+                                end
+                                PosGay = hrp.CFrame
+                                topos(hrp.CFrame * Pos)
+                                game:GetService("VirtualUser"):CaptureController()
+                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
+                            until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
+                        end
                     end
                 end
             end)
         end
     end
 end)
-
-local remote, idremote
-for _, v in next, ({game.ReplicatedStorage.Util, game.ReplicatedStorage.Common, game.ReplicatedStorage.Remotes, game.ReplicatedStorage.Assets, game.ReplicatedStorage.FX}) do
-    for _, n in next, v:GetChildren() do
-        if n:IsA("RemoteEvent") and n:GetAttribute("Id") then
-            remote, idremote = n, n:GetAttribute("Id")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Player = Players.LocalPlayer
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local Net = Modules:WaitForChild("Net")
+local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
+local RegisterHit = Net:WaitForChild("RE/RegisterHit")
+local ShootGunEvent = Net:WaitForChild("RE/ShootGunEvent")
+local GunValidator = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Validator2")
+local Config = {
+    AttackDistance = 70,
+    AttackMobs = true,
+    AttackPlayers = true,
+    AttackCooldown = 0.2,
+    ComboResetTime = 0.3,
+    MaxCombo = 4,
+    HitboxLimbs = {"RightLowerArm", "RightUpperArm", "LeftLowerArm", "LeftUpperArm", "RightHand", "LeftHand"},
+    AutoClickEnabled = true
+}
+local FastAttack = {}
+FastAttack.__index = FastAttack
+function FastAttack.new()
+    local self = setmetatable({
+        Debounce = 0,
+        ComboDebounce = 0,
+        ShootDebounce = 0,
+        M1Combo = 0,
+        EnemyRootPart = nil,
+        Connections = {},
+        Overheat = {Dragonstorm = {MaxOverheat = 3, Cooldown = 0, TotalOverheat = 0, Distance = 350, Shooting = false}},
+        ShootsPerTarget = {["Dual Flintlock"] = 2},
+        SpecialShoots = {["Skull Guitar"] = "TAP", ["Bazooka"] = "Position", ["Cannon"] = "Position", ["Dragonstorm"] = "Overheat"}
+    }, FastAttack)    
+    pcall(function()
+        self.CombatFlags = require(Modules.Flags).COMBAT_REMOTE_THREAD
+        self.ShootFunction = getupvalue(require(ReplicatedStorage.Controllers.CombatController).Attack, 9)
+        local LocalScript = Player:WaitForChild("PlayerScripts"):FindFirstChildOfClass("LocalScript")
+        if LocalScript and getsenv then
+            self.HitFunction = getsenv(LocalScript)._G.SendHitsToServer
         end
-    end
-    v.ChildAdded:Connect(function(n)
-        if n:IsA("RemoteEvent") and n:GetAttribute("Id") then
-            remote, idremote = n, n:GetAttribute("Id")
-        end
-    end)
+    end)    
+    return self
 end
-task.spawn(function()
-    while task.wait(0.05) do
-        local char = game.Players.LocalPlayer.Character
-        local root = char and char:FindFirstChild("HumanoidRootPart")
-        local parts = {}
-        for _, x in ipairs({workspace.Enemies, workspace.Characters}) do
-            for _, v in ipairs(x and x:GetChildren() or {}) do
-                local hrp = v:FindFirstChild("HumanoidRootPart")
-                local hum = v:FindFirstChild("Humanoid")
-                if v ~= char and hrp and hum and hum.Health > 0 and (hrp.Position - root.Position).Magnitude <= 60 then
-                    for _, _v in ipairs(v:GetChildren()) do
-                        if _v:IsA("BasePart") and (hrp.Position - root.Position).Magnitude <= 60 then
-                            parts[#parts+1] = {v, _v}
-                        end
+function FastAttack:IsEntityAlive(entity)
+    local humanoid = entity and entity:FindFirstChild("Humanoid")
+    return humanoid and humanoid.Health > 0
+end
+function FastAttack:CheckStun(Character, Humanoid, ToolTip)
+    local Stun = Character:FindFirstChild("Stun")
+    local Busy = Character:FindFirstChild("Busy")
+    if Humanoid.Sit and (ToolTip == "Sword" or ToolTip == "Melee" or ToolTip == "Blox Fruit") then
+        return false
+    elseif Stun and Stun.Value > 0 or Busy and Busy.Value then
+        return false
+    end
+    return true
+end
+function FastAttack:GetBladeHits(Character, Distance)
+    local Position = Character:GetPivot().Position
+    local BladeHits = {}
+    Distance = Distance or Config.AttackDistance    
+    local function ProcessTargets(Folder, CanAttack)
+        for _, Enemy in ipairs(Folder:GetChildren()) do
+            if Enemy ~= Character and self:IsEntityAlive(Enemy) then
+                local BasePart = Enemy:FindFirstChild(Config.HitboxLimbs[math.random(#Config.HitboxLimbs)]) or Enemy:FindFirstChild("HumanoidRootPart")
+                if BasePart and (Position - BasePart.Position).Magnitude <= Distance then
+                    if not self.EnemyRootPart then
+                        self.EnemyRootPart = BasePart
+                    else
+                        table.insert(BladeHits, {Enemy, BasePart})
                     end
                 end
             end
         end
-        local tool = char:FindFirstChildOfClass("Tool")
-        if #parts > 0 and tool and (tool:GetAttribute("WeaponType") == "Melee" or tool:GetAttribute("WeaponType") == "Sword") then
-            pcall(function()
-                require(game.ReplicatedStorage.Modules.Net):RemoteEvent("RegisterHit", true)
-                game.ReplicatedStorage.Modules.Net["RE/RegisterAttack"]:FireServer()
-                local head = parts[1][1]:FindFirstChild("Head")
-                if not head then return end
-                game.ReplicatedStorage.Modules.Net["RE/RegisterHit"]:FireServer(head, parts, {}, tostring(game.Players.LocalPlayer.UserId):sub(2, 4) .. tostring(coroutine.running()):sub(11, 15))
-                cloneref(remote):FireServer(string.gsub("RE/RegisterHit", ".", function(c)
-                    return string.char(bit32.bxor(string.byte(c), math.floor(workspace:GetServerTimeNow() / 10 % 10) + 1))
-                end),
-                bit32.bxor(idremote + 909090, game.ReplicatedStorage.Modules.Net.seed:InvokeServer() * 2), head, parts)
+    end    
+    if Config.AttackMobs then ProcessTargets(Workspace.Enemies) end
+    if Config.AttackPlayers then ProcessTargets(Workspace.Characters, true) end    
+    return BladeHits
+end
+function FastAttack:GetClosestEnemy(Character, Distance)
+    local BladeHits = self:GetBladeHits(Character, Distance)
+    local Closest, MinDistance = nil, math.huge 
+    for _, Hit in ipairs(BladeHits) do
+        local Magnitude = (Character:GetPivot().Position - Hit[2].Position).Magnitude
+        if Magnitude < MinDistance then
+            MinDistance = Magnitude
+            Closest = Hit[2]
+        end
+    end
+    return Closest
+end
+function FastAttack:GetCombo()
+    local Combo = (tick() - self.ComboDebounce) <= Config.ComboResetTime and self.M1Combo or 0
+    Combo = Combo >= Config.MaxCombo and 1 or Combo + 1
+    self.ComboDebounce = tick()
+    self.M1Combo = Combo
+    return Combo
+end
+function FastAttack:ShootInTarget(TargetPosition)
+    local Character = Player.Character
+    if not self:IsEntityAlive(Character) then return end
+    
+    local Equipped = Character:FindFirstChildOfClass("Tool")
+    if not Equipped or Equipped.ToolTip ~= "Gun" then return end    
+    local Cooldown = Equipped:FindFirstChild("Cooldown") and Equipped.Cooldown.Value or 0.3
+    if (tick() - self.ShootDebounce) < Cooldown then return end    
+    local ShootType = self.SpecialShoots[Equipped.Name] or "Normal"
+    if ShootType == "Position" or (ShootType == "TAP" and Equipped:FindFirstChild("RemoteEvent")) then
+        Equipped:SetAttribute("LocalTotalShots", (Equipped:GetAttribute("LocalTotalShots") or 0) + 1)
+        GunValidator:FireServer(self:GetValidator2())        
+        if ShootType == "TAP" then
+            Equipped.RemoteEvent:FireServer("TAP", TargetPosition)
+        else
+            ShootGunEvent:FireServer(TargetPosition)
+        end
+        self.ShootDebounce = tick()
+    else
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 1)
+        task.wait(0.05)
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 1)
+        self.ShootDebounce = tick()
+    end
+end
+function FastAttack:GetValidator2()
+    local v1 = getupvalue(self.ShootFunction, 15)
+    local v2 = getupvalue(self.ShootFunction, 13)
+    local v3 = getupvalue(self.ShootFunction, 16)
+    local v4 = getupvalue(self.ShootFunction, 17)
+    local v5 = getupvalue(self.ShootFunction, 14)
+    local v6 = getupvalue(self.ShootFunction, 12)
+    local v7 = getupvalue(self.ShootFunction, 18)
+    
+    local v8 = v6 * v2
+    local v9 = (v5 * v2 + v6 * v1) % v3
+    v9 = (v9 * v3 + v8) % v4
+    v5 = math.floor(v9 / v3)
+    v6 = v9 - v5 * v3
+    v7 = v7 + 1    
+    setupvalue(self.ShootFunction, 15, v1)
+    setupvalue(self.ShootFunction, 13, v2)
+    setupvalue(self.ShootFunction, 16, v3)
+    setupvalue(self.ShootFunction, 17, v4)
+    setupvalue(self.ShootFunction, 14, v5)
+    setupvalue(self.ShootFunction, 12, v6)
+    setupvalue(self.ShootFunction, 18, v7)
+    
+    return math.floor(v9 / v4 * 16777215), v7
+end
+function FastAttack:UseNormalClick(Character, Humanoid, Cooldown)
+    self.EnemyRootPart = nil
+    local BladeHits = self:GetBladeHits(Character)
+    
+    if self.EnemyRootPart then
+        RegisterAttack:FireServer(Cooldown)
+        if self.CombatFlags and self.HitFunction then
+            self.HitFunction(self.EnemyRootPart, BladeHits)
+        else
+            RegisterHit:FireServer(self.EnemyRootPart, BladeHits)
+        end
+    end
+end
+function FastAttack:UseFruitM1(Character, Equipped, Combo)
+    local Targets = self:GetBladeHits(Character)
+    if not Targets[1] then return end
+    
+    local Direction = (Targets[1][2].Position - Character:GetPivot().Position).Unit
+    Equipped.LeftClickRemote:FireServer(Direction, Combo)
+end
+function FastAttack:Attack()
+    if not Config.AutoClickEnabled or (tick() - self.Debounce) < Config.AttackCooldown then return end
+    local Character = Player.Character
+    if not Character or not self:IsEntityAlive(Character) then return end
+    
+    local Humanoid = Character.Humanoid
+    local Equipped = Character:FindFirstChildOfClass("Tool")
+    if not Equipped then return end
+    
+    local ToolTip = Equipped.ToolTip
+    if not table.find({"Melee", "Blox Fruit", "Sword", "Gun"}, ToolTip) then return end
+    
+    local Cooldown = Equipped:FindFirstChild("Cooldown") and Equipped.Cooldown.Value or Config.AttackCooldown
+    if not self:CheckStun(Character, Humanoid, ToolTip) then return end
+    
+    local Combo = self:GetCombo()
+    Cooldown = Cooldown + (Combo >= Config.MaxCombo and 0.05 or 0)
+    self.Debounce = Combo >= Config.MaxCombo and ToolTip ~= "Gun" and (tick() + 0.05) or tick()
+    
+    if ToolTip == "Blox Fruit" and Equipped:FindFirstChild("LeftClickRemote") then
+        self:UseFruitM1(Character, Equipped, Combo)
+    elseif ToolTip == "Gun" then
+        local Target = self:GetClosestEnemy(Character, 120)
+        if Target then
+            self:ShootInTarget(Target.Position)
+        end
+    else
+        self:UseNormalClick(Character, Humanoid, Cooldown)
+    end
+end
+local AttackInstance = FastAttack.new()
+table.insert(AttackInstance.Connections, RunService.Stepped:Connect(function()
+    AttackInstance:Attack()
+end))
+for _, v in pairs(getgc(true)) do
+    if typeof(v) == "function" and iscclosure(v) then
+        local name = debug.getinfo(v).name
+        if name == "Attack" or name == "attack" or name == "RegisterHit" then
+            hookfunction(v, function(...)
+                AttackInstance:Attack()
+                return v(...)
             end)
         end
     end
-end)
+end
+local Modules = game.ReplicatedStorage.Modules
+local Net = Modules.Net
+local Register_Hit, Register_Attack = Net:WaitForChild("RE/RegisterHit"), Net:WaitForChild("RE/RegisterAttack")
+local Funcs = {}
+function GetAllBladeHits()
+    bladehits = {}
+    for _, v in pairs(workspace.Enemies:GetChildren()) do
+        if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 
+        and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 65 then
+            table.insert(bladehits, v)
+        end
+    end
+    return bladehits
+end
+function Getplayerhit()
+    bladehits = {}
+    for _, v in pairs(workspace.Characters:GetChildren()) do
+        if v.Name ~= game.Players.LocalPlayer.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 
+        and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 65 then
+            table.insert(bladehits, v)
+        end
+    end
+    return bladehits
+end
+function Funcs:Attack()
+    local bladehits = {}
+    for r,v in pairs(GetAllBladeHits()) do
+        table.insert(bladehits, v)
+    end
+    for r,v in pairs(Getplayerhit()) do
+        table.insert(bladehits, v)
+    end
+    if #bladehits == 0 then return end
+    local args = {
+        [1] = nil;
+        [2] = {},
+        [4] = "078da341"
+    }
+    for r, v in pairs(bladehits) do
+        Register_Attack:FireServer(0)
+        if not args[1] then
+            args[1] = v.Head
+        end
+        args[2][r] = {
+            [1] = v,
+            [2] = v.HumanoidRootPart
+        }
+    end
+    Register_Hit:FireServer(unpack(args))
+end
