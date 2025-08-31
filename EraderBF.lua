@@ -1722,11 +1722,11 @@ end
 spawn(function()
 	while wait(0.1) do
 		if _G.AutoV4 then
-			if tonumber(((game:GetService("Players")).LocalPlayer.Character:WaitForChild("RaceEnergy")).Value) == 1 then
-				if (game:GetService("Players")).LocalPlayer.Character.RaceTransformed.Value == false then
-					(game:GetService("VirtualInputManager")):SendKeyEvent(true, "Y", false, game)
+			if tonumber(game:GetService("Players").LocalPlayer.Character:WaitForChild("RaceEnergy").Value) == 1 then
+				if game:GetService("Players").LocalPlayer.Character.RaceTransformed.Value == false then
+					game:GetService("VirtualInputManager"):SendKeyEvent(true, "Y", false, game)
 					wait(0.1)
-					(game:GetService("VirtualInputManager")):SendKeyEvent(false, "Y", false, game)
+					game:GetService("VirtualInputManager"):SendKeyEvent(false, "Y", false, game)
 				end
 			end
 		end
