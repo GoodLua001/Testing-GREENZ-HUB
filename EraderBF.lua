@@ -1408,10 +1408,12 @@ function TP(mode, CF)
     end
     if getgenv().StopTween then
         getgenv().NoClip = false
+    if _G.StopTween then
+        tween:Cancel()
+        end
     end
 end
 getgenv().NoClip = false
-
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
         if not (game:GetService("Players").LocalPlayer.Character 
@@ -1671,19 +1673,30 @@ spawn(function()
                     local targetPos = basePos + Vector3.new(spacing * col, 0, spacing * row)
                     local targetCFrame = CFrame.new(targetPos)
 
+                    v.Humanoid.WalkSpeed = 0
+                    v.Humanoid.JumpPower = 0
+                    v.Humanoid.PlatformStand = true
+                    v.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                    if v.Humanoid:FindFirstChild("Animator") then
+                        v.Humanoid.Animator:Destroy()
+                    end
+
+                    v.HumanoidRootPart.Anchored = false
                     local tween = TweenService:Create(
                         v.HumanoidRootPart,
                         TweenInfo.new(1, Enum.EasingStyle.Linear),
                         {CFrame = targetCFrame}
                     )
                     tween:Play()
+                    tween.Completed:Connect(function()
+                        v.HumanoidRootPart.CFrame = targetCFrame
+                        v.HumanoidRootPart.Anchored = true
+                    end)
 
                     v.HumanoidRootPart.CanCollide = false
                     v.Head.CanCollide = false
-                    if v.Humanoid:FindFirstChild("Animator") then
-                        v.Humanoid.Animator:Destroy()
-                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                    end
+                    v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+
                     sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
 
                     count = count + 1
@@ -1692,16 +1705,18 @@ spawn(function()
         end)
     end
 end)
-    function InMyNetWork(object)
-      	if isnetworkowner then
-		return isnetworkowner(object)
-      	else
-	  	if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then 
- 			return true
-    		end
- 		return false
-      	end
-   end
+
+function InMyNetWork(object)
+    if isnetworkowner then
+        return isnetworkowner(object)
+    else
+        if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then 
+            return true
+        end
+        return false
+    end
+end
+
 local vaisix = Tabs.Se:AddToggle("vaisix", {
     Title = "Auto Turn On V3",
     Description = "",
@@ -1766,6 +1781,9 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
+    if not Value then
+        _G.StopTween = true
+    end
 end
 })
 spawn(function()
@@ -1871,6 +1889,9 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
+    if not Value then
+        _G.StopTween = true
+    end
 end
 })
 spawn(function()
@@ -1942,6 +1963,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
+    if not Value then
+        _G.StopTween = true
+    end
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2067,7 +2091,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 PosMon = hrp.CFrame
-                                TP("Tween", hrp.CFrame * Pos)
+                                TP("Tween", hrp.CFrame * CFrame.new(0, 30, 0))
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
