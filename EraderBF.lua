@@ -2066,11 +2066,88 @@ spawn(function()
                                 if v:FindFirstChild("Head") then
                                     v.Head.CanCollide = false
                                 end
-                                PosGay = hrp.CFrame
+                                PosMon = hrp.CFrame
                                 TP("Tween", hrp.CFrame * Pos)
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+local occac = Tabs.M:AddSection("King Red Head Event")
+local v19 = Tabs.M:AddToggle("v19", {
+    Title = "Auto Farm Oni Token",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoFarmOniToken = Value
+end
+})
+spawn(function()
+    while wait() do 
+        if _G.AutoFarmOniToken and World3 then
+            pcall(function()
+                if BypassTP then
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
+                        TP1(boneframe)
+                        wait(.1)
+                        for i = 1, 8 do
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
+                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
+                            wait(.1)		
+                        end
+                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
+                        local args = {
+                            [1] = "InitiateTeleportToTemple"
+}
+game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+                    end
+                else
+                    local args = {
+                        [1] = "InitiateTeleportToTemple"
+}
+game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+                end
+                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                                repeat task.wait()
+                                    AutoHaki()
+                                    NoAttackAnimation = true
+                                    NeedAttacking = true
+                                    EquipWeapon(_G.SelectWeapon)
+                                    v.HumanoidRootPart.CanCollide = false
+                                    v.Humanoid.WalkSpeed = 0
+                                    v.Head.CanCollide = false 
+                                    StartBring = true
+                                    MonFarm = v.Name                
+                                    PosMon = v.HumanoidRootPart.CFrame
+                                    local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
+                                    cf = TP_Random_Around(cf, 18)
+                                    TP("Tween", cf)
+                                    sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
+                                until not _G.AutoFarmOniToken or not v.Parent or v.Humanoid.Health <= 0
+                            end
+                        end
+                    end
+                else
+                    StartBring = false
+                    local cf = TP_Random_Around(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375), 18)
+                    TP("Tween", cf)
+                    for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                            local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
+                            mobcf = TP_Random_Around(mobcf, 10)
+                            TP("Tween", mobcf)
                         end
                     end
                 end
