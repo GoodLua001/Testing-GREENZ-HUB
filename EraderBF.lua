@@ -1505,6 +1505,30 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end)
 end)
+local function GetRandomPos(basePos, range)
+    local offsetX = math.random(-range, range)
+    local offsetZ = math.random(-range, range)
+    return basePos * CFrame.new(offsetX, 0, offsetZ)
+end
+
+local PosY = 30
+local Type = 1
+local Pos = CFrame.new(0, PosY, 0)
+local RandomRange = 5
+
+spawn(function()
+    while task.wait() do
+        if Type == 1 then
+            Pos = GetRandomPos(CFrame.new(0, PosY, -19), RandomRange)
+        elseif Type == 2 then
+            Pos = GetRandomPos(CFrame.new(19, PosY, 0), RandomRange)
+        elseif Type == 3 then
+            Pos = GetRandomPos(CFrame.new(0, PosY, 19), RandomRange)
+        elseif Type == 4 then
+            Pos = GetRandomPos(CFrame.new(-19, PosY, 0), RandomRange)
+        end
+    end
+end)
 if game.CoreGui:FindFirstChild('UIBUTTON') then
   game.CoreGui:FindFirstChild('UIBUTTON'):Destroy()
 end
@@ -1892,7 +1916,7 @@ spawn(function()
                                                     EquipWeapon(_G.SelectWeapon)
                                                      AutoHaki()                                            
                                                     PosMon = v.HumanoidRootPart.CFrame
-                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-5,5), 0, math.random(-5,5)))
                                                     v.HumanoidRootPart.CanCollide = false
                                                     v.Humanoid.WalkSpeed = 0
                                                     v.Head.CanCollide = false
@@ -1933,7 +1957,7 @@ end
 spawn(function()
         while wait() do 
             local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-            if _G.FarmBone and World3 then
+            if _G.AutoFarmBone and World3 then
             pcall(function()
                     if BypassTP then
                         if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
@@ -1965,9 +1989,9 @@ spawn(function()
                                         StartBring = true
                                         MonFarm = v.Name                
                                         PosMon = v.HumanoidRootPart.CFrame
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-5,5), 0, math.random(-5,5)))
                                         sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                    until not _G.FarmBone or not v.Parent or v.Humanoid.Health <= 0
+                                    until not _G.AutoFarmBone or not v.Parent or v.Humanoid.Health <= 0
                                 end
                             end
                         end
@@ -2049,7 +2073,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-5,5), 0, math.random(-5,5)))
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2121,7 +2145,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 PosMon = hrp.CFrame
-                                topos(hrp.CFrame * CFrame.new(0, 30, 0))
+                                topos(hrp.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-5,5), 0, math.random(-5,5)))
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
@@ -2161,7 +2185,7 @@ spawn(function()
                                 humanoid.WalkSpeed = 0
                                 humanoid.JumpPower = 0
                                 PosMon = root.CFrame
-                                topos(root.CFrame * CFrame.new(0, 30, 0))
+                                topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-5,5), 0, math.random(-5,5)))
                                 MonFarm = v.Name
                             until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
                             StartBring = false
