@@ -1392,32 +1392,104 @@ function CheckItemBPCRBPCR(name)
     end
 end
 
-local currentTween
+local isTeleporting = false
 
-function TP(mode, CF)
-    if typeof(CF) == "CFrame" then
+function WaitHRP(plr)
+    return plr.Character:WaitForChild("HumanoidRootPart")
+end
+
+function TP(mode, Pos)
+    local plr = game.Players.LocalPlayer
+    if typeof(Pos) == "CFrame" then
         if mode == "TP" then
-            game.Players.LocalPlayer.Character:PivotTo(CF)
+            if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                plr.Character:PivotTo(Pos)
+            end
         elseif mode == "Tween" then
-            local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                if currentTween then currentTween:Cancel() end
-                local distance = (hrp.Position - CF.Position).Magnitude
-                currentTween = game:GetService("TweenService"):Create(
-                    hrp,
-                    TweenInfo.new(distance / 200, Enum.EasingStyle.Linear),
-                    {CFrame = CF}
+            if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+                local nearestTeleport = CheckNearestTeleporter and CheckNearestTeleporter(Pos) or nil
+                if nearestTeleport then
+                    requestEntrance(nearestTeleport)
+                end
+                if not plr.Character:FindFirstChild("PartTele") then
+                    local PartTele = Instance.new("Part")
+                    PartTele.Parent = plr.Character
+                    PartTele.Size = Vector3.new(10,1,10)
+                    PartTele.Name = "PartTele"
+                    PartTele.Anchored = true
+                    PartTele.Transparency = 1
+                    PartTele.CanCollide = true
+                    PartTele.CFrame = WaitHRP(plr).CFrame 
+                    PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+                        if not isTeleporting then return end
+                        task.wait()
+                        if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                            WaitHRP(plr).CFrame = PartTele.CFrame
+                        end
+                    end)
+                end
+                isTeleporting = true
+                local Tween = game:GetService("TweenService"):Create(
+                    plr.Character.PartTele, 
+                    TweenInfo.new(Distance / 360, Enum.EasingStyle.Linear), 
+                    {CFrame = Pos}
                 )
-                currentTween:Play()
+                Tween:Play()
+                Tween.Completed:Connect(function(status)
+                    if status == Enum.PlaybackState.Completed then
+                        if plr.Character:FindFirstChild("PartTele") then
+                            plr.Character.PartTele:Destroy()
+                        end
+                        isTeleporting = false
+                    end
+                end)
             end
         end
-        getgenv().NoClip = true
-    end
-    if getgenv().StopTween then
-        getgenv().NoClip = false
-        if currentTween then currentTween:Cancel() end
     end
 end
+
+function stopTeleport()
+    isTeleporting = false
+    local plr = game.Players.LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("PartTele") then
+        plr.Character.PartTele:Destroy()
+    end
+end
+
+spawn(function()
+    while task.wait() do
+        if not isTeleporting then
+            stopTeleport()
+        end
+    end
+end)
+
+spawn(function()
+    local plr = game.Players.LocalPlayer
+    while task.wait() do
+        pcall(function()
+            if plr.Character and plr.Character:FindFirstChild("PartTele") then
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+                    stopTeleport()
+                end
+            end
+        end)
+    end
+end)
+
+local plr = game.Players.LocalPlayer
+local function onCharacterAdded(character)
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Died:Connect(function()
+        stopTeleport()
+    end)
+end
+plr.CharacterAdded:Connect(onCharacterAdded)
+if plr.Character then
+    onCharacterAdded(plr.Character)
+end
+
 getgenv().NoClip = false
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
@@ -1450,61 +1522,43 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end)
 end)
-local ScreenGui = Instance.new("ScreenGui")
+if game.CoreGui:FindFirstChild('UIBUTTON') then
+  game.CoreGui:FindFirstChild('UIBUTTON'):Destroy()
+end
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local UIBUTTON = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
 local ImageButton = Instance.new("ImageButton")
 local UICorner = Instance.new("UICorner")
-local ParticleEmitter = Instance.new("ParticleEmitter")
-local TweenService = game:GetService("TweenService")
-ScreenGui.Parent=game.CoreGui
-ScreenGui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
-ImageButton.Parent=ScreenGui
-ImageButton.BackgroundColor3=Color3.fromRGB(0, 0, 0)
-ImageButton.BorderSizePixel=0
-ImageButton.Position=UDim2.new(0.120833337-0.10, 0, 0.0952890813+0.01, 0)
-ImageButton.Size=UDim2.new(0, 50, 0, 50)
-ImageButton.Draggable=true
-ImageButton.Image="http://www.roblox.com/asset/?id=106497738167570"
-UICorner.Parent=ImageButton
-UICorner.CornerRadius=UDim.new(0, 12) 
-ParticleEmitter.Parent=ImageButton
-ParticleEmitter.LightEmission=1
-ParticleEmitter.Size=NumberSequence.new({NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 0)})
-ParticleEmitter.Lifetime=NumberRange.new(0.5, 1)
-ParticleEmitter.Rate=0 
-ParticleEmitter.Speed=NumberRange.new(5, 10)
-ParticleEmitter.Color=ColorSequence.new(Color3.fromRGB(255, 85, 255), Color3.fromRGB(85, 255, 255))
-local rotateTween = TweenService:Create(ImageButton, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation=360})
-ImageButton.MouseButton1Down:Connect(function()
-    ParticleEmitter.Rate=100
-    task.delay(1, function()
-        ParticleEmitter.Rate=0
-    end)
-    rotateTween:Play()
-    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
-    rotateTween.Completed:Connect(function()
-        ImageButton.Rotation=0
-    end)
-    local zoomTween = TweenService:Create(ImageButton, TweenInfo.new(0.2, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {Size=UDim2.new(0, 60, 0, 60)})
-    zoomTween:Play()
-    zoomTween.Completed:Connect(function()
-        local resetZoom = TweenService:Create(ImageButton, TweenInfo.new(0.2, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {Size=UDim2.new(0, 50, 0, 50)})
-        resetZoom:Play()
-    end)
+local UICorner_2 = Instance.new("UICorner")
+
+UIBUTTON.Name = "UIBUTTON"
+UIBUTTON.Parent = game.CoreGui
+UIBUTTON.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Frame.Parent = UIBUTTON
+Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Transparency = 1
+Frame.Position = UDim2.new(0.157012194, 0, 0.164366379, 0)
+Frame.Size = UDim2.new(0, 115, 0, 49)
+
+ImageButton.Parent = Frame
+ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
+ImageButton.Size = UDim2.new(0, 64, 0, 64)
+ImageButton.Image = "rbxassetid://106497738167570"
+ImageButton.Draggable = true
+ImageButton.MouseButton1Click:Connect(function()
+	game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
 end)
-task.defer(function()
-    if game:GetService("ReplicatedStorage"):FindFirstChild("Effect") 
-        and game:GetService("ReplicatedStorage").Effect:FindFirstChild("Container") 
-        and game:GetService("ReplicatedStorage").Effect.Container:FindFirstChild("Death") then
-        local DeathEffect = require(game:GetService("ReplicatedStorage").Effect.Container.Death)
-        local CameraShaker = require(game:GetService("ReplicatedStorage").Util.CameraShaker)
-        if CameraShaker then
-            CameraShaker:Stop()
-        end
-        if hookfunction then
-            hookfunction(DeathEffect, function(...) return ... end)
-        end
-    end
-end)
+UICorner.CornerRadius = UDim.new(0, 100)
+UICorner.Parent = ImageButton
+UICorner_2.CornerRadius = UDim.new(0, 10)
+UICorner_2.Parent = Frame
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title="Erader Hub",
@@ -1786,11 +1840,6 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
-                if Value==false then
-            wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-    end
 end
 })
 spawn(function()
@@ -1896,11 +1945,6 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
-       if Value==false then
-            wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-    end
 end
 })
 spawn(function()
@@ -1972,11 +2016,6 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
-        if Value==false then
-            wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-    end
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2080,11 +2119,6 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
-            if Value==false then
-            wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-    end
 end
 })
 spawn(function() 
@@ -2125,11 +2159,6 @@ local v19 = Tabs.M:AddToggle("v19", {
     Default = false,
     Callback = function(Value)
         _G.AutoOniSoldier = Value
-        if Value==false then
-            wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-    end
 end
 })
 spawn(function()
