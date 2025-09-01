@@ -1392,6 +1392,8 @@ function CheckItemBPCRBPCR(name)
     end
 end
 
+local currentTween
+
 function TP(mode, CF)
     if typeof(CF) == "CFrame" then
         if mode == "TP" then
@@ -1399,15 +1401,21 @@ function TP(mode, CF)
         elseif mode == "Tween" then
             local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
+                if currentTween then currentTween:Cancel() end
                 local distance = (hrp.Position - CF.Position).Magnitude
-                local tween = game:GetService("TweenService"):Create(hrp, TweenInfo.new(distance / 200, Enum.EasingStyle.Linear), {CFrame = CF})
-                tween:Play()
+                currentTween = game:GetService("TweenService"):Create(
+                    hrp,
+                    TweenInfo.new(distance / 200, Enum.EasingStyle.Linear),
+                    {CFrame = CF}
+                )
+                currentTween:Play()
             end
         end
         getgenv().NoClip = true
     end
     if getgenv().StopTween then
         getgenv().NoClip = false
+        if currentTween then currentTween:Cancel() end
     end
 end
 getgenv().NoClip = false
@@ -1778,6 +1786,11 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
+        if Value == true then
+        _G.StopTweenP = false
+    elseif Value == false then
+        _G.StopTweenP = true
+    end
 end
 })
 spawn(function()
@@ -1883,6 +1896,11 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
+        if Value == true then
+        _G.StopTweenP = false
+    elseif Value == false then
+        _G.StopTweenP = true
+    end
 end
 })
 spawn(function()
@@ -1954,6 +1972,11 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
+        if Value == true then
+        _G.StopTweenP = false
+    elseif Value == false then
+        _G.StopTweenP = true
+        end
     end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2057,6 +2080,11 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
+    if Value == true then
+        _G.StopTweenP = false
+    elseif Value == false then
+        _G.StopTweenP = true
+    end
 end
 })
 spawn(function() 
@@ -2101,36 +2129,23 @@ end
 })
 spawn(function()
     while wait() do 
-        if _G.AutoFarmOniToken and World3 then
+        if _G.AutoFarmOniToken then
             pcall(function()
                 if BypassTP then
                     if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                        TP1(boneframe)
+                        print("Erader Hub Lo")
                         wait(.1)
                         for i = 1, 8 do
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
                             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
                             wait(.1)		
                         end
-                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
-                        local args = {
-                            [1] = "InitiateTeleportToTemple"
-}
-game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                     end
-                else
-                    local args = {
-                        [1] = "InitiateTeleportToTemple"
-}
-game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                 end
-                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
+                if game:GetService("Workspace").Enemies:FindFirstChild("Oni Solider") or
+                   game:GetService("Workspace").Enemies:FindFirstChild("Red Commander")  then
                     for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                        if v.Name == "Oni Solider" or v.Name == "Red Commander" then
                             if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                                 repeat task.wait()
                                     AutoHaki()
@@ -2156,7 +2171,7 @@ game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTra
                     local cf = TP_Random_Around(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375), 18)
                     TP("Tween", cf)
                     for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
+                        if v.Name == "Oni Solider" or v.Name == "Red Commander" then
                             local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
                             mobcf = TP_Random_Around(mobcf, 10)
                             TP("Tween", mobcf)
