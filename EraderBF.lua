@@ -1948,68 +1948,65 @@ local v17 = Tabs.M:AddToggle("v17", {
 end
 })
 spawn(function()
-    while wait() do 
-        local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-        if _G.AutoFarmBone and World3 then
+        while wait() do 
+            local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
+            if _G.FarmBone and World3 then
             pcall(function()
-                if BypassTP then
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                        TP1(boneframe)
-                        wait(.1)
-                        for i = 1, 8 do
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
-                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
-                            wait(.1)		
+                    if BypassTP then
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
+                            TP1(boneframe)
+                            wait(.1)
+                            for i = 1, 8 do
+                                game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
+			                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
+                                wait(.1)		
+                            end
+                        elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
+                            TP1(boneframe)
                         end
-                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
+                    else
                         TP1(boneframe)
                     end
-                else
-                    TP1(boneframe)
-                end
-                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
-                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
-                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                repeat task.wait()
-                                    AutoHaki()
-                                    NoAttackAnimation = true
-                                    NeedAttacking = true
-                                    EquipWeapon(_G.SelectWeapon)
-                                    v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
-                                    v.Head.CanCollide = false 
-                                    StartBring = true
-                                    MonFarm = v.Name                
-                                    PosMon = v.HumanoidRootPart.CFrame
-                                    local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
-                                    cf = TP_Random_Around(cf, 18)
-                                    TP("Tween", cf)
-                                    sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                until not _G.AutoFarmBone or not v.Parent or v.Humanoid.Health <= 0
+                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
+                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                                    repeat task.wait()
+                                        AutoHaki()
+                                        NoAttackAnimation = true
+                                        NeedAttacking = true
+                                        EquipWeapon(_G.SelectWeapon)
+                                        v.HumanoidRootPart.CanCollide = false
+                                        v.Humanoid.WalkSpeed = 0
+                                        v.Head.CanCollide = false 
+                                        StartBring = true
+                                        MonFarm = v.Name                
+                                        PosMon = v.HumanoidRootPart.CFrame
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
+                                    until not _G.FarmBone or not v.Parent or v.Humanoid.Health <= 0
+                                end
+                            end
+                        end
+                    else
+                        StartBring = false
+    					TP("Tween", CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
+                        for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+                            if v.Name == "Reborn Skeleton" then
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Living Zombie" then
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Demonic Soul" then
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Posessed Mummy" then
+                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             end
                         end
                     end
-                else
-                    StartBring = false
-                    local cf = TP_Random_Around(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375), 18)
-                    TP("Tween", cf)
-                    for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                        if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" or v.Name == "Soul Reaper" then
-                            local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
-                            mobcf = TP_Random_Around(mobcf, 10)
-                            TP("Tween", mobcf)
-                        end
-                    end
-                end
-            end)
+                end)
+            end
         end
-    end
-end)
+    end)   
 local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Katakuri",
     Description = "",
@@ -2019,13 +2016,13 @@ local v18 = Tabs.M:AddToggle("v18", {
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
-local Plsmon = game:GetService("Workspace").Enemies
-task.spawn(function()
+    local Plsmon = game:GetService("Workspace").Enemies
+     task.spawn(function()
     while task.wait() do
-        if _G.FarmCake and World3 then
+        if _G.FarmCake then
             pcall(function()
                 if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
-                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                         if v.Name == "Cake Prince" then
                             if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                                 repeat
@@ -2035,16 +2032,11 @@ task.spawn(function()
                                     v.HumanoidRootPart.CanCollide = false
                                     v.Humanoid.WalkSpeed = 0
                                     v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
-                                    local cf
-                                    if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring")
-                                    or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist")
-                                    or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
-                                        cf = v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0)
+                                    if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
                                     else
-                                        cf = v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10)
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
                                     end
-                                    cf = TP_Random_Around(cf, 18)
-                                    TP("Tween", cf)
                                     NeedAttacking = true
                                 until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
                                 wait(1)
@@ -2074,9 +2066,7 @@ task.spawn(function()
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
-                                        cf = TP_Random_Around(cf, 18)
-                                        TP("Tween", cf)
+                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2093,9 +2083,14 @@ task.spawn(function()
                             end
                         end
                     else
-                        local baseCf = CakePos
-                        local cf = TP_Random_Around(baseCf, 20)
-                        TP("Tween", cf)
+                        local RandomTele = math.random(1, 3)
+                        if RandomTele == 1 then
+                            TP("Tween", CFrame.new(-1436.86011, 167.753616, -12296.9512))
+                        elseif RandomTele == 2 then
+                            TP("Tween", CFrame.new(-2383.78979, 150.450592, -12126.4961))
+                        elseif RandomTele == 3 then
+                            TP("Tween", CFrame.new(-2231.2793, 168.256653, -12845.7559))
+                        end
                     end
                     if BypassTP then
                         if (playerPos - CakePos.Position).Magnitude > 1500 then
@@ -2107,11 +2102,13 @@ task.spawn(function()
                         TP("Tween", CakePos)
                     end
                     UnEquipWeapon(_G.Selectweapon)
+                    TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
                 end
             end)
         end
     end
 end)
+
 local djtmecl = Tabs.M:AddSection("Lightning Event")
 local v18 = Tabs.M:AddToggle("v18", {
     Title = "Auto Farm Summer Token",
