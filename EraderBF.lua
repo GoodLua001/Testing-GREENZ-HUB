@@ -1786,10 +1786,10 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
-        if Value == true then
-        _G.StopTweenP = false
-    elseif Value == false then
-        _G.StopTweenP = true
+                if Value==false then
+            wait()
+            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            wait()
     end
 end
 })
@@ -1896,10 +1896,10 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
-        if Value == true then
-        _G.StopTweenP = false
-    elseif Value == false then
-        _G.StopTweenP = true
+       if Value==false then
+            wait()
+            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            wait()
     end
 end
 })
@@ -1972,12 +1972,12 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
-        if Value == true then
-        _G.StopTweenP = false
-    elseif Value == false then
-        _G.StopTweenP = true
-        end
+        if Value==false then
+            wait()
+            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            wait()
     end
+end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
 local Plsmon = game:GetService("Workspace").Enemies
@@ -2080,10 +2080,10 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
-    if Value == true then
-        _G.StopTweenP = false
-    elseif Value == false then
-        _G.StopTweenP = true
+            if Value==false then
+            wait()
+            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            wait()
     end
 end
 })
@@ -2125,25 +2125,19 @@ local v19 = Tabs.M:AddToggle("v19", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmOniToken = Value
+        if Value==false then
+            wait()
+            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            wait()
+    end
 end
 })
 spawn(function()
     while wait() do 
         if _G.AutoFarmOniToken then
             pcall(function()
-                if BypassTP then
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                        print("Erader Hub Lo")
-                        wait(.1)
-                        for i = 1, 8 do
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
-                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
-                            wait(.1)		
-                        end
-                    end
-                end
                 if game:GetService("Workspace").Enemies:FindFirstChild("Oni Solider") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Red Commander")  then
+                   game:GetService("Workspace").Enemies:FindFirstChild("Red Commander") then
                     for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                         if v.Name == "Oni Solider" or v.Name == "Red Commander" then
                             if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
@@ -2168,8 +2162,6 @@ spawn(function()
                     end
                 else
                     StartBring = false
-                    local cf = TP_Random_Around(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375), 18)
-                    TP("Tween", cf)
                     for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
                         if v.Name == "Oni Solider" or v.Name == "Red Commander" then
                             local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
@@ -2182,6 +2174,7 @@ spawn(function()
         end
     end
 end)
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
