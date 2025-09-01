@@ -2124,7 +2124,7 @@ local v19 = Tabs.M:AddToggle("v19", {
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.AutoFarmOniToken = Value
+        _G.AutoOniSoldier = Value
         if Value==false then
             wait()
             TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
@@ -2133,40 +2133,29 @@ local v19 = Tabs.M:AddToggle("v19", {
 end
 })
 spawn(function()
-    while wait() do 
-        if _G.AutoFarmOniToken then
+    while task.wait() do
+        if _G.AutoOniSoldier then
             pcall(function()
-                if game:GetService("Workspace").Enemies:FindFirstChild("Oni Solider") or
-                   game:GetService("Workspace").Enemies:FindFirstChild("Red Commander") then
-                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v.Name == "Oni Solider" or v.Name == "Red Commander" then
-                            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                                repeat task.wait()
-                                    AutoHaki()
-                                    NoAttackAnimation = true
-                                    NeedAttacking = true
-                                    EquipWeapon(_G.SelectWeapon)
-                                    v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
-                                    v.Head.CanCollide = false 
-                                    StartBring = true
-                                    MonFarm = v.Name                
-                                    PosMon = v.HumanoidRootPart.CFrame
-                                    local cf = v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0)
-                                    cf = TP_Random_Around(cf, 18)
-                                    TP("Tween", cf)
-                                    sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                                until not _G.AutoFarmOniToken or not v.Parent or v.Humanoid.Health <= 0
-                            end
-                        end
-                    end
-                else
-                    StartBring = false
-                    for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-                        if v.Name == "Oni Solider" or v.Name == "Red Commander" then
-                            local mobcf = v.HumanoidRootPart.CFrame * CFrame.new(2,20,2)
-                            mobcf = TP_Random_Around(mobcf, 10)
-                            TP("Tween", mobcf)
+                for _, v in pairs(workspace.Enemies:GetChildren()) do
+                    if v.Name == "Oni Soldier" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                        local humanoid = v.Humanoid
+                        local root = v.HumanoidRootPart
+
+                        if humanoid.Health > 0 then
+                            repeat task.wait()
+                                StartBring = true
+                                AutoHaki()
+                                EquipWeapon(_G.SelectWeapon)
+                                root.Size = Vector3.new(60, 60, 60)
+                                root.Transparency = 1
+                                root.CanCollide = false
+                                humanoid.WalkSpeed = 0
+                                humanoid.JumpPower = 0
+                                PosMon = root.CFrame
+                                TP("Tween", root.CFrame * CFrame.new(0, 30, 0))
+                                MonFarm = v.Name
+                            until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
+                            StartBring = false
                         end
                     end
                 end
