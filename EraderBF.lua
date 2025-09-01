@@ -826,7 +826,7 @@ function StopTween(target)
     if not target then
         _G.StopTween = true
         wait(0.2)
-        TP("Tween", char.HumanoidRootPart.CFrame)
+        topos(char.HumanoidRootPart.CFrame)
         wait(0.2)
         if char.HumanoidRootPart:FindFirstChild("BodyClip") then
             char.HumanoidRootPart.BodyClip:Destroy()
@@ -1152,7 +1152,7 @@ if plr.Character then
     onCharacterAdded(plr.Character)
 end
 function TP1(Pos)
-    TP("Tween", Pos)
+    topos(Pos)
 end
 
     spawn(function()
@@ -1264,7 +1264,7 @@ end
         if not target then
             _G.StopTween = true
             wait()
-            TP("Tween", game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+            topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
             wait()
             if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
@@ -1313,7 +1313,7 @@ end
     function AutoActiveColorRip_Indra()
         for r, v in pairs(CheckColorRipIndra()) do
             ActivateColor(r)
-            TP("Tween", v.CFrame)
+            topos(v.CFrame)
             firetouchinterest(v.TouchInterest)
         end
     end
@@ -1392,67 +1392,51 @@ function CheckItemBPCRBPCR(name)
     end
 end
 
-local isTeleporting = false
-
-function WaitHRP(plr)
-    return plr.Character:WaitForChild("HumanoidRootPart")
-end
-
-function TP(mode, Pos)
+    function topos(Pos)
     local plr = game.Players.LocalPlayer
-    if typeof(Pos) == "CFrame" then
-        if mode == "TP" then
-            if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                plr.Character:PivotTo(Pos)
-            end
-        elseif mode == "Tween" then
-            if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-                local nearestTeleport = CheckNearestTeleporter and CheckNearestTeleporter(Pos) or nil
-                if nearestTeleport then
-                    requestEntrance(nearestTeleport)
-                end
-                if not plr.Character:FindFirstChild("PartTele") then
-                    local PartTele = Instance.new("Part")
-                    PartTele.Parent = plr.Character
-                    PartTele.Size = Vector3.new(10,1,10)
-                    PartTele.Name = "PartTele"
-                    PartTele.Anchored = true
-                    PartTele.Transparency = 1
-                    PartTele.CanCollide = true
-                    PartTele.CFrame = WaitHRP(plr).CFrame 
-                    PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-                        if not isTeleporting then return end
-                        task.wait()
-                        if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                            WaitHRP(plr).CFrame = PartTele.CFrame
-                        end
-                    end)
-                end
-                isTeleporting = true
-                local Tween = game:GetService("TweenService"):Create(
-                    plr.Character.PartTele, 
-                    TweenInfo.new(Distance / 360, Enum.EasingStyle.Linear), 
-                    {CFrame = Pos}
-                )
-                Tween:Play()
-                Tween.Completed:Connect(function(status)
-                    if status == Enum.PlaybackState.Completed then
-                        if plr.Character:FindFirstChild("PartTele") then
-                            plr.Character.PartTele:Destroy()
-                        end
-                        isTeleporting = false
-                    end
-                end)
-            end
+    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
+        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+        if not Pos then 
+            return 
         end
+        local nearestTeleport = CheckNearestTeleporter(Pos)
+        if nearestTeleport then
+            requestEntrance(nearestTeleport)
+        end
+        if not plr.Character:FindFirstChild("PartTele") then
+            local PartTele = Instance.new("Part", plr.Character)
+            PartTele.Size = Vector3.new(10,1,10)
+            PartTele.Name = "PartTele"
+            PartTele.Anchored = true
+            PartTele.Transparency = 1
+            PartTele.CanCollide = true
+            PartTele.CFrame = WaitHRP(plr).CFrame 
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+                if not isTeleporting then return end
+                task.wait()
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    WaitHRP(plr).CFrame = PartTele.CFrame
+                end
+            end)
+        end
+        isTeleporting = true
+        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / 360, Enum.EasingStyle.Linear), {CFrame = Pos})
+        Tween:Play()
+        Tween.Completed:Connect(function(status)
+            if status == Enum.PlaybackState.Completed then
+                if plr.Character:FindFirstChild("PartTele") then
+                    plr.Character.PartTele:Destroy()
+                end
+                isTeleporting = false
+            end
+        end)
     end
 end
 
 function stopTeleport()
     isTeleporting = false
     local plr = game.Players.LocalPlayer
-    if plr.Character and plr.Character:FindFirstChild("PartTele") then
+    if plr.Character:FindFirstChild("PartTele") then
         plr.Character.PartTele:Destroy()
     end
 end
@@ -1469,7 +1453,7 @@ spawn(function()
     local plr = game.Players.LocalPlayer
     while task.wait() do
         pcall(function()
-            if plr.Character and plr.Character:FindFirstChild("PartTele") then
+            if plr.Character:FindFirstChild("PartTele") then
                 if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
                     stopTeleport()
                 end
@@ -1489,8 +1473,7 @@ plr.CharacterAdded:Connect(onCharacterAdded)
 if plr.Character then
     onCharacterAdded(plr.Character)
 end
-
-getgenv().NoClip = false
+getgenv().NoClip = true
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
         if not (game:GetService("Players").LocalPlayer.Character 
@@ -1827,7 +1810,7 @@ spawn(function()
         if _G.AutoTeleportY then
             pcall(function()
                 if game.Players.Localplayer.Character.Humanoid.Health < 4000 then
-            TP("Tween", 0, 200, 0)
+            topos(0, 200, 0)
                 end
             end)
         end
@@ -1876,7 +1859,7 @@ spawn(function()
                                                 EquipWeapon(_G.SelectWeapon)
                                                 
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.Humanoid.WalkSpeed = 0
                                                 v.Head.CanCollide = false
@@ -1909,7 +1892,7 @@ spawn(function()
                                                     EquipWeapon(_G.SelectWeapon)
                                                      AutoHaki()                                            
                                                     PosMon = v.HumanoidRootPart.CFrame
-                                                    TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                                     v.HumanoidRootPart.CanCollide = false
                                                     v.Humanoid.WalkSpeed = 0
                                                     v.Head.CanCollide = false
@@ -1982,7 +1965,7 @@ spawn(function()
                                         StartBring = true
                                         MonFarm = v.Name                
                                         PosMon = v.HumanoidRootPart.CFrame
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
                                     until not _G.FarmBone or not v.Parent or v.Humanoid.Health <= 0
                                 end
@@ -1990,16 +1973,16 @@ spawn(function()
                         end
                     else
                         StartBring = false
-    					TP("Tween", CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
+    					topos(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
                         for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
                             if v.Name == "Reborn Skeleton" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Living Zombie" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Demonic Soul" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             elseif v.Name == "Posessed Mummy" then
-                                TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             end
                         end
                     end
@@ -2033,9 +2016,9 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                     v.Humanoid.WalkSpeed = 0
                                     v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     if game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Ring") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("Fist") or game:GetService("Workspace")["_WorldOrigin"]:FindFirstChild("MochiSwirl") then
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, -40, 0))
                                     else
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(4, 10, 10))
                                     end
                                     NeedAttacking = true
                                 until not _G.FarmCake or not v.Parent or v.Humanoid.Health <= 0
@@ -2066,7 +2049,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        TP("Tween", v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2085,24 +2068,24 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                     else
                         local RandomTele = math.random(1, 3)
                         if RandomTele == 1 then
-                            TP("Tween", CFrame.new(-1436.86011, 167.753616, -12296.9512))
+                            topos(CFrame.new(-1436.86011, 167.753616, -12296.9512))
                         elseif RandomTele == 2 then
-                            TP("Tween", CFrame.new(-2383.78979, 150.450592, -12126.4961))
+                            topos(CFrame.new(-2383.78979, 150.450592, -12126.4961))
                         elseif RandomTele == 3 then
-                            TP("Tween", CFrame.new(-2231.2793, 168.256653, -12845.7559))
+                            topos(CFrame.new(-2231.2793, 168.256653, -12845.7559))
                         end
                     end
                     if BypassTP then
                         if (playerPos - CakePos.Position).Magnitude > 1500 then
                             BTP(CakePos)
                         else
-                            TP("Tween", CakePos)
+                            topos(CakePos)
                         end
                     else
-                        TP("Tween", CakePos)
+                        topos(CakePos)
                     end
                     UnEquipWeapon(_G.Selectweapon)
-                    TP("Tween", CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
+                    topos(CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375))
                 end
             end)
         end
@@ -2138,7 +2121,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 PosMon = hrp.CFrame
-                                TP("Tween", hrp.CFrame * CFrame.new(0, 30, 0))
+                                topos(hrp.CFrame * CFrame.new(0, 30, 0))
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
@@ -2178,7 +2161,7 @@ spawn(function()
                                 humanoid.WalkSpeed = 0
                                 humanoid.JumpPower = 0
                                 PosMon = root.CFrame
-                                TP("Tween", root.CFrame * CFrame.new(0, 30, 0))
+                                topos(root.CFrame * CFrame.new(0, 30, 0))
                                 MonFarm = v.Name
                             until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
                             StartBring = false
