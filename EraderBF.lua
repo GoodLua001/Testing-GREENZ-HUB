@@ -1779,9 +1779,6 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
-        if Value == false then
-            stopTeleport()
-    end         
 end
 })
 spawn(function()
@@ -1886,10 +1883,7 @@ local v17 = Tabs.M:AddToggle("v17", {
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.AutoFarmBone = Value
-        if Value == false then
-            stopTeleport()
-    end         
+        _G.AutoFarmBone = Value      
 end
 })
 spawn(function()
@@ -1958,9 +1952,6 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
-        if Value == false then
-            stopTeleport()
-    end         
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2064,9 +2055,6 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
-        if Value == false then
-            stopTeleport()
-    end         
 end
 })
 spawn(function() 
@@ -2109,54 +2097,55 @@ local v19 = Tabs.M:AddToggle("v19", {
         _G.AutoOniSoldier = Value
 end
 })
-
 spawn(function()
     while task.wait() do
-        if _G.AutoOniSoldier then
+        if _G.AutoOniSoldier and not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
             pcall(function()
-                if not game:GetService("Workspace").Map("Oni Realm") then 
-                    if World1 then
-                        CFrameTpOni = CFrame.new(-614.1772, 7.8933, 1535.4930)
-                    elseif World2 then
-                        CFrameTpOni = CFrame.new(-2025.7010, 72.7401, -2706.4855)
-                    elseif World3 then
-                        CFrameTpOni = CFrame.new(-12577.828125, 336.9557189941406, -7440.9580078125)
-                    end
-                    topos(CFrameTpOni)
-                else 
-                    local args = {
-                        [1] = "InitiateTeleportToTemple"
-                    }
-                    game:GetService("ReplicatedStorage").Moudle.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
-                end
-                if game:GetService("Workspace").Map("Oni Realm") then
-                    for _, v in pairs(workspace.Enemies:GetChildren()) do
-                        if (v.Name == "Oni Soldier" or v.Name == "Red Commander") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                            local humanoid = v.Humanoid
-                            local root = v.HumanoidRootPart
-                            if humanoid.Health > 0 then
-                                repeat task.wait()
-                                    StartBring = true
-                                    AutoHaki()
-                                    EquipWeapon(_G.SelectWeapon)
-                                    root.Size = Vector3.new(60, 60, 60)
-                                    root.Transparency = 1
-                                    root.CanCollide = false
-                                    humanoid.WalkSpeed = 0
-                                    humanoid.JumpPower = 0
-                                    PosMon = root.CFrame
-                                    topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
-                                    MonFarm = v.Name
-                                until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
-                                StartBring = false
-                            end
-                        end
-                    end
+                local CFrameTpOni1 = CFrame.new(-614.1772, 7.8933, 1535.4930)
+                local CFrameTpOni2 = CFrame.new(-2025.7010, 72.7401, -2706.4855)
+                local CFrameTpOni3 = CFrame.new(-12577.828125, 336.9557189941406, -7440.9580078125)
+                if World1 then
+                    topos(CFrameTpOni1) 
+                elseif World2 then
+                    topos(CFrameTpOni2)
+                elseif World3 then
+                    topos(CFrameTpOni3)
                 end
             end)
+        else 
+            local args = {
+                [1] = "InitiateTeleportToTemple"
+            }
+            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+        end
+
+        if game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
+            for _, v in pairs(workspace.Enemies:GetChildren()) do
+                if (v.Name == "Oni Soldier" or v.Name == "Red Commander") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                    local humanoid = v.Humanoid
+                    local root = v.HumanoidRootPart
+                    if humanoid.Health > 0 then
+                        repeat task.wait()
+                            StartBring = true
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            root.Size = Vector3.new(60, 60, 60)
+                            root.Transparency = 1
+                            root.CanCollide = false
+                            humanoid.WalkSpeed = 0
+                            humanoid.JumpPower = 0
+                            PosMon = root.CFrame
+                            topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                            MonFarm = v.Name
+                        until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
+                        StartBring = false
+                    end
+                end
+            end
         end
     end
 end)
+
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
