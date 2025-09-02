@@ -1405,13 +1405,13 @@ function topos(KG)
         tween:Cancel()
     end
 end
-_G.StopTween = false
+getgenv().NoClipS = false
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
         if not (game:GetService("Players").LocalPlayer.Character 
             and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
             and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-        if _G.StopTween then
+        if getgenv().NoClipS then
             if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
                 local bv = Instance.new("BodyVelocity")
                 bv.Name = "BodyClip"
@@ -1779,6 +1779,9 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 spawn(function()
@@ -1883,7 +1886,10 @@ local v17 = Tabs.M:AddToggle("v17", {
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.AutoFarmBone = Value      
+        _G.AutoFarmBone = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end      
 end
 })
 spawn(function()
@@ -1952,6 +1958,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2055,6 +2064,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 spawn(function() 
@@ -2096,6 +2108,9 @@ local v19 = Tabs.M:AddToggle("v19", {
     Default = false,
     Callback = function(Value)
         _G.AutoOniSoldier = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 spawn(function()
@@ -2150,6 +2165,9 @@ local vap = Tabs.M:AddToggle("vap", {
     Default = false,
     Callback = function(Value)
         _G.AutoOniSoldier = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 spawn(function()
@@ -2205,6 +2223,9 @@ local dcm = Tabs.M:AddToggle("dcm", {
     Default = false,
     Callback = function(Value)
         _G.AutoOniSoldier = Value
+        if Value == true then
+            getgenv().NoClipS = true
+    end
 end
 })
 spawn(function()
