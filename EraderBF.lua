@@ -1518,7 +1518,7 @@ Tabs.S:AddButton({
     Title = "Travel Main",
     Description = "",
     Callback = function()
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain")
 end
 })
 Tabs.S:AddButton({
@@ -2250,8 +2250,7 @@ spawn(function()
         end
     end
 end)
-
-elseif World3 then
+end
 local dcm = Tabs.M:AddToggle("dcm", {
     Title = "Auto Farm Oni Token",
     Description = "",
@@ -2266,22 +2265,30 @@ local dcm = Tabs.M:AddToggle("dcm", {
 end
 })
 spawn(function()
+    local CFrameTpOni1 = CFrame.new(-614.1772, 7.8933, 1535.4930)
+    local CFrameTpOni2 = CFrame.new(-2025.7010, 72.7401, -2706.4855)
     local CFrameTpOni3 = CFrame.new(-12577.828125, 336.9557189941406, -7440.9580078125)
     while task.wait() do
         if _G.AutoOniSoldier then
             pcall(function()
-                if not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then 
-                    topos(CFrameTpOni3)
-                    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    if hrp and (hrp.Position - CFrameTpOni3.Position).Magnitude < 5 then
-                        local args = {
-                            [12] = "InitiateTeleportToTemple"
-                        }
-                        game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+                if not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
+                    if World1 then 
+                        topos(CFrameTpOni1)
+                    elseif World2 then
+                        topos(CFrameTpOni2)
+                    elseif World3 then
+                        topos(CFrameTpOni3)
+                        local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if hrp and (hrp.Position - CFrameTpOni3.Position).Magnitude < 5 then
+                            local args = {
+                                [12] = "InitiateTeleportToTemple"
+                            }
+                            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+                        end
                     end
                 end
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
-                    if (v.Name == "Oni Soldier" or v.Name == "Red Commander") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                    if v.Name == "Oni Soldier" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
                         local humanoid = v.Humanoid
                         local root = v.HumanoidRootPart
                         if humanoid.Health > 0 then
@@ -2300,9 +2307,6 @@ spawn(function()
                                 MonFarm = v.Name
                             until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
                             StartBring = false
-                            if not game:GetService("Workspace").Enemies:FindFirstChild("Oni Solider") then
-                                topos(CFrame.new(-4956.05713, -4136.18408, 4768.82227, 0.474190891, 0.100823715, 0.874629915, -0.207925126, 0.978144765, -2.74181366e-05, -0.855517447, -0.181844547, 0.4847911))
-                            end
                         end
                     end
                 end
@@ -2310,7 +2314,6 @@ spawn(function()
         end
     end
 end)
-end
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
