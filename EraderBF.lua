@@ -1405,13 +1405,13 @@ function topos(KG)
         tween:Cancel()
     end
 end
-getgenv().NoClip = true
+_G.StopTween = false
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
         if not (game:GetService("Players").LocalPlayer.Character 
             and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
             and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-        if getgenv().NoClip then
+        if _G.StopTween then
             if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
                 local bv = Instance.new("BodyVelocity")
                 bv.Name = "BodyClip"
