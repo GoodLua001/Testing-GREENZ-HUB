@@ -2099,11 +2099,12 @@ end
 })
 spawn(function()
     while task.wait() do
-        if _G.AutoOniSoldier and not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
+        if _G.AutoOniSoldier then
             pcall(function()
                 local CFrameTpOni1 = CFrame.new(-614.1772, 7.8933, 1535.4930)
                 local CFrameTpOni2 = CFrame.new(-2025.7010, 72.7401, -2706.4855)
                 local CFrameTpOni3 = CFrame.new(-12577.828125, 336.9557189941406, -7440.9580078125)
+            if not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then 
                 if World1 then
                     topos(CFrameTpOni1) 
                 elseif World2 then
@@ -2111,8 +2112,9 @@ spawn(function()
                 elseif World3 then
                     topos(CFrameTpOni3)
                 end
-            end)
-        else 
+            end
+        end)
+        elseif topos(CFrameTpOni1) or topos(CFrameTpOni2) or topos(CFrameTpOni3) then 
             local args = {
                 [1] = "InitiateTeleportToTemple"
             }
