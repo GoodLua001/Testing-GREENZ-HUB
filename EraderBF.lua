@@ -1392,7 +1392,7 @@ function CheckItemBPCRBPCR(name)
     end
 end
 
-    function topos(Pos)
+topos = function(target)
     local character = plr.Character
   if not character or not character:FindFirstChild("HumanoidRootPart") then return end
   local rootPart = character.HumanoidRootPart
@@ -2114,7 +2114,7 @@ spawn(function()
     while task.wait() do
         if _G.AutoOniSoldier then
             pcall(function()
-                if not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then 
+                if not game:GetService("Workspace").Map("Oni Realm") then 
                     if World1 then
                         CFrameTpOni = CFrame.new(-614.1772, 7.8933, 1535.4930)
                     elseif World2 then
@@ -2129,7 +2129,7 @@ spawn(function()
                     }
                     game:GetService("ReplicatedStorage").Moudle.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                 end
-                if game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
+                if game:GetService("Workspace").Map("Oni Realm") then
                     for _, v in pairs(workspace.Enemies:GetChildren()) do
                         if (v.Name == "Oni Soldier" or v.Name == "Red Commander") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
                             local humanoid = v.Humanoid
