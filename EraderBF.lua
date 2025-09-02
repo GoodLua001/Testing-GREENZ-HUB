@@ -1393,85 +1393,17 @@ function CheckItemBPCRBPCR(name)
 end
 
     function topos(Pos)
-    local plr = game.Players.LocalPlayer
-    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-        if not Pos then 
-            return 
-        end
-        local nearestTeleport = CheckNearestTeleporter(Pos)
-        if nearestTeleport then
-            requestEntrance(nearestTeleport)
-        end
-        if not plr.Character:FindFirstChild("PartTele") then
-            local PartTele = Instance.new("Part", plr.Character)
-            PartTele.Size = Vector3.new(10,1,10)
-            PartTele.Name = "PartTele"
-            PartTele.Anchored = true
-            PartTele.Transparency = 1
-            PartTele.CanCollide = true
-            PartTele.CFrame = WaitHRP(plr).CFrame 
-            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-                if not isTeleporting then return end
-                task.wait()
-                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                    WaitHRP(plr).CFrame = PartTele.CFrame
-                end
-            end)
-        end
-        isTeleporting = true
-        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / 360, Enum.EasingStyle.Linear), {CFrame = Pos})
-        Tween:Play()
-        Tween.Completed:Connect(function(status)
-            if status == Enum.PlaybackState.Completed then
-                if plr.Character:FindFirstChild("PartTele") then
-                    plr.Character.PartTele:Destroy()
-                end
-                isTeleporting = false
-            end
-        end)
-    end
-end
-
-function stopTeleport()
-    isTeleporting = false
-    local plr = game.Players.LocalPlayer
-    if plr.Character:FindFirstChild("PartTele") then
-        plr.Character.PartTele:Destroy()
-    end
-end
-
-spawn(function()
-    while task.wait() do
-        if not isTeleporting then
-            stopTeleport()
-        end
-    end
-end)
-
-spawn(function()
-    local plr = game.Players.LocalPlayer
-    while task.wait() do
-        pcall(function()
-            if plr.Character:FindFirstChild("PartTele") then
-                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-                    stopTeleport()
-                end
-            end
-        end)
-    end
-end)
-
-local plr = game.Players.LocalPlayer
-local function onCharacterAdded(character)
-    local humanoid = character:WaitForChild("Humanoid")
-    humanoid.Died:Connect(function()
-        stopTeleport()
-    end)
-end
-plr.CharacterAdded:Connect(onCharacterAdded)
-if plr.Character then
-    onCharacterAdded(plr.Character)
+    local character = plr.Character
+  if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+  local rootPart = character.HumanoidRootPart
+  local distance = (target.Position - rootPart.Position).Magnitude
+  local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+  local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = target})    
+  if plr.Character.Humanoid.Sit == true then
+    block.CFrame = CFrame.new(block.Position.X, target.Y, block.Position.Z)
+  end  
+  tween:Play()    
+  task.spawn(function() while tween.PlaybackState == Enum.PlaybackState.Playing do if not shouldTween then tween:Cancel() break end task.wait(0.1) end end)
 end
 getgenv().NoClip = true
 game:GetService("RunService").Stepped:Connect(function()
@@ -1847,6 +1779,9 @@ local v16 = Tabs.M:AddToggle("v16", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarm = Value
+        if Value == false then
+            stopTeleport()
+    end         
 end
 })
 spawn(function()
@@ -1952,6 +1887,9 @@ local v17 = Tabs.M:AddToggle("v17", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmBone = Value
+        if Value == false then
+            stopTeleport()
+    end         
 end
 })
 spawn(function()
@@ -2020,6 +1958,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.FarmCake = Value
+        if Value == false then
+            stopTeleport()
+    end         
 end
 })
 local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
@@ -2123,6 +2064,9 @@ local v18 = Tabs.M:AddToggle("v18", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummerToken = Value
+        if Value == false then
+            stopTeleport()
+    end         
 end
 })
 spawn(function() 
@@ -2165,30 +2109,47 @@ local v19 = Tabs.M:AddToggle("v19", {
         _G.AutoOniSoldier = Value
 end
 })
+
 spawn(function()
     while task.wait() do
         if _G.AutoOniSoldier then
             pcall(function()
-                for _, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v.Name == "Oni Soldier" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                        local humanoid = v.Humanoid
-                        local root = v.HumanoidRootPart
-
-                        if humanoid.Health > 0 then
-                            repeat task.wait()
-                                StartBring = true
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                root.Size = Vector3.new(60, 60, 60)
-                                root.Transparency = 1
-                                root.CanCollide = false
-                                humanoid.WalkSpeed = 0
-                                humanoid.JumpPower = 0
-                                PosMon = root.CFrame
-                                topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
-                                MonFarm = v.Name
-                            until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
-                            StartBring = false
+                if not game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then 
+                    if World1 then
+                        CFrameTpOni = CFrame.new(-614.1772, 7.8933, 1535.4930)
+                    elseif World2 then
+                        CFrameTpOni = CFrame.new(-2025.7010, 72.7401, -2706.4855)
+                    elseif World3 then
+                        CFrameTpOni = CFrame.new(-12577.828125, 336.9557189941406, -7440.9580078125)
+                    end
+                    topos(CFrameTpOni)
+                else 
+                    local args = {
+                        [1] = "InitiateTeleportToTemple"
+                    }
+                    game:GetService("ReplicatedStorage").Moudle.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
+                end
+                if game:GetService("Workspace").Map:FindFirstChild("Oni Realm") then
+                    for _, v in pairs(workspace.Enemies:GetChildren()) do
+                        if (v.Name == "Oni Soldier" or v.Name == "Red Commander") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
+                            local humanoid = v.Humanoid
+                            local root = v.HumanoidRootPart
+                            if humanoid.Health > 0 then
+                                repeat task.wait()
+                                    StartBring = true
+                                    AutoHaki()
+                                    EquipWeapon(_G.SelectWeapon)
+                                    root.Size = Vector3.new(60, 60, 60)
+                                    root.Transparency = 1
+                                    root.CanCollide = false
+                                    humanoid.WalkSpeed = 0
+                                    humanoid.JumpPower = 0
+                                    PosMon = root.CFrame
+                                    topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                    MonFarm = v.Name
+                                until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
+                                StartBring = false
+                            end
                         end
                     end
                 end
