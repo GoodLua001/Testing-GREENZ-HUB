@@ -2280,12 +2280,12 @@ spawn(function()
                     elseif World3 then
                         topos(CFrameTpOni3)
                         local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                        if hrp and (hrp.Position - OniPortal.Position).Magnitude < 10 then
-                            local args = {"InitiateTeleportToTemple"}
-                            local rf = game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation")
-                            if rf then
-                                rf:InvokeServer(unpack(args))
-                            end
+                        if hrp and (hrp.Position - OniPortal.Position).Magnitude < 5 then
+local args = {
+    [1] = "InitiateTeleportToTemple"
+}
+
+game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                         end
                     end
                 end 
@@ -2300,18 +2300,15 @@ spawn(function()
                                 AutoHaki()
                                 EquipWeapon(_G.SelectWeapon)
                                 root.Size = Vector3.new(60, 60, 60)
-                                root.Transparency = 1
-                                root.CanCollide = false
-                                humanoid.WalkSpeed = 0
-                                humanoid.JumpPower = 0
+                                v.HumanoidRootPart.CanCollide = false
+                                v.Head.CanCollide = false
+                                v.Humanoid.WalkSpeed = 0
                                 PosMon = root.CFrame
-                                topos((root.CFrame * CFrame.new(0, 30, 0)) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                topos((root.CFrame * CFrame.new(0, 30, 0)))
                                 MonFarm = v.Name
                             until not _G.AutoOniSoldier or not v.Parent or humanoid.Health <= 0
                             StartBring = false
-                            if not game:GetService("Workspace").Enemies:FindFirstChild("Oni Soldier") then
                                 topos(CFrame.new(-4956.05713, -4136.18408, 4768.82227, 0.474190891, 0.100823715, 0.874629915, -0.207925126, 0.978144765, -2.74181366e-05, -0.855517447, -0.181844547, 0.4847911)) 
-                            end    
                         end
                     end
                 end
