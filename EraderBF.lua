@@ -1655,10 +1655,11 @@ Frame.Size = UDim2.new(0, 115, 0, 49)
 
 ImageButton.Parent = Frame
 ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageButton.BackgroundColor3 = Color3.fromRBG(0, 0, 0)
 ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
 ImageButton.Size = UDim2.new(0, 64, 0, 64)
-ImageButton.Image = "rbxassetid://92791387778839"
+ImageButton.Image = "rbxassetid://113875790138706"
 ImageButton.Draggable = true
 ImageButton.MouseButton1Click:Connect(function()
 	game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
@@ -1681,6 +1682,9 @@ local Tabs = {
   S=Window:AddTab({ Title="Tab Shop" }),
   Se=Window:AddTab({ Title="Tab Setting"}),
   M=Window:AddTab({ Title="Tab Farming"}),
+  St=Window:AddTab({ Title="Tab Stack Farming"}),
+  Fo=Window:AddTab({ Title="Tab Farming Other"}),
+  Vol=Window:AddTab({ Title="Tab Volcano"}),
 }
 Tabs.S:AddSection("World Sea")
 Tabs.S:AddButton({
@@ -2044,7 +2048,7 @@ spawn(function()
                                                     EquipWeapon(_G.SelectWeapon)
                                                      AutoHaki()                                            
                                                     PosMon = v.HumanoidRootPart.CFrame
-                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                                     v.HumanoidRootPart.CanCollide = false
                                                     v.Humanoid.WalkSpeed = 0
                                                     v.Head.CanCollide = false
@@ -2122,7 +2126,7 @@ spawn(function()
                                         StartBring = true
                                         MonFarm = v.Name                
                                         PosMon = v.HumanoidRootPart.CFrame
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
                                     until not _G.AutoFarmBone or not v.Parent or v.Humanoid.Health <= 0
                                 end
@@ -2211,7 +2215,7 @@ local CakePos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375
                                         PosMon = v.HumanoidRootPart.CFrame
                                         MonFarm = v.Name
                                         v.Head.CanCollide = false
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                         NeedAttacking = true
                                         if v.Name == "Cookie Crafter" then
                                             Bring(v.Name, CFrame.new(-2212.88965, 37.0051041, -11969.2568, 0.458114207, -0, -0.888893366, 0, 1, -0, 0.888893366, 0, 0.458114207))
@@ -2288,7 +2292,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 PosMon = hrp.CFrame
-                                topos(hrp.CFrame * CFrame.new(0, 30, 0) * CFrame.new(math.random(-8,8), 0, math.random(-8,8)))
+                                topos(hrp.CFrame * CFrame.new(0, 30, 0))
                                 game:GetService("VirtualUser"):CaptureController()
                                 game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
                             until not _G.AutoSummerToken or not v.Parent or humanoid.Health <= 0
@@ -2373,6 +2377,206 @@ spawn(function()
         end
     end
 end)
+local clma = Tabs.St:AddSection("Dough King")
+local v237 = Tabs.St:AddToggle("v237", {
+    Title = "Auto Attack Dough King",
+    Description = "",
+    Callback = function(Value)
+        _G.AttackDough = Value
+        if Value == true then
+            getgenv().NoClipS = true
+        elseif Value == false then
+            getgenv().NoClipS = false
+    end
+end
+})
+spawn(function()
+    while task.wait() do
+        if _G.AttackDough and World3 then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                local plr = game.Players.LocalPlayer
+                local hrp = WaitHRP(plr)
+                if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                    task.wait(1)
+                    return
+                end
+
+                local foundBoss = false
+                for _, v in pairs(enemies:GetChildren()) do
+                    if v.Name == "Dough King" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        foundBoss = true
+                        repeat
+                            task.wait()
+                            if not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                                break
+                            end
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            topos(v.HumanoidRootPart.CFrame * Pos)
+                            sethiddenproperty(plr, "SimulationRadius", math.huge)
+                        until not _G.AutoAttackDough or not v.Parent or v.Humanoid.Health <= 0
+                    end
+                end
+
+                if not foundBoss then
+                    local cupo = game:GetService("ReplicatedStorage"):FindFirstChild("Red Commander")
+                    if cupo then
+                        topos(cupo.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        else 
+                       Fluent:Notify({
+                       Title = "Notification",
+                       Content = "Not Found Dough King",
+                       Duration = 5,
+})
+                    end
+                end
+            end)
+        end
+    end
+end)
+local pcks = Tabs.St:AddToggle("pcks", {
+    Title = "Hop Dough King",
+    Description = "",
+    Callback = function(Value)
+        _G.HopDough = Value
+end
+})
+local acbp = Tabs.St:AddSection("rip_indra True Form")
+local dpa = Tabs.St:AddToggle("dpa", {
+    Title = "Auto Attack rip_indra True Form",
+    Description = "",
+    Deafult = false,
+    Callback = function(Value)
+        _G.AttackRip = Value
+end
+})
+spawn(function()
+    while task.wait() do
+        if _G.AttackRip then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                local plr = game.Players.LocalPlayer
+                local hrp = WaitHRP(plr)
+                if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                    task.wait(1)
+                    return
+                end
+
+                local foundBoss = false
+                for _, v in pairs(enemies:GetChildren()) do
+                    if v.Name == "rip_indra True Form" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        foundBoss = true
+                        repeat
+                            task.wait()
+                            if not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                                break
+                            end
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                            sethiddenproperty(plr, "SimulationRadius", math.huge)
+                        until not _G.AttackRip or not v.Parent or v.Humanoid.Health <= 0
+                    end
+                end
+
+                if not foundBoss then
+                    local caldo = game:GetService("ReplicatedStorage"):FindFirstChild("rip_indra True Form")
+                    if caldl then
+                        topos(caldo.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        else 
+                       Fluent:Notify({
+                       Title = "Notification",
+                       Content = "Not Found rip_indra True Form",
+                       Duration = 5,
+})
+                    end
+                end
+            end)
+        end
+    end
+end)
+local cbjk = Tabs.St:AddToggle("cbjk", {
+    Title = "Hop rip_indra True Form",
+    Description = "",
+    Default = false
+    Callback = function(Value)
+        _G.HopRip = Value
+end
+})
+Tabs.St:AddSection("Darkbeard")
+local dumpy = Tabs.St:AddToggle("dumpy", {
+    Title = "Auto Attack Darkbeard",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AttackDark = Value
+        if Value == true then
+            getgenv().NoClipS = true
+        elseif Value == false then
+            getgenv().NoClipS = false
+    end
+end
+})
+spawn(function()
+    while task.wait() do
+        if _G.AttackDark then
+            pcall(function()
+                local enemies = game:GetService("Workspace").Enemies
+                local plr = game.Players.LocalPlayer
+                local hrp = WaitHRP(plr)
+                if not hrp or not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                    task.wait(1)
+                    return
+                end
+
+                local foundBoss = false
+                for _, v in pairs(enemies:GetChildren()) do
+                    if v.Name == "Darkbeard" and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        foundBoss = true
+                        repeat
+                            task.wait()
+                            if not plr.Character or not plr.Character.Humanoid or plr.Character.Humanoid.Health <= 0 then
+                                break
+                            end
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            v.HumanoidRootPart.CanCollide = false
+                            v.Humanoid.WalkSpeed = 0
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                            sethiddenproperty(plr, "SimulationRadius", math.huge)
+                        until not _G.AttackDark or not v.Parent or v.Humanoid.Health <= 0
+                    end
+                end
+
+                if not foundBoss then
+                    local caldo = game:GetService("ReplicatedStorage"):FindFirstChild("Darkbeard")
+                    if caldl then
+                        topos(caldo.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        else 
+                       Fluent:Notify({
+                       Title = "Notification",
+                       Content = "Not Found Darkbeard",
+                       Duration = 5,
+})
+                    end
+                end
+            end)
+        end
+    end
+end)
+local concacdj = Tabs.St:AddToggle("concacdj", {
+    Title = "Hop Server Darkbeard",
+    Description = "",
+    Default = false,
+    Callback = function(Valu
+        _G.HopDark = Value
+})
+
 local remote, idremote
 for _, v in next, ({game.ReplicatedStorage.Util, game.ReplicatedStorage.Common, game.ReplicatedStorage.Remotes, game.ReplicatedStorage.Assets, game.ReplicatedStorage.FX}) do
     for _, n in next, v:GetChildren() do
