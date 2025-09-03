@@ -1392,20 +1392,94 @@ function CheckItemBPCRBPCR(name)
     end
 end
 
-TweenSpeed = 350
-function topos(target)
-    local character = plr.Character
-  if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-  local rootPart = character.HumanoidRootPart
-  local distance = (target.Position - rootPart.Position).Magnitude
-  local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
-  local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = target})    
-  if plr.Character.Humanoid.Sit == true then
-    block.CFrame = CFrame.new(block.Position.X, target.Y, block.Position.Z)
-  end  
-  tween:Play()    
-  task.spawn(function() while tween.PlaybackState == Enum.PlaybackState.Playing do if not shouldTween then tween:Cancel() break end task.wait(0.1) end end)
+function topos(Pos)
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+        if not Pos then 
+
+            return 
+
+        end
+
+        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+
+        local nearestTeleport = CheckNearestTeleporter(Pos)
+
+        if nearestTeleport then
+
+            requestEntrance(nearestTeleport)
+
+        end
+
+        if not plr.Character:FindFirstChild("PartTele") then
+
+            local PartTele = Instance.new("Part", plr.Character)
+
+            PartTele.Size = Vector3.new(10,1,10)
+
+            PartTele.Name = "PartTele"
+
+            PartTele.Anchored = true
+
+            PartTele.Transparency = 1
+
+            PartTele.CanCollide = false
+
+            PartTele.CFrame = WaitHRP(plr).CFrame 
+
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+
+                if not isTeleporting then return end
+
+                task.wait()
+
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+                    local targetCFrame = PartTele.CFrame
+
+                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
+
+                end
+
+            end)
+
+        end
+
+        isTeleporting = true
+
+        local SpeedTw = getgenv().TweenSpeed
+
+        if Distance <= 250 then
+
+            SpeedTw = SpeedTw * 3
+
+        end
+
+        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
+
+        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
+
+        Tween:Play()
+
+        Tween.Completed:Connect(function(status)
+
+            if status == Enum.PlaybackState.Completed then
+
+                if plr.Character:FindFirstChild("PartTele") then
+
+                    plr.Character.PartTele:Destroy()
+
+                end
+
+                isTeleporting = false
+            end
+       end)
+    end
 end
+getgenv().TweenSpeed = 350
 getgenv().NoClipS = false
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
