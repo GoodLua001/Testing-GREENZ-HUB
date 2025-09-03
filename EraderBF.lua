@@ -2317,7 +2317,6 @@ spawn(function()
                                 v.Humanoid.WalkSpeed = 0
                                 topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                             until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
-                            StartBring = false
                         end
                     end
                 end
