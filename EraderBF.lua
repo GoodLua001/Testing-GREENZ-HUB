@@ -1475,11 +1475,106 @@ function topos(Pos)
                 end
 
                 isTeleporting = false
+
             end
-       end)
+
+        end)
+
     end
+
 end
+
+
+
 getgenv().TweenSpeed = 350
+
+
+
+function stopTeleport()
+
+    isTeleporting = false
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character:FindFirstChild("PartTele") then
+
+        plr.Character.PartTele:Destroy()
+
+    end
+
+end
+
+
+
+spawn(function()
+
+    while task.wait() do
+
+        if not isTeleporting then
+
+            stopTeleport()
+
+        end
+
+    end
+
+end)
+
+
+
+spawn(function()
+
+    local plr = game.Players.LocalPlayer
+
+    while task.wait() do
+
+        pcall(function()
+
+            if plr.Character:FindFirstChild("PartTele") then
+
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+
+                    stopTeleport()
+
+                end
+
+            end
+
+        end)
+
+    end
+
+end)
+
+
+
+local plr = game.Players.LocalPlayer
+
+
+
+local function onCharacterAdded(character)
+
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Died:Connect(function()
+
+        stopTeleport()
+
+    end)
+
+end
+
+
+
+plr.CharacterAdded:Connect(onCharacterAdded)
+
+
+
+if plr.Character then
+
+    onCharacterAdded(plr.Character)
+
+end
 getgenv().NoClipS = false
 game:GetService("RunService").Stepped:Connect(function()
     pcall(function()
