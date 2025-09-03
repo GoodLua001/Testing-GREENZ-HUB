@@ -1650,7 +1650,7 @@ Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
 Frame.Transparency = 1
-Frame.Position = UDim2.new(0.157012194, 0, 0.164366379, 0)
+Frame.Position = UDim2.new(0.120833337-0.10, 0, 0.0952890813+0.01, 0)
 Frame.Size = UDim2.new(0, 115, 0, 49)
 
 ImageButton.Parent = Frame
@@ -1659,7 +1659,7 @@ ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
 ImageButton.Size = UDim2.new(0, 64, 0, 64)
-ImageButton.Image = "rbxassetid://106497738167570"
+ImageButton.Image = "rbxassetid://92791387778839"
 ImageButton.Draggable = true
 ImageButton.MouseButton1Click:Connect(function()
 	game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
