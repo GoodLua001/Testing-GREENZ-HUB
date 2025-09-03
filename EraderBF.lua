@@ -1393,17 +1393,18 @@ function CheckItemBPCRBPCR(name)
 end
 
 TweenSpeed = 350
-function topos(KG)
-    local Distance = (KG.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-    local Speed = TweenSpeed  
-    local tweenInfo = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
-    local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, tweenInfo, {
-        CFrame = KG
-    })
-    tween:Play()
-    if _G.StopTween then
-        tween:Cancel()
-    end
+function topos(target)
+    local character = plr.Character
+  if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+  local rootPart = character.HumanoidRootPart
+  local distance = (target.Position - rootPart.Position).Magnitude
+  local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+  local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = target})    
+  if plr.Character.Humanoid.Sit == true then
+    block.CFrame = CFrame.new(block.Position.X, target.Y, block.Position.Z)
+  end  
+  tween:Play()    
+  task.spawn(function() while tween.PlaybackState == Enum.PlaybackState.Playing do if not shouldTween then tween:Cancel() break end task.wait(0.1) end end)
 end
 getgenv().NoClipS = false
 game:GetService("RunService").Stepped:Connect(function()
@@ -2172,7 +2173,7 @@ spawn(function()
                         net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                     end
                 end
-
+                if map:FindFirstChild("Oni Realm") then
                 local enemyFolder = workspace:FindFirstChild("Enemies")
                 local targetList = {
                  ["Oni Soldier"] = true 
@@ -2186,8 +2187,8 @@ spawn(function()
                         and v.Humanoid.Health > 0 then
                             repeat
                                 task.wait()
-                                StartBring = true
                                 AutoHaki()
+                                StartBring = true
                                 EquipWeapon(_G.SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
                                 if v:FindFirstChild("Head") then
@@ -2196,6 +2197,7 @@ spawn(function()
                                 v.Humanoid.WalkSpeed = 0
                                 topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                             until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
+                            end
                         end
                     end
                 end
