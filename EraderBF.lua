@@ -1654,8 +1654,8 @@ Frame.Position = UDim2.new(0.120833337-0.10, 0, 0.0952890813+0.01, 0)
 Frame.Size = UDim2.new(0, 115, 0, 49)
 
 ImageButton.Parent = Frame
+ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ImageButton.BackgroundColor3 = Color3.fromRBG(0, 0, 0)
 ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.218742043, 0, -0.155235752, 0)
 ImageButton.Size = UDim2.new(0, 64, 0, 64)
@@ -2503,7 +2503,7 @@ end)
 local cbjk = Tabs.St:AddToggle("cbjk", {
     Title = "Hop rip_indra True Form",
     Description = "",
-    Default = false
+    Default = false,
     Callback = function(Value)
         _G.HopRip = Value
 end
@@ -2573,10 +2573,10 @@ local concacdj = Tabs.St:AddToggle("concacdj", {
     Title = "Hop Server Darkbeard",
     Description = "",
     Default = false,
-    Callback = function(Valu
+    Callback = function(Value)
         _G.HopDark = Value
+end
 })
-
 local remote, idremote
 for _, v in next, ({game.ReplicatedStorage.Util, game.ReplicatedStorage.Common, game.ReplicatedStorage.Remotes, game.ReplicatedStorage.Assets, game.ReplicatedStorage.FX}) do
     for _, n in next, v:GetChildren() do
