@@ -382,221 +382,6 @@ GetConnectionEnemies = function(a)
     end
   end
 end
-function topos(Pos)
-
-    local plr = game.Players.LocalPlayer
-
-    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-        if not Pos then 
-
-            return 
-
-        end
-
-        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-
-        local nearestTeleport = CheckNearestTeleporter(Pos)
-
-        if nearestTeleport then
-
-            requestEntrance(nearestTeleport)
-
-        end
-
-        if not plr.Character:FindFirstChild("PartTele") then
-
-            local PartTele = Instance.new("Part", plr.Character)
-
-            PartTele.Size = Vector3.new(10,1,10)
-
-            PartTele.Name = "PartTele"
-
-            PartTele.Anchored = true
-
-            PartTele.Transparency = 1
-
-            PartTele.CanCollide = false
-
-            PartTele.CFrame = WaitHRP(plr).CFrame 
-
-            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-
-                if not isTeleporting then return end
-
-                task.wait()
-
-                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-                    local targetCFrame = PartTele.CFrame
-
-                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
-
-                end
-
-            end)
-
-        end
-
-        isTeleporting = true
-
-        local SpeedTw = getgenv().TweenSpeed
-
-        if Distance <= 250 then
-
-            SpeedTw = SpeedTw * 3
-
-        end
-
-        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
-
-        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
-
-        Tween:Play()
-
-        Tween.Completed:Connect(function(status)
-
-            if status == Enum.PlaybackState.Completed then
-
-                if plr.Character:FindFirstChild("PartTele") then
-
-                    plr.Character.PartTele:Destroy()
-
-                end
-
-                isTeleporting = false
-
-            end
-
-        end)
-
-    end
-
-end
-
-
-
-getgenv().TweenSpeed = 350
-
-
-
-function stopTeleport()
-
-    isTeleporting = false
-
-    local plr = game.Players.LocalPlayer
-
-    if plr.Character:FindFirstChild("PartTele") then
-
-        plr.Character.PartTele:Destroy()
-
-    end
-
-end
-
-
-
-spawn(function()
-
-    while task.wait() do
-
-        if not isTeleporting then
-
-            stopTeleport()
-
-        end
-
-    end
-
-end)
-
-
-
-spawn(function()
-
-    local plr = game.Players.LocalPlayer
-
-    while task.wait() do
-
-        pcall(function()
-
-            if plr.Character:FindFirstChild("PartTele") then
-
-                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-
-                    stopTeleport()
-
-                end
-
-            end
-
-        end)
-
-    end
-
-end)
-
-
-
-local plr = game.Players.LocalPlayer
-
-
-
-local function onCharacterAdded(character)
-
-    local humanoid = character:WaitForChild("Humanoid")
-
-    humanoid.Died:Connect(function()
-
-        stopTeleport()
-
-    end)
-
-end
-
-
-
-plr.CharacterAdded:Connect(onCharacterAdded)
-
-
-
-if plr.Character then
-
-    onCharacterAdded(plr.Character)
-
-end
-getgenv().NoClipS = false
-game:GetService("RunService").Stepped:Connect(function()
-    pcall(function()
-        if not (game:GetService("Players").LocalPlayer.Character 
-            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
-            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-        if getgenv().NoClipS then
-            if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
-                local bv = Instance.new("BodyVelocity")
-                bv.Name = "BodyClip"
-                bv.Velocity = Vector3.new(0, 0, 0)
-                bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-                bv.P = 15000
-                bv.Parent = game:GetService("Players").LocalPlayer.Character.Head
-            end
-            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = false
-                end
-            end
-        else
-            if game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
-                game:GetService("Players").LocalPlayer.Character.Head.BodyClip:Destroy()
-            end
-            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = true
-                end
-            end
-        end
-    end)
-end)
 LowCpu = function()
   local decalsyeeted = true
   local g = game
@@ -959,19 +744,222 @@ QuestNeta = function()
     [6] = PosQ
   }
 end
-TweenSpeed = 350
-function TPA(KG)
-    local Distance = (KG.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-    local Speed = TweenSpeed  
-    local tweenInfo = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
-    local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, tweenInfo, {
-        CFrame = KG
-    })
-    tween:Play()
-    if _G.StopTween then
-        tween:Cancel()
+function topos(Pos)
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+        if not Pos then 
+
+            return 
+
+        end
+
+        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+
+        local nearestTeleport = CheckNearestTeleporter(Pos)
+
+        if nearestTeleport then
+
+            requestEntrance(nearestTeleport)
+
+        end
+
+        if not plr.Character:FindFirstChild("PartTele") then
+
+            local PartTele = Instance.new("Part", plr.Character)
+
+            PartTele.Size = Vector3.new(10,1,10)
+
+            PartTele.Name = "PartTele"
+
+            PartTele.Anchored = true
+
+            PartTele.Transparency = 1
+
+            PartTele.CanCollide = false
+
+            PartTele.CFrame = WaitHRP(plr).CFrame 
+
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+
+                if not isTeleporting then return end
+
+                task.wait()
+
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+                    local targetCFrame = PartTele.CFrame
+
+                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
+
+                end
+
+            end)
+
+        end
+
+        isTeleporting = true
+
+        local SpeedTw = getgenv().TweenSpeed
+
+        if Distance <= 250 then
+
+            SpeedTw = SpeedTw * 3
+
+        end
+
+        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
+
+        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
+
+        Tween:Play()
+
+        Tween.Completed:Connect(function(status)
+
+            if status == Enum.PlaybackState.Completed then
+
+                if plr.Character:FindFirstChild("PartTele") then
+
+                    plr.Character.PartTele:Destroy()
+
+                end
+
+                isTeleporting = false
+
+            end
+
+        end)
+
     end
+
 end
+
+
+
+getgenv().TweenSpeed = 350
+
+
+
+function stopTeleport()
+
+    isTeleporting = false
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character:FindFirstChild("PartTele") then
+
+        plr.Character.PartTele:Destroy()
+
+    end
+
+end
+
+
+
+spawn(function()
+
+    while task.wait() do
+
+        if not isTeleporting then
+
+            stopTeleport()
+
+        end
+
+    end
+
+end)
+
+
+
+spawn(function()
+
+    local plr = game.Players.LocalPlayer
+
+    while task.wait() do
+
+        pcall(function()
+
+            if plr.Character:FindFirstChild("PartTele") then
+
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+
+                    stopTeleport()
+
+                end
+
+            end
+
+        end)
+
+    end
+
+end)
+
+
+
+local plr = game.Players.LocalPlayer
+
+
+
+local function onCharacterAdded(character)
+
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Died:Connect(function()
+
+        stopTeleport()
+
+    end)
+
+end
+
+
+
+plr.CharacterAdded:Connect(onCharacterAdded)
+
+
+
+if plr.Character then
+
+    onCharacterAdded(plr.Character)
+
+end
+getgenv().NoClipS = false
+game:GetService("RunService").Stepped:Connect(function()
+    pcall(function()
+        if not (game:GetService("Players").LocalPlayer.Character 
+            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
+            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
+        if getgenv().NoClipS then
+            if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
+                local bv = Instance.new("BodyVelocity")
+                bv.Name = "BodyClip"
+                bv.Velocity = Vector3.new(0, 0, 0)
+                bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                bv.P = 15000
+                bv.Parent = game:GetService("Players").LocalPlayer.Character.Head
+            end
+            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                end
+            end
+        else
+            if game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
+                game:GetService("Players").LocalPlayer.Character.Head.BodyClip:Destroy()
+            end
+            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = true
+                end
+            end
+        end
+    end)
+end)
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -1451,7 +1439,7 @@ spawn(function()
                 if not foundBoss then
                     local djtme = game:GetService("ReplicatedStorage"):FindFirstChild("Red Commander")
                     if djtme then
-                        _tp(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        topos(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
                         else 
                        Fluent:Notify({
                        Title = "Notification",
