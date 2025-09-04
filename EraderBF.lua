@@ -656,7 +656,7 @@ end
 spawn(function()
   while task.wait() do
     pcall(function()
-      if _G.SailBoat_Hydra or _G.WardenBoss or _G.AutoFactory or _G.HighestMirage or _G.HCM or _G.PGB or _G.Leviathan1 or _G.UPGDrago or _G.Complete_Trials or _G.TpDrago_Prehis or _G.BuyDrago or _G.AutoFireFlowers or _G.DT_Uzoth or _G.AutoBerry or _G.Prehis_Find or _G.Prehis_Skills or _G.Prehis_DB or _G.Prehis_DE or _G.FarmBlazeEM or _G.Dojoo or _G.CollectPresent or _G.AutoLawKak or _G.TpLab or _G.AutoPhoenixF or _G.AutoFarmChest or _G.AutoHytHallow or _G.LongsWord or _G.BlackSpikey or _G.AutoHolyTorch or _G.TrainDrago  or _G.AutoSaber or _G.FarmMastery_Dev or _G.CitizenQuest or _G.AutoEctoplasm or _G.KeysRen or _G.Auto_Rainbow_Haki or _G.obsFarm or _G.AutoBigmom or _G.Doughv2 or _G.AuraBoss or _G.Raiding or _G.Auto_Cavender or _G.TpPly or _G.Bartilo_Quest or _G.Level or _G.FarmEliteHunt or _G.AutoZou or _G.AutoFarm_Bone or getgenv().AutoMaterial or _G.CraftVM or _G.FrozenTP or _G.TPDoor or _G.AcientOne or _G.AutoFarmNear or _G.AutoRaidCastle or _G.DarkBladev3 or _G.AutoFarmRaid or _G.Auto_Cake_Prince or _G.Addealer or _G.TPNpc or _G.TwinHook or _G.FindMirage or _G.FarmChestM or _G.Shark or _G.TerrorShark or _G.Piranha or _G.MobCrew or _G.SeaBeast1 or _G.FishBoat or _G.AutoPole or _G.AutoPoleV2 or _G.Auto_SuperHuman or _G.AutoDeathStep or _G.Auto_SharkMan_Karate or _G.Auto_Electric_Claw or _G.AutoDragonTalon or _G.Auto_Def_DarkCoat or _G.Auto_God_Human or _G.Auto_Tushita or _G.AutoMatSoul or _G.AutoKenVTWO or _G.AutoSerpentBow or _G.AutoFMon or _G.Auto_Soul_Guitar or _G.TPGEAR or _G.AutoSaw or _G.AutoTridentW2 or _G.Auto_StartRaid or _G.AutoEvoRace or _G.AutoGetQuestBounty or _G.MarinesCoat or _G.TravelDres or _G.Defeating or _G.DummyMan or _G.Auto_Yama or _G.Auto_SwanGG or _G.SwanCoat or _G.AutoEcBoss or _G.Auto_Mink or _G.Auto_Human or _G.Auto_Skypiea or _G.Auto_Fish or _G.CDK_TS or _G.CDK_YM or _G.CDK or _G.AutoFarmGodChalice or _G.AutoFistDarkness or _G.AutoMiror or _G.Teleport or _G.AutoKilo or _G.AutoGetUsoap or _G.Praying or _G.TryLucky or _G.AutoColShad or _G.AutoUnHaki or _G.Auto_DonAcces or _G.AutoRipIngay or _G.DragoV3 or _G.DragoV1 or _G.SailBoats or NextIs or _G.FarmGodChalice or _G.IceBossRen or senth or senth2 or _G.Lvthan or _G.beasthunter or _G.DangerLV or _G.Relic123 or _G.tweenKitsune or _G.Collect_Ember or _G.AutofindKitIs or _G.snaguine or _G.TwFruits or _G.tweenKitShrine or _G.Tp_LgS or _G.Tp_MasterA or _G.tweenShrine or _G.FarmMastery_G or _G.FarmMastery_S or _G.FarmSummer or _G.AutoOniSoldier or _G.AutoFarmRed then
+      if _G.SailBoat_Hydra or _G.WardenBoss or _G.AutoFactory or _G.HighestMirage or _G.HCM or _G.PGB or _G.Leviathan1 or _G.UPGDrago or _G.Complete_Trials or _G.TpDrago_Prehis or _G.BuyDrago or _G.AutoFireFlowers or _G.DT_Uzoth or _G.AutoBerry or _G.Prehis_Find or _G.Prehis_Skills or _G.Prehis_DB or _G.Prehis_DE or _G.FarmBlazeEM or _G.Dojoo or _G.CollectPresent or _G.AutoLawKak or _G.TpLab or _G.AutoPhoenixF or _G.AutoFarmChest or _G.AutoHytHallow or _G.LongsWord or _G.BlackSpikey or _G.AutoHolyTorch or _G.TrainDrago  or _G.AutoSaber or _G.FarmMastery_Dev or _G.CitizenQuest or _G.AutoEctoplasm or _G.KeysRen or _G.Auto_Rainbow_Haki or _G.obsFarm or _G.AutoBigmom or _G.Doughv2 or _G.AuraBoss or _G.Raiding or _G.Auto_Cavender or _G.TpPly or _G.Bartilo_Quest or _G.Level or _G.FarmEliteHunt or _G.AutoZou or _G.AutoFarm_Bone or getgenv().AutoMaterial or _G.CraftVM or _G.FrozenTP or _G.TPDoor or _G.AcientOne or _G.AutoFarmNear or _G.AutoRaidCastle or _G.DarkBladev3 or _G.AutoFarmRaid or _G.Auto_Cake_Prince or _G.Addealer or _G.TPNpc or _G.TwinHook or _G.FindMirage or _G.FarmChestM or _G.Shark or _G.TerrorShark or _G.Piranha or _G.MobCrew or _G.SeaBeast1 or _G.FishBoat or _G.AutoPole or _G.AutoPoleV2 or _G.Auto_SuperHuman or _G.AutoDeathStep or _G.Auto_SharkMan_Karate or _G.Auto_Electric_Claw or _G.AutoDragonTalon or _G.Auto_Def_DarkCoat or _G.Auto_God_Human or _G.Auto_Tushita or _G.AutoMatSoul or _G.AutoKenVTWO or _G.AutoSerpentBow or _G.AutoFMon or _G.Auto_Soul_Guitar or _G.TPGEAR or _G.AutoSaw or _G.AutoTridentW2 or _G.Auto_StartRaid or _G.AutoEvoRace or _G.AutoGetQuestBounty or _G.MarinesCoat or _G.TravelDres or _G.Defeating or _G.DummyMan or _G.Auto_Yama or _G.Auto_SwanGG or _G.SwanCoat or _G.AutoEcBoss or _G.Auto_Mink or _G.Auto_Human or _G.Auto_Skypiea or _G.Auto_Fish or _G.CDK_TS or _G.CDK_YM or _G.CDK or _G.AutoFarmGodChalice or _G.AutoFistDarkness or _G.AutoMiror or _G.Teleport or _G.AutoKilo or _G.AutoGetUsoap or _G.Praying or _G.TryLucky or _G.AutoColShad or _G.AutoUnHaki or _G.Auto_DonAcces or _G.AutoRipIngay or _G.DragoV3 or _G.DragoV1 or _G.SailBoats or NextIs or _G.FarmGodChalice or _G.IceBossRen or senth or senth2 or _G.Lvthan or _G.beasthunter or _G.DangerLV or _G.Relic123 or _G.tweenKitsune or _G.Collect_Ember or _G.AutofindKitIs or _G.snaguine or _G.TwFruits or _G.tweenKitShrine or _G.Tp_LgS or _G.Tp_MasterA or _G.tweenShrine or _G.FarmMastery_G or _G.FarmMastery_S or _G.AutoSummer or _G.AutoOniSoldier or _G.AutoFarmRed then
         shouldTween = true
         if not plr.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
           local Noclip = Instance.new("BodyVelocity")
@@ -744,222 +744,6 @@ QuestNeta = function()
     [6] = PosQ
   }
 end
-function topos(Pos)
-
-    local plr = game.Players.LocalPlayer
-
-    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-        if not Pos then 
-
-            return 
-
-        end
-
-        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-
-        local nearestTeleport = CheckNearestTeleporter(Pos)
-
-        if nearestTeleport then
-
-            requestEntrance(nearestTeleport)
-
-        end
-
-        if not plr.Character:FindFirstChild("PartTele") then
-
-            local PartTele = Instance.new("Part", plr.Character)
-
-            PartTele.Size = Vector3.new(10,1,10)
-
-            PartTele.Name = "PartTele"
-
-            PartTele.Anchored = true
-
-            PartTele.Transparency = 1
-
-            PartTele.CanCollide = false
-
-            PartTele.CFrame = WaitHRP(plr).CFrame 
-
-            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-
-                if not isTeleporting then return end
-
-                task.wait()
-
-                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-
-                    local targetCFrame = PartTele.CFrame
-
-                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
-
-                end
-
-            end)
-
-        end
-
-        isTeleporting = true
-
-        local SpeedTw = getgenv().TweenSpeed
-
-        if Distance <= 250 then
-
-            SpeedTw = SpeedTw * 3
-
-        end
-
-        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
-
-        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
-
-        Tween:Play()
-
-        Tween.Completed:Connect(function(status)
-
-            if status == Enum.PlaybackState.Completed then
-
-                if plr.Character:FindFirstChild("PartTele") then
-
-                    plr.Character.PartTele:Destroy()
-
-                end
-
-                isTeleporting = false
-
-            end
-
-        end)
-
-    end
-
-end
-
-
-
-getgenv().TweenSpeed = 350
-
-
-
-function stopTeleport()
-
-    isTeleporting = false
-
-    local plr = game.Players.LocalPlayer
-
-    if plr.Character:FindFirstChild("PartTele") then
-
-        plr.Character.PartTele:Destroy()
-
-    end
-
-end
-
-
-
-spawn(function()
-
-    while task.wait() do
-
-        if not isTeleporting then
-
-            stopTeleport()
-
-        end
-
-    end
-
-end)
-
-
-
-spawn(function()
-
-    local plr = game.Players.LocalPlayer
-
-    while task.wait() do
-
-        pcall(function()
-
-            if plr.Character:FindFirstChild("PartTele") then
-
-                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-
-                    stopTeleport()
-
-                end
-
-            end
-
-        end)
-
-    end
-
-end)
-
-
-
-local plr = game.Players.LocalPlayer
-
-
-
-local function onCharacterAdded(character)
-
-    local humanoid = character:WaitForChild("Humanoid")
-
-    humanoid.Died:Connect(function()
-
-        stopTeleport()
-
-    end)
-
-end
-
-
-
-plr.CharacterAdded:Connect(onCharacterAdded)
-
-
-
-if plr.Character then
-
-    onCharacterAdded(plr.Character)
-
-end
-getgenv().NoClipS = false
-game:GetService("RunService").Stepped:Connect(function()
-    pcall(function()
-        if not (game:GetService("Players").LocalPlayer.Character 
-            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
-            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
-        if getgenv().NoClipS then
-            if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
-                local bv = Instance.new("BodyVelocity")
-                bv.Name = "BodyClip"
-                bv.Velocity = Vector3.new(0, 0, 0)
-                bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-                bv.P = 15000
-                bv.Parent = game:GetService("Players").LocalPlayer.Character.Head
-            end
-            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = false
-                end
-            end
-        else
-            if game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
-                game:GetService("Players").LocalPlayer.Character.Head.BodyClip:Destroy()
-            end
-            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = true
-                end
-            end
-        end
-    end)
-end)
-
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -1324,13 +1108,7 @@ local kuribell = Tabs.Main:AddToggle("kuribell", {
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.FarmOniToken = Value
-        if Value == true then
-            getgenv().NoClipS = true
-        elseif Value == false then
-            getgenv().NoClipS = false
-   
-    end
+        _G.AutoOniSoldier = Value
 end
 })
 spawn(function()
@@ -1343,11 +1121,11 @@ spawn(function()
         CFrameTpOni = CFrame.new(-12577.8281, 336.9557, -7440.9580)
     end
     while task.wait() do
-        if _G.FarmOniToken then
+        if _G.AutoOniSoldier then
             pcall(function()
                 local map = game:GetService("Workspace").Map
                 if not map:FindFirstChild("Oni Realm") then
-                    topos(CFrameTpOni)
+                    _tp(CFrameTpOni)
                     
                     local player = game.Players.LocalPlayer
                     local char = player.Character
@@ -1382,8 +1160,8 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 v.Humanoid.WalkSpeed = 0
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                            until not _G.FarmOniToken or not v.Parent or v.Humanoid.Health <= 0
+                                Attack.Kill(v, _G.FarmOniToken)
+                            until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
                     end
@@ -1398,11 +1176,6 @@ local duma = Tabs.Main:AddToggle("duma", {
     Default = false,
     Callback = function(Value)
         _G.AutoFarmRed = Value
-                if Value == true then
-            getgenv().NoClipS = true
-        elseif Value == false then
-            getgenv().NoClipS = false
-    end
 end
 })
 spawn(function()
@@ -1430,7 +1203,7 @@ spawn(function()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
-                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                            Attack.Kill(v, _G.AutoFarmRed)
                             sethiddenproperty(plr, "SimulationRadius", math.huge)
                         until not _G.AutoFarmRed or not v.Parent or v.Humanoid.Health <= 0
                     end
@@ -1439,7 +1212,7 @@ spawn(function()
                 if not foundBoss then
                     local djtme = game:GetService("ReplicatedStorage"):FindFirstChild("Red Commander")
                     if djtme then
-                        topos(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        _tp(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
                         else 
                        Fluent:Notify({
                        Title = "Notification",
@@ -1459,11 +1232,6 @@ local concukuri = Tabs.Main:AddToggle("concukuri", {
     Default = false,
     Callback = function(Value)
         _G.AutoSummer = Value
-                if Value == true then
-            getgenv().NoClipS = true
-        elseif Value == false then
-            getgenv().NoClipS = false
-    end
 end
 })
 spawn(function() 
@@ -1480,7 +1248,7 @@ spawn(function()
                             repeat task.wait()
                                 AutoHaki()                   
                                 EquipWeapon(_G.SelectWeapon)
-                                topos(hrp.CFrame * CFrame.new(0, 30, 0))
+                                Attack.Kill(v, _G.AutoSummer)
                                 hrp.CanCollide = false
                                 humanoid.WalkSpeed = 0
                                 if v:FindFirstChild("Head") then
