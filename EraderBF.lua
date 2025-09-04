@@ -1116,8 +1116,8 @@ spawn(function()
   end
 end)
 Tabs.Main:AddSection("Oni Realms")
-local kuribell = Tabs.Main:AddToggle('kuribell", {
-    Title = "Auto Farm Oni Token"
+local kuribell = Tabs.Main:AddToggle("kuribell", {
+    Title = "Auto Farm Oni Token",
     Description = "",
     Default = false,
     Callback = function(Value)
