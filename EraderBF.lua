@@ -1126,44 +1126,29 @@ spawn(function()
                 local map = game:GetService("Workspace").Map
                 if not map:FindFirstChild("Oni Realm") then
                     _tp(CFrameTpOni)
-                    
+
                     local player = game.Players.LocalPlayer
                     local char = player.Character
                     local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                    
+
                     if hrp and (hrp.Position - CFrameTpOni.Position).Magnitude < 5 then
                         local args = {
-                        [1] = "InitiateTeleportToTemple"
-}
+                             = "InitiateTeleportToTemple"
+                        }
                         local net = game:GetService("ReplicatedStorage").Modules.Net
                         net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
                     end
                 end
                 if map:FindFirstChild("Oni Realm") then
-                local enemyFolder = workspace:FindFirstChild("Enemies")
-                local targetList = {
-                 ["Oni Soldier"] = true 
-}
-
-                if enemyFolder then
-                    for _, v in pairs(enemyFolder:GetChildren()) do
-                        if targetList[v.Name] 
-                        and v:FindFirstChild("Humanoid") 
-                        and v:FindFirstChild("HumanoidRootPart") 
-                        and v.Humanoid.Health > 0 then
-                            repeat task.wait()
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                v.HumanoidRootPart.CanCollide = false
-                                if v:FindFirstChild("Head") then
-                                    v.Head.CanCollide = false
-                                end
-                                v.Humanoid.WalkSpeed = 0
-                                Attack.Kill(v.HumanoidRootPart.CFrame, _G.FarmOniToken)
-                            until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
-                            end
-                        end
-                    end
+                    local Oni = {
+                        "Oni Soldier"
+                    }
+                    local v = GetConnectionEnemies(Oni)
+                    repeat 
+                        wait()
+                        Attack.Kill(v, _G.AutoOniSoldier)
+                        EquipWeapon(_G.SelectWeapon)
+                    until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
                 end
             end)
         end
