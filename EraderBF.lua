@@ -1151,8 +1151,7 @@ spawn(function()
                         and v:FindFirstChild("Humanoid") 
                         and v:FindFirstChild("HumanoidRootPart") 
                         and v.Humanoid.Health > 0 then
-                            repeat
-                                task.wait()
+                            repeat task.wait()
                                 AutoHaki()
                                 EquipWeapon(_G.SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
@@ -1160,7 +1159,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 v.Humanoid.WalkSpeed = 0
-                                Attack.Kill(v, _G.FarmOniToken)
+                                Attack.Kill(v.HumanoidRootPart.CFrame, _G.FarmOniToken)
                             until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
@@ -1203,7 +1202,7 @@ spawn(function()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
-                            Attack.Kill(v, _G.AutoFarmRed)
+                            Attack.Kill(v.HumanoidRootPart.CFrame, _G.AutoFarmRed)
                             sethiddenproperty(plr, "SimulationRadius", math.huge)
                         until not _G.AutoFarmRed or not v.Parent or v.Humanoid.Health <= 0
                     end
@@ -1248,7 +1247,7 @@ spawn(function()
                             repeat task.wait()
                                 AutoHaki()                   
                                 EquipWeapon(_G.SelectWeapon)
-                                Attack.Kill(v, _G.AutoSummer)
+                                Attack.Kill(v.HumanoidRootPart.CFrame, _G.AutoSummer)
                                 hrp.CanCollide = false
                                 humanoid.WalkSpeed = 0
                                 if v:FindFirstChild("Head") then
