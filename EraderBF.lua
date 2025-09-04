@@ -1173,7 +1173,7 @@ spawn(function()
                                     v.Head.CanCollide = false
                                 end
                                 v.Humanoid.WalkSpeed = 0
-                                TPA(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                _tp(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                             until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
                             end
                         end
@@ -1216,7 +1216,7 @@ spawn(function()
                             EquipWeapon(_G.SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
                             v.Humanoid.WalkSpeed = 0
-                            TPA(v.HumanoidRootPart.CFrame * Pos)
+                            _tp(v.HumanoidRootPart.CFrame * Pos)
                             sethiddenproperty(plr, "SimulationRadius", math.huge)
                         until not _G.AutoFarmRed or not v.Parent or v.Humanoid.Health <= 0
                     end
@@ -1225,7 +1225,7 @@ spawn(function()
                 if not foundBoss then
                     local djtme = game:GetService("ReplicatedStorage"):FindFirstChild("Red Commander")
                     if djtme then
-                        TPA(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
+                        _tp(djtme.HumanoidRootPart.CFrame * CFrame.new(5, 10, 7))
                         else 
                        Fluent:Notify({
                        Title = "Notification",
@@ -1258,7 +1258,7 @@ spawn(function()
                             repeat task.wait()
                                 AutoHaki()                   
                                 EquipWeapon(_G.SelectWeapon)
-                                TPA(hrp.CFrame * CFrame.new(0, 30, 0))
+                                _tp(hrp.CFrame * CFrame.new(0, 30, 0))
                                 hrp.CanCollide = false
                                 humanoid.WalkSpeed = 0
                                 if v:FindFirstChild("Head") then
