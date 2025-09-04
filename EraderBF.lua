@@ -1133,7 +1133,7 @@ spawn(function()
 
                     if hrp and (hrp.Position - CFrameTpOni.Position).Magnitude < 5 then
                         local args = {
-                             = "InitiateTeleportToTemple"
+                           [1] = "InitiateTeleportToTemple"
                         }
                         local net = game:GetService("ReplicatedStorage").Modules.Net
                         net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
