@@ -85,7 +85,81 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
+getgenv().BringMobs = true
+local Players = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+local Player = Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
 
+local Enemies = workspace:WaitForChild("Enemies")
+
+_BringEnemies = function(hadoken)
+	getgenv().BringMobs = getgenv().BringMobs or false
+
+	local TRoot = hadoken:FindFirstChild("HumanoidRootPart") or hadoken.PrimaryPart
+	local THumanoid = hadoken:FindFirstChildWhichIsA("Humanoid")
+
+	if TRoot and THumanoid and THumanoid.Health > 0 then
+		pcall(sethiddenproperty, Player, "SimulationRadius", math.huge)
+
+		local ToCFrame = TRoot.CFrame
+		local name = hadoken.Name
+		local pos = Character:GetPivot().Position
+
+		for _, mob in ipairs(Enemies:GetChildren()) do
+			if mob.Name == name and not CollectionService:HasTag(mob, "QMobs") then
+				local humanoid = mob:FindFirstChildWhichIsA("Humanoid")
+				if humanoid and humanoid.Health > 0 then
+					CollectionService:AddTag(mob, "QMobs")
+					task.spawn(function()
+						while mob and mob.Parent and humanoid and humanoid.Health > 0 do
+							task.wait(0.5)
+						end
+						if mob and mob.Parent then
+							CollectionService:RemoveTag(mob, "QMobs")
+							local a = mob:FindFirstChild("MobBringAttachment")
+							if a then a:Destroy() end
+						end
+					end)
+				end
+			end
+		end
+		for _, k in ipairs(CollectionService:GetTagged("QMobs")) do
+			if k.Name == name then
+				local root = k:FindFirstChild("HumanoidRootPart") or k.PrimaryPart
+				local humanoid = k:FindFirstChildWhichIsA("Humanoid")
+
+				if root and humanoid and humanoid.Health > 0 and (pos - root.Position).Magnitude < 400 then
+					humanoid.WalkSpeed = 0
+					humanoid.JumpPower = 0
+
+					local attachment = root:FindFirstChild("MobBringAttachment") or Instance.new("Attachment")
+					attachment.Name = "MobBringAttachment"
+					attachment.Parent = root
+
+					local align = attachment:FindFirstChild("MobAlignPosition") or Instance.new("AlignPosition")
+					align.Name = "MobAlignPosition"
+					align.Mode = Enum.PositionAlignmentMode.OneAttachment
+					align.Position = ToCFrame.Position
+					align.Responsiveness = 300
+					align.MaxForce = 1e6
+					align.Attachment0 = attachment
+					align.Parent = attachment
+
+					task.spawn(function()
+						while k and k.Parent and humanoid and humanoid.Health > 0 do
+							align.Position = ToCFrame.Position
+							task.wait(0.5)
+						end
+						if attachment and attachment.Parent then
+							attachment:Destroy()
+						end
+					end)
+				end
+			end
+		end
+	end
+end
 local Attack = {}
 Attack.__index = Attack
 Attack.Alive = function(model) if not model then return end local Humanoid = model:FindFirstChild("Humanoid") return Humanoid and Humanoid.Health > 0 end
@@ -96,7 +170,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -108,7 +182,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -120,7 +194,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -131,7 +205,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
   if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
@@ -141,7 +215,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -157,7 +231,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  _BringEnemies(model)
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
@@ -835,62 +909,6 @@ v1:AddToggle({
         _G.BringMob = Value
 end
 })
-local function TweenObject(object, targetCFrame, speed)
-    speed = speed or 350
-    local distance = (targetCFrame.Position - object.Position).Magnitude
-    local info = TweenInfo.new(distance / speed, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(object, info, {CFrame = targetCFrame})
-    tween:Play()
-end
-
-local function GetMobPosition(enemyName)
-    local pos, count = nil, 0
-    for _, enemy in ipairs(Workspace.Enemies:GetChildren()) do
-        if enemy.Name == enemyName and enemy:FindFirstChild("HumanoidRootPart") then
-            if not pos then
-                pos = enemy.HumanoidRootPart.Position
-            else
-                pos = pos + enemy.HumanoidRootPart.Position
-            end
-            count = count + 1
-        end
-    end
-    return count > 0 and pos / count or nil
-end
-
-if _G.BringMob and BringEnemy then
-    local enemies = Workspace.Enemies:GetChildren()
-    if #enemies > 0 then
-        local totalPos = {}
-        for _, enemy in ipairs(enemies) do
-            if not totalPos[enemy.Name] then
-                local avgPos = GetMobPosition(enemy.Name)
-                if avgPos then
-                    totalPos[enemy.Name] = avgPos
-                end
-            end
-        end
-        for _, enemy in ipairs(enemies) do
-            if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and enemy:FindFirstChild("HumanoidRootPart") then
-                if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
-                    local avgPos = totalPos[enemy.Name]
-                    if avgPos then
-                        local targetCFrame = CFrame.new(avgPos)
-                        local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
-                        if offsetMag > 3 and offsetMag <= 280 then
-                            TweenObject(enemy.HumanoidRootPart, targetCFrame, 300)
-                            enemy.HumanoidRootPart.CanCollide = false
-                            enemy.Humanoid.WalkSpeed = 0
-                            enemy.Humanoid.JumpPower = 0
-                            enemy.Humanoid:ChangeState(14)
-                            pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) end)
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
 v1:AddToggle({
     ["Title"] = "Fast Attack",
     ["Title2"] = "Not Supported Gas M1",
