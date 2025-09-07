@@ -187,14 +187,6 @@ Attack.Kill = function(model, Succes)
 		else
 			_tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))
 		end
-
-		if RandomCFrame then
-			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
-			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
-			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0))
-			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
-			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
-		end
 	end
 end
 Attack.Kill2 = function(model, Succes)
@@ -1075,34 +1067,36 @@ DuM:AddToggle({
 end
 })
 spawn(function()
-  while wait(Sec) do 
-    if _G.AutoFarmBone then
-      pcall(function()        
-        local player = game.Players.LocalPlayer
-        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        local questUI = player.PlayerGui.Main.Quest
-        local BonesTable = {"Reborn Skeleton","Living Zombie","Demonic Soul","Posessed Mummy"}
-        if not root then return end
-        local bone = GetConnectionEnemies(BonesTable)
-          if bone then
-	        if _G.AcceptQuestC and not questUI.Visible then
-              local questPos = CFrame.new(-9516.99316,172.017181,6078.46533,0,0,-1,0,1,0,1,0,0)
-              _tp(questPos)
-              while (questPos.Position - root.Position).Magnitude > 50 do
-                wait(0.2)
-              end
-              local randomQuest = math.random(1, 4)
-              local questData = {
-                [1] = {"StartQuest", "HauntedQuest2", 2},
-                [2] = {"StartQuest", "HauntedQuest2", 1},
-                [3] = {"StartQuest", "HauntedQuest1", 1},
-                [4] = {"StartQuest", "HauntedQuest1", 2}
-              }                    
-              local success, response = pcall(function()
-                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
-              end)
-            end
-		    repeat task.wait() Attack.Kill(bone, _G.AutoFarmBone) AutoHaki() until not _G.AutoFarmBone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible) 
+  while wait() do
+    if _G.Auto_Cake_Prince then
+      pcall(function()
+        if game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
+          local Soul = { "Soul Reaper" }
+          local c = GetConnectionEnemies(Soul)
+          repeat 
+            task.wait()
+            Attack.Kill(c, _G.AutoFarmBone)
+            EquipWeapon(_G.SelectWeapon)
+            AutoHaki()
+          until not (_G.AutoFarmBone and c and c.Parent and c.Humanoid.Health > 0)
+        else
+          local BoneMob = {
+            "Reborn Skeleton",
+            "Living Zombie",
+            "Demonic Soul",
+            "Posessed Mummy"
+          }
+          local v = GetConnectionEnemies(BoneMob)
+          if v then
+            repeat 
+              wait()
+              Attack.Kill(v, _G.AutoFarmBone)
+              EquipWeapon(_G.SelectWeapon)
+              AutoHaki()
+            until not (_G.AutoFarmBine and v and v.Parent and v.Humanoid.Health > 0)
+          else
+            _tp(CFrame.new(-2077, 252, -12373))
+          end
         end
       end)
     end
@@ -1121,46 +1115,36 @@ spawn(function()
   while wait() do
     if _G.Auto_Cake_Prince then
       pcall(function()
-        local player = game.Players.LocalPlayer
-        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        local questUI = player.PlayerGui.Main.Quest
-        local enemies = workspace.Enemies
-        local bigMirror = workspace.Map.CakeLoaf.BigMirror
-        if not root then return end
-        if not bigMirror:FindFirstChild("Other") then
-          _tp(CFrame.new(-2077, 252, -12373))
-        end        
-        if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
-          local v = GetConnectionEnemies("Cake Prince")
-          if v then
-            repeat wait() Attack.Kill2(v, _G.Auto_Cake_Prince)until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
-          else
-            if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
-              _tp(CFrame.new(-2151.82, 149.32, -12404.91))
-            end
+        local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
+          if (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
+            _tp(CFrame.new(-2151.82, 149.32, -12404.91))
+          end
+          local cake = { "Cake Prince" }
+          local c = GetConnectionEnemies(cake)
+          if c then
+            repeat 
+              task.wait()
+              Attack.Kill(c, _G.Auto_Cake_Prince)
+              EquipWeapon(_G.SelectWeapon)
+              AutoHaki()
+            until not (_G.Auto_Cake_Prince and c and c.Parent and c.Humanoid.Health > 0)
           end
         else
-          local CakePrince = {"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}
-          local v = GetConnectionEnemies(CakePrince)
+          local CakeMob = {
+            "Cookie Crafter",
+            "Cake Guard",
+            "Baking Staff",
+            "Head Baker",
+          }
+          local v = GetConnectionEnemies(CakeMob)
           if v then
-            if _G.AcceptQuestC and not questUI.Visible then
-              local questPos = CFrame.new(-1927.92, 37.8, -12842.54)
-              _tp(questPos)
-              while (questPos.Position - root.Position).Magnitude > 50 do
-                wait(0.2)
-              end
-              local randomQuest = math.random(1, 4)
-              local questData = {
-                [1] = {"StartQuest", "CakeQuest2", 2},
-                [2] = {"StartQuest", "CakeQuest2", 1},
-                [3] = {"StartQuest", "CakeQuest1", 1},
-                [4] = {"StartQuest", "CakeQuest1", 2}
-              }                    
-              local success, response = pcall(function()
-                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
-              end)
-            end
-            repeat wait() Attack.Kill(v, _G.Auto_Cake_Prince) until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
+            repeat 
+              wait()
+              Attack.Kill(v, _G.Auto_Cake_Prince)
+              EquipWeapon(_G.SelectWeapon)
+              AutoHaki()
+            until not (_G.Auto_Cake_Prince and v and v.Parent and v.Humanoid.Health > 0)
           else
             _tp(CFrame.new(-2077, 252, -12373))
           end
@@ -1213,137 +1197,6 @@ spawn(function()
 end)
 
 local SME = CM:AddSection("Summer Event")
-local Mas = CM:AddSection("Mastery Farm")
-Mas:AddDropdown({
-    ["Title"] = "Select Mode Farm Mastery",
-    ["Content"] = "",
-    ["Multi"] = false,
-    ["Options"] = {"Katakuri", "Bones"},
-    ["Default"] = "Katakuri",
-    ["Callback"] = function(Value)
-        SelectIsland = Value
-    end
-})
-Mas:AddToggle({
-    ["Title"] = "Auto Farm Mastery Fruits",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.FarmMastery_Dev = Value
-end
-})
-spawn(function()
-  while wait(Sec) do
-    if _G.FarmMastery_Dev then
-      pcall(function()
-        if SelectIsland == "Katakuri" then         
-          local v = GetConnectionEnemies(mastery1)
-		  if v then		   
-		    HealthM = v.Humanoid.MaxHealth * 70 / 100
-		    repeat wait()
-		      MousePos = v.HumanoidRootPart.Position
-		      Attack.Mas(v,_G.FarmMastery_Dev)
-		    until _G.FarmMastery_Dev == false or v.Humanoid.Health <= 0 or not v.Parent         		         		        
-		  else
-		    _tp(CFrame.new(-1943.676513671875, 251.5095672607422, -12337.880859375)) 
-		  end
-		elseif SelectIsland == "Bones" then
-          local v = GetConnectionEnemies(mastery2)
-		  if v then		
-		    HealthM = v.Humanoid.MaxHealth * 70 / 100
-		    repeat wait()
-		      MousePos = v.HumanoidRootPart.Position
-		      Attack.Mas(v,_G.FarmMastery_Dev)
-		    until _G.FarmMastery_Dev == false or v.Humanoid.Health <= 0 or not v.Parent		        
-		  else
-		    _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 		    
-		  end
-        end
-      end)
-    end
-  end
-end)
-Mas:AddToggle({
-    ["Title"] = "Auto Farm Mastery Gun",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.FarmMastery_G = Value
-end
-})
-spawn(function()
-  while wait(Sec) do
-    if _G.FarmMastery_G then
-      pcall(function()
-        if SelectIsland == "Katakuri" then
-          local v = GetConnectionEnemies(mastery1)
-		  if v then		      
-		    HealthM = v.Humanoid.MaxHealth * 70 / 100
-		    repeat wait()
-		      MousePos = v.HumanoidRootPart.Position
-		      Attack.Masgun(v,_G.FarmMastery_G)
-		      local Modules = replicated:FindFirstChild("Modules")
-              local Net = Modules:FindFirstChild("Net")
-              local RE_ShootGunEvent = Net:FindFirstChild("RE/ShootGunEvent")    
-              if plr.Character:FindFirstChildOfClass("Tool").ToolTip ~= "Gun" then return end
-              if plr.Character:FindFirstChildOfClass("Tool") and plr.Character:FindFirstChildOfClass("Tool").Name == 'Skull Guitar' then
-                SoulGuitar = true
-		        plr.Character:FindFirstChildOfClass("Tool").RemoteEvent:FireServer("TAP", MousePos)
-		        if _G.FarmMastery_G then
-		          vim1:SendMouseButtonEvent(0, 0, 0, true, game, 1);wait(0.05)
-                  vim1:SendMouseButtonEvent(0, 0, 0, false, game, 1);wait(0.05)
-                end
-		      elseif plr.Character:FindFirstChildOfClass("Tool") and plr.Character:FindFirstChildOfClass("Tool").Name ~= 'Skull Guitar' then
-		        SoulGuitar = false
-		        RE_ShootGunEvent:FireServer(MousePos, { v.HumanoidRootPart })
-		        if _G.FarmMastery_G then
-		          vim1:SendMouseButtonEvent(0, 0, 0, true, game, 1);wait(0.05)
-                  vim1:SendMouseButtonEvent(0, 0, 0, false, game, 1);wait(0.05)
-                end
-		      end		            		
-		    until _G.FarmMastery_G == false or v.Humanoid.Health <= 0 or not v.Parent    
-		    SoulGuitar = false     		         		        
-		  else
-		    _tp(CFrame.new(-1943.676513671875, 251.5095672607422, -12337.880859375)) 		    
-	  	  end
-		elseif SelectIsland == "Bones" then
-          local v = GetConnectionEnemies(mastery2)
-		  if v then		      
-		    HealthM = v.Humanoid.MaxHealth * 70 / 100
-		    repeat wait()
-		      MousePos = v.HumanoidRootPart.Position
-		      Attack.Masgun(v,_G.FarmMastery_G)
-		      local Modules = replicated:FindFirstChild("Modules")
-              local Net = Modules:FindFirstChild("Net")
-              local RE_ShootGunEvent = Net:FindFirstChild("RE/ShootGunEvent")    
-              if plr.Character:FindFirstChildOfClass("Tool").ToolTip ~= "Gun" then return end
-              if plr.Character:FindFirstChildOfClass("Tool") and plr.Character:FindFirstChildOfClass("Tool").Name == 'Skull Guitar' then
-                SoulGuitar = true
-		        plr.Character:FindFirstChildOfClass("Tool").RemoteEvent:FireServer("TAP", MousePos)
-		        if _G.FarmMastery_G then
-		          vim1:SendMouseButtonEvent(0, 0, 0, true, game, 1);wait(0.05)
-                  vim1:SendMouseButtonEvent(0, 0, 0, false, game, 1);wait(0.05)
-                end
-		      elseif plr.Character:FindFirstChildOfClass("Tool") and plr.Character:FindFirstChildOfClass("Tool").Name ~= 'Skull Guitar' then
-		        SoulGuitar = false
-		        RE_ShootGunEvent:FireServer(MousePos, { v.HumanoidRootPart })
-		        if _G.FarmMastery_G then
-		          vim1:SendMouseButtonEvent(0, 0, 0, true, game, 1);wait(0.05)
-                  vim1:SendMouseButtonEvent(0, 0, 0, false, game, 1);wait(0.05)
-                end
-		      end		            		
-		    until _G.FarmMastery_G == false or v.Humanoid.Health <= 0 or not v.Parent    
-		    SoulGuitar = false     		         		        
-		  else
-		    _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 
-	  	  end
-        end
-      end)
-    end
-  end
-end)
 local Cak = FlurioreGui:CreateTab({
 	["Name"] = "Tab Stack Farming",
 	["Icon"] = "rbxassetid://7733960981"
