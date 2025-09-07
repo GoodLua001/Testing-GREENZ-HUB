@@ -85,83 +85,6 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
-getgenv().BringMobs = true
-local Players = game:GetService("Players")
-local CollectionService = game:GetService("CollectionService")
-local Player = Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAdded:Wait()
-
-local Enemies = workspace:WaitForChild("Enemies")
-
-_BringEnemies = function(hadoken)
-	getgenv().BringMobs = getgenv().BringMobs or false
-
-	local TRoot = hadoken:FindFirstChild("HumanoidRootPart") or hadoken.PrimaryPart
-	local THumanoid = hadoken:FindFirstChildWhichIsA("Humanoid")
-
-	if TRoot and THumanoid and THumanoid.Health > 0 then
-		pcall(sethiddenproperty, Player, "SimulationRadius", math.huge)
-
-		local ToCFrame = TRoot.CFrame
-		local name = hadoken.Name
-		local pos = Character:GetPivot().Position
-
-		for _, mob in ipairs(Enemies:GetChildren()) do
-			if mob.Name == name and not CollectionService:HasTag(mob, "QMobs") then
-				local humanoid = mob:FindFirstChildWhichIsA("Humanoid")
-				if humanoid and humanoid.Health > 0 then
-					CollectionService:AddTag(mob, "QMobs")
-					task.spawn(function()
-						while mob and mob.Parent and humanoid and humanoid.Health > 0 do
-							task.wait(0.5)
-						end
-						if mob and mob.Parent then
-							CollectionService:RemoveTag(mob, "QMobs")
-							local a = mob:FindFirstChild("MobBringAttachment")
-							if a then a:Destroy() end
-						end
-					end)
-				end
-			end
-		end
-		for _, k in ipairs(CollectionService:GetTagged("QMobs")) do
-			if k.Name == name then
-				local root = k:FindFirstChild("HumanoidRootPart") or k.PrimaryPart
-				local humanoid = k:FindFirstChildWhichIsA("Humanoid")
-
-				if root and humanoid and humanoid.Health > 0 and (pos - root.Position).Magnitude < 400 then
-					humanoid.WalkSpeed = 0
-					humanoid.JumpPower = 0
-
-					local attachment = root:FindFirstChild("MobBringAttachment") or Instance.new("Attachment")
-					attachment.Name = "MobBringAttachment"
-					attachment.Parent = root
-
-					local align = attachment:FindFirstChild("MobAlignPosition") or Instance.new("AlignPosition")
-					align.Name = "MobAlignPosition"
-					align.Mode = Enum.PositionAlignmentMode.OneAttachment
-					align.Position = ToCFrame.Position
-					align.Responsiveness = 300
-					align.MaxForce = 1e6
-					align.Attachment0 = attachment
-					align.Parent = attachment
-
-					task.spawn(function()
-						while k and k.Parent and humanoid and humanoid.Health > 0 do
-							align.Position = ToCFrame.Position
-							task.wait(0.5)
-						end
-						if attachment and attachment.Parent then
-							attachment:Destroy()
-						end
-					end)
-				end
-			end
-		end
-	end
-end
-
-
 
 local Attack = {}
 Attack.__index = Attack
@@ -176,7 +99,7 @@ Attack.Kill = function(model, Succes)
 		end
 
 		PosMon = model:GetAttribute("Locked").Position
-		_BringEnemies(model)
+		BringEnemy()
 
 		EquipWeapon(_G.SelectWeapon)
 		local Equipped = Player.Character:FindFirstChildOfClass("Tool")
@@ -196,7 +119,7 @@ Attack.Kill2 = function(model, Succes)
 		end
 
 		PosMon = model:GetAttribute("Locked").Position
-		_BringEnemies(model)
+		BringEnemy()
 
 		EquipWeapon(_G.SelectWeapon)
 		local Equipped = Player.Character:FindFirstChildOfClass("Tool")
@@ -343,6 +266,21 @@ Useskills = function(weapon, skill)
     vim1:SendKeyEvent(true, "Y", false, game);
     vim1:SendKeyEvent(false, "Y", false, game);
   end
+end
+BringEnemy = function()
+  if not _B then return end
+  for _,v in pairs(workspace.Enemies:GetChildren()) do
+    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+	  if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
+	    v.PrimaryPart.CFrame = CFrame.new(PosMon)
+		v.PrimaryPart.CanCollide = true;
+		v:FindFirstChild("Humanoid").WalkSpeed = 0;
+		v:FindFirstChild("Humanoid").JumpPower = 0;
+		if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy()end;
+		plr.SimulationRadius = math.huge
+	  end
+	end                               
+  end                    	
 end
 local gg = getrawmetatable(game)
 local old = gg.__namecall
