@@ -191,21 +191,65 @@ statsSetings = function(Num, value)
     end
   end
 end
-BringEnemy = function()
-  if not _B then return end
-  for _,v in pairs(workspace.Enemies:GetChildren()) do
-    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-	  if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-	    v.PrimaryPart.CFrame = CFrame.new(PosMon)
-		v.PrimaryPart.CanCollide = true;
-		v:FindFirstChild("Humanoid").WalkSpeed = 0;
-		v:FindFirstChild("Humanoid").JumpPower = 0;
-		if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy()end;
-		plr.SimulationRadius = math.huge
-	  end
-	end                               
-  end                    	
+local function TweenObject(object, targetCFrame, speed)
+    speed = speed or 350
+    local distance = (targetCFrame.Position - object.Position).Magnitude
+    local info = TweenInfo.new(distance / speed, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(object, info, {CFrame = targetCFrame})
+    tween:Play()
 end
+
+local function GetMobPosition(enemyName)
+    local pos, count = nil, 0
+    for _, enemy in ipairs(Workspace.Enemies:GetChildren()) do
+        if enemy.Name == enemyName and enemy:FindFirstChild("HumanoidRootPart") then
+            if not pos then
+                pos = enemy.HumanoidRootPart.Position
+            else
+                pos = pos + enemy.HumanoidRootPart.Position
+            end
+            count = count + 1
+        end
+    end
+    return count > 0 and pos / count or nil
+end
+
+BringEnemy = function(value)
+    if value then
+        local enemies = Workspace.Enemies:GetChildren()
+        if #enemies > 0 then
+            local totalPos = {}
+            for _, enemy in ipairs(enemies) do
+                if not totalPos[enemy.Name] then
+                    local avgPos = GetMobPosition(enemy.Name)
+                    if avgPos then
+                        totalPos[enemy.Name] = avgPos
+                    end
+                end
+            end
+            for _, enemy in ipairs(enemies) do
+                if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and enemy:FindFirstChild("HumanoidRootPart") then
+                    if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
+                        local avgPos = totalPos[enemy.Name]
+                        if avgPos then
+                            local targetCFrame = CFrame.new(avgPos)
+                            local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
+                            if offsetMag > 3 and offsetMag <= 280 then
+                                TweenObject(enemy.HumanoidRootPart, targetCFrame, 300)
+                                enemy.HumanoidRootPart.CanCollide = false
+                                enemy.Humanoid.WalkSpeed = 0
+                                enemy.Humanoid.JumpPower = 0
+                                enemy.Humanoid:ChangeState(14)
+                                pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) end)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 Useskills = function(weapon, skill)
   if weapon == "Melee" then
     weaponSc("Melee")
