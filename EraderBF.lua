@@ -1199,22 +1199,22 @@ else
 end
 
 SME:Dropdown({
-    Title = "Select Boss Pain",
-    Content = "",
-    Multi = false,
-    Options = bosspain,
-    Default = bossdefault,
-    Callback = function(Value)
+    ["Title"] = "Select Boss Pain",
+    ["Content"] = "",
+    ["Multi"] = false,
+    ["Options"] = bosspain,
+    ["Default"] = bossdefault,
+    ["Callback"] = function(Value)
         _G.SelectBossPain = Value
     end
 })
 
 SME:AddToggle({
-    Title = "Auto Farm Boss Pain",
-    Title2 = "",
-    Content = "",
-    Default = false,
-    Callback = function(Value)
+    ["Title"] = "Auto Farm Boss Pain",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
         _G.AutoFarmPain = Value
     end
 })
