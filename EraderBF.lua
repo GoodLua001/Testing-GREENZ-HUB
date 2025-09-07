@@ -1068,7 +1068,7 @@ end
 })
 spawn(function()
   while wait() do
-    if _G.Auto_Cake_Prince then
+    if _G.AutoFarmBone then
       pcall(function()
         if game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
           local Soul = { "Soul Reaper" }
@@ -1093,7 +1093,7 @@ spawn(function()
               Attack.Kill(v, _G.AutoFarmBone)
               EquipWeapon(_G.SelectWeapon)
               AutoHaki()
-            until not (_G.AutoFarmBine and v and v.Parent and v.Humanoid.Health > 0)
+            until not (_G.AutoFarmBone and v and v.Parent and v.Humanoid.Health > 0)
           else
             _tp(CFrame.new(-2077, 252, -12373))
           end
