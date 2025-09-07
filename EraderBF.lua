@@ -656,7 +656,7 @@ end
 spawn(function()
   while task.wait() do
     pcall(function()
-      if _G.SailBoat_Hydra or _G.WardenBoss or _G.AutoFactory or _G.HighestMirage or _G.HCM or _G.PGB or _G.Leviathan1 or _G.UPGDrago or _G.Complete_Trials or _G.TpDrago_Prehis or _G.BuyDrago or _G.AutoFireFlowers or _G.DT_Uzoth or _G.AutoBerry or _G.Prehis_Find or _G.Prehis_Skills or _G.Prehis_DB or _G.Prehis_DE or _G.FarmBlazeEM or _G.Dojoo or _G.CollectPresent or _G.AutoLawKak or _G.TpLab or _G.AutoPhoenixF or _G.AutoFarmChest or _G.AutoHytHallow or _G.LongsWord or _G.BlackSpikey or _G.AutoHolyTorch or _G.TrainDrago  or _G.AutoSaber or _G.FarmMastery_Dev or _G.CitizenQuest or _G.AutoEctoplasm or _G.KeysRen or _G.Auto_Rainbow_Haki or _G.obsFarm or _G.AutoBigmom or _G.Doughv2 or _G.AuraBoss or _G.Raiding or _G.Auto_Cavender or _G.TpPly or _G.Bartilo_Quest or _G.Level or _G.FarmEliteHunt or _G.AutoZou or _G.AutoFarm_Bone or getgenv().AutoMaterial or _G.CraftVM or _G.FrozenTP or _G.TPDoor or _G.AcientOne or _G.AutoFarmNear or _G.AutoRaidCastle or _G.DarkBladev3 or _G.AutoFarmRaid or _G.Auto_Cake_Prince or _G.Addealer or _G.TPNpc or _G.TwinHook or _G.FindMirage or _G.FarmChestM or _G.Shark or _G.TerrorShark or _G.Piranha or _G.MobCrew or _G.SeaBeast1 or _G.FishBoat or _G.AutoPole or _G.AutoPoleV2 or _G.Auto_SuperHuman or _G.AutoDeathStep or _G.Auto_SharkMan_Karate or _G.Auto_Electric_Claw or _G.AutoDragonTalon or _G.Auto_Def_DarkCoat or _G.Auto_God_Human or _G.Auto_Tushita or _G.AutoMatSoul or _G.AutoKenVTWO or _G.AutoSerpentBow or _G.AutoFMon or _G.Auto_Soul_Guitar or _G.TPGEAR or _G.AutoSaw or _G.AutoTridentW2 or _G.Auto_StartRaid or _G.AutoEvoRace or _G.AutoGetQuestBounty or _G.MarinesCoat or _G.TravelDres or _G.Defeating or _G.DummyMan or _G.Auto_Yama or _G.Auto_SwanGG or _G.SwanCoat or _G.AutoEcBoss or _G.Auto_Mink or _G.Auto_Human or _G.Auto_Skypiea or _G.Auto_Fish or _G.CDK_TS or _G.CDK_YM or _G.CDK or _G.AutoFarmGodChalice or _G.AutoFistDarkness or _G.AutoMiror or _G.Teleport or _G.AutoKilo or _G.AutoGetUsoap or _G.Praying or _G.TryLucky or _G.AutoColShad or _G.AutoUnHaki or _G.Auto_DonAcces or _G.AutoRipIngay or _G.DragoV3 or _G.DragoV1 or _G.SailBoats or NextIs or _G.FarmGodChalice or _G.IceBossRen or senth or senth2 or _G.Lvthan or _G.beasthunter or _G.DangerLV or _G.Relic123 or _G.tweenKitsune or _G.Collect_Ember or _G.AutofindKitIs or _G.snaguine or _G.TwFruits or _G.tweenKitShrine or _G.Tp_LgS or _G.Tp_MasterA or _G.tweenShrine or _G.FarmMastery_G or _G.FarmMastery_S or _G.AutoSummer or _G.AutoOniSoldier or _G.AutoFarmRed then
+      if _G.SailBoat_Hydra or _G.WardenBoss or _G.AutoFactory or _G.HighestMirage or _G.HCM or _G.PGB or _G.Leviathan1 or _G.UPGDrago or _G.Complete_Trials or _G.TpDrago_Prehis or _G.BuyDrago or _G.AutoFireFlowers or _G.DT_Uzoth or _G.AutoBerry or _G.Prehis_Find or _G.Prehis_Skills or _G.Prehis_DB or _G.Prehis_DE or _G.FarmBlazeEM or _G.Dojoo or _G.CollectPresent or _G.AutoLawKak or _G.TpLab or _G.AutoPhoenixF or _G.AutoFarmChest or _G.AutoHytHallow or _G.LongsWord or _G.BlackSpikey or _G.AutoHolyTorch or _G.TrainDrago  or _G.AutoSaber or _G.FarmMastery_Dev or _G.CitizenQuest or _G.AutoEctoplasm or _G.KeysRen or _G.Auto_Rainbow_Haki or _G.obsFarm or _G.AutoBigmom or _G.Doughv2 or _G.AuraBoss or _G.Raiding or _G.Auto_Cavender or _G.TpPly or _G.Bartilo_Quest or _G.Level or _G.FarmEliteHunt or _G.AutoZou or _G.AutoFarm_Bone or getgenv().AutoMaterial or _G.CraftVM or _G.FrozenTP or _G.TPDoor or _G.AcientOne or _G.AutoFarmNear or _G.AutoRaidCastle or _G.DarkBladev3 or _G.AutoFarmRaid or _G.Auto_Cake_Prince or _G.Addealer or _G.TPNpc or _G.TwinHook or _G.FindMirage or _G.FarmChestM or _G.Shark or _G.TerrorShark or _G.Piranha or _G.MobCrew or _G.SeaBeast1 or _G.FishBoat or _G.AutoPole or _G.AutoPoleV2 or _G.Auto_SuperHuman or _G.AutoDeathStep or _G.Auto_SharkMan_Karate or _G.Auto_Electric_Claw or _G.AutoDragonTalon or _G.Auto_Def_DarkCoat or _G.Auto_God_Human or _G.Auto_Tushita or _G.AutoMatSoul or _G.AutoKenVTWO or _G.AutoSerpentBow or _G.AutoFMon or _G.Auto_Soul_Guitar or _G.TPGEAR or _G.AutoSaw or _G.AutoTridentW2 or _G.Auto_StartRaid or _G.AutoEvoRace or _G.AutoGetQuestBounty or _G.MarinesCoat or _G.TravelDres or _G.Defeating or _G.DummyMan or _G.Auto_Yama or _G.Auto_SwanGG or _G.SwanCoat or _G.AutoEcBoss or _G.Auto_Mink or _G.Auto_Human or _G.Auto_Skypiea or _G.Auto_Fish or _G.CDK_TS or _G.CDK_YM or _G.CDK or _G.AutoFarmGodChalice or _G.AutoFistDarkness or _G.AutoMiror or _G.Teleport or _G.AutoKilo or _G.AutoGetUsoap or _G.Praying or _G.TryLucky or _G.AutoColShad or _G.AutoUnHaki or _G.Auto_DonAcces or _G.AutoRipIngay or _G.DragoV3 or _G.DragoV1 or _G.SailBoats or NextIs or _G.FarmGodChalice or _G.IceBossRen or senth or senth2 or _G.Lvthan or _G.beasthunter or _G.DangerLV or _G.Relic123 or _G.tweenKitsune or _G.Collect_Ember or _G.AutofindKitIs or _G.snaguine or _G.TwFruits or _G.tweenKitShrine or _G.Tp_LgS or _G.Tp_MasterA or _G.tweenShrine or _G.FarmMastery_G or _G.FarmMastery_S or _G.AutoSummer or _G.AutoOniSoldier or _G.AutoFarmRed or _G.AutoLevel or _G.AutoFarmBone or _G.AutoFarmKatakuri then
         shouldTween = true
         if not plr.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
           local Noclip = Instance.new("BodyVelocity")
@@ -1162,184 +1162,41 @@ DuM:AddToggle({
         _G.AutoRaidCastle = Value
 end
 })
-while wait(Sec) do
-    if _G.AutoRaidCastle then
-        pcall(function()
-            local CFrameCastleRaid = CFrame.new(-5496.17432, 313.768921, -2841.53027, 0.924894512, 7.37058015e-09, 0.380223751, 3.5881019e-08, 1, -1.06665446e-07, -0.380223751, 1.12297109e-07, 0.924894512)
-            if (CFrame.new(-5539.3115234375, 313.800537109375, -2972.372314453125).Position - Root.Position).Magnitude <= 500 then
-                for i, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                        if v.Name then
-                            if (v.HumanoidRootPart.Position - Root.Position).Magnitude <= 2000 then
-                                repeat 
+spawn(function()
+    while wait(Sec) do
+        if _G.AutoRaidCastle then
+            pcall(function()
+                local CFrameCastleRaid = CFrame.new(-5496.17432, 313.768921, -2841.53027, 0.924894512, 7.37058015e-09, 0.380223751, 3.5881019e-08, 1, -1.06665446e-07, -0.380223751, 1.12297109e-07, 0.924894512)
+                if (CFrame.new(-5539.3115234375, 313.800537109375, -2972.372314453125).Position - Root.Position).Magnitude <= 500 then
+                    for _, v in pairs(workspace.Enemies:GetChildren()) do
+                        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            if v.Name and (v.HumanoidRootPart.Position - Root.Position).Magnitude <= 2000 then
+                                while _G.AutoRaidCastle and v.Parent and v.Humanoid.Health > 0 and workspace.Enemies:FindFirstChild(v.Name) do
                                     wait()
                                     Attack.Kill(v, _G.AutoRaidCastle)
-                                until not _G.AutoRaidCastle or not v.Parent or v.Humanoid.Health <= 0 or not workspace.Enemies:FindFirstChild(v.Name)
+                                end
                             end
                         end
                     end
-                end
-            else
-                local Castle_Mob = {
-                    "Galley Pirate", "Galley Captain", "Raider", "Mercenary", "Vampire", "Zombie", "Snow Trooper", "Winter Warrior", "Lab Subordinate", 
-                    "Horned Warrior", "Magma Ninja", "Lava Pirate", "Ship Deckhand", "Ship Engineer", "Ship Steward", "Ship Officer",
-                    "Arctic Warrior", "Snow Lurker", "Sea Soldier", "Water Fighter"
-                }
-                for i = 1, #Castle_Mob do
-                    if replicated:FindFirstChild(Castle_Mob[i]) then
-                        for _, v in pairs(replicated:GetChildren()) do
-                            if table.find(Castle_Mob, v.Name) then
-                                _tp(CFrameCastleRaid)
-                            end
+                else
+                    local Castle_Mob = {
+                        "Galley Pirate", "Galley Captain", "Raider", "Mercenary", "Vampire", "Zombie", "Snow Trooper", "Winter Warrior", "Lab Subordinate", 
+                        "Horned Warrior", "Magma Ninja", "Lava Pirate", "Ship Deckhand", "Ship Engineer", "Ship Steward", "Ship Officer",
+                        "Arctic Warrior", "Snow Lurker", "Sea Soldier", "Water Fighter"
+                    }
+                    for _, mob in ipairs(Castle_Mob) do
+                        local mobObj = replicated:FindFirstChild(mob)
+                        if mobObj then
+                            _tp(CFrameCastleRaid)
                         end
                     end
                 end
-            end
-        end)
+            end)
+        end
     end
-end
+end)
 
 local SME = CM:AddSection("Summer Event")
-SME:AddToggle({
-    ["Title"] = "Auto Farm Oni Token",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoOniSoldier = Value
-end
-})
-spawn(function()
-    local CFrameTpOni
-    if World1 then
-        CFrameTpOni = CFrame.new(-614.1772, 7.8933, 1535.4930)
-    elseif World2 then
-        CFrameTpOni = CFrame.new(-2025.7010, 72.7401, -2706.4855)
-    elseif World3 then
-        CFrameTpOni = CFrame.new(-12577.8281, 336.9557, -7440.9580)
-    end
-    while task.wait() do
-        if _G.AutoOniSoldier then
-            pcall(function()
-                local map = game:GetService("Workspace").Map
-                if not map:FindFirstChild("Oni Realm") then
-                    _tp(CFrameTpOni)
-                    wait(2.5)
-                    local player = game.Players.LocalPlayer
-                    local char = player.Character
-                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-
-                    if hrp and (hrp.Position - CFrameTpOni.Position).Magnitude < 5 then
-                        local args = {
-                           [1] = "InitiateTeleportToTemple"
-                        }
-                        local net = game:GetService("ReplicatedStorage").Modules.Net
-                        net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
-                    end
-                end
-                if map:FindFirstChild("Oni Realm") then
-                    local Oni = {
-                        "Oni Soldier"
-                    }
-                    local v = GetConnectionEnemies(Oni)
-                    repeat 
-                        wait()
-                        Attack.Kill(v, _G.AutoOniSoldier)
-                        EquipWeapon(_G.SelectWeapon)
-                    until not _G.AutoOniSoldier or not v.Parent or v.Humanoid.Health <= 0
-                end
-            end)
-        end
-    end
-end)
-SME:AddToggle({
-    ["Title"] = "Auto Farm Red Commander",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoFarmRed = Value
-end
-})
-spawn(function()
-    local CFrameTpOni
-
-    if World1 then
-        CFrameTpOni = CFrame.new(-614.1772, 7.8933, 1535.4930)
-    elseif World2 then
-        CFrameTpOni = CFrame.new(-2025.7010, 72.7401, -2706.4855)
-    elseif World3 then
-        CFrameTpOni = CFrame.new(-12577.8281, 336.9557, -7440.9580)
-    end
-
-    while task.wait() do
-        if _G.AutoFarmRed then
-            pcall(function()
-                local map = game:GetService("Workspace").Map
-
-                if not map:FindFirstChild("Oni Realm") then
-                    _tp(CFrameTpOni)
-                    wait(2.5)
-                    local player = game.Players.LocalPlayer
-                    local char = player.Character
-                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-
-                    if hrp and (hrp.Position - CFrameTpOni.Position).Magnitude < 5 then
-                        local args = { "InitiateTeleportToTemple" }
-                        local net = game:GetService("ReplicatedStorage").Modules.Net
-                        net:FindFirstChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
-                    end
-                end
-
-                if map:FindFirstChild("Oni Realm") then
-                    local args = {
-                        "InitiateTeleportToInterior"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
-                    if map:FindFirstChild("Oni Realm (Interior)") then
-                        local Red = { "Red Commander" }
-                        local v = GetConnectionEnemies(Red)
-                        repeat 
-                            wait()
-                            Attack.Kill(v, _G.AutoFarmRed)
-                            EquipWeapon(_G.SelectWeapon)
-                        until not _G.AutoFarmRed or not v.Parent or v.Humanoid.Health <= 0
-                    end
-                end
-
-            end)
-        end
-    end
-end)
-SME:AddToggle({
-    ["Title"] = "Auto Farm Summer Token",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoSummer = Value
-end
-})
-spawn(function()
-    while task.wait() do
-        if _G.AutoSummer then
-            pcall(function()
-                for _, humanoid in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                    if humanoid.DisplayName:find("%[Electrified%]") then
-                        local v = humanoid
-                        repeat
-                            wait()
-                            Attack.Kill(v, _G.AutoSummer)
-                            EquipWeapon(_G.SelectWeapon)
-                            game:GetService("VirtualUser"):CaptureController()
-                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,672))
-                        until not _G.AutoSummer or not v.Parent or v.Humanoid.Health <= 0
-                    end
-                end
-            end)
-        end
-    end
-end)
 local Mas = CM:AddSection("Mastery Farm")
 local modemas = {"Katakuri", "Bones"}
 Mas:AddDropdown({
