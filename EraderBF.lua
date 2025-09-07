@@ -740,7 +740,7 @@ QuestNeta = function()
     [6] = PosQ
   }
 end
-local FlurioreFixLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/aoowkwjwj/Hello/refs/heads/main/XinChaoNheee.lua"))()
+ local FlurioreFixLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/aoowkwjwj/Hello/refs/heads/main/XinChaoNheee.lua"))()
 local FlurioreGui = FlurioreFixLib:MakeGui({
 	["NameHub"] = "Yiner Hub",
 	["Description"] = "Free",
@@ -1180,10 +1180,7 @@ spawn(function()
         end
     end
 end)
-
-local SME = CM:AddSection("Summer Event")
-local bosspain, bossdefault
-
+local bosspain,bossdefault
 if World1 then
     bosspain = {"The Saw", "The Gorilla King", "Bobby", "Yeti", "Mob Leader", "Vice Admiral", "Warden", "Chief Warden", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Saber Expert"}
     bossdefault = {"The Saw"}
@@ -1193,12 +1190,9 @@ elseif World2 then
 elseif World3 then
     bosspain = {"Stone", "Island Empress", "Rocket Admiral", "Captain Elephant", "Beautiful Pirate", "rip_indra True Form", "Longma", "Soul Reaper", "Cake Queen", "Cake Prince", "Dough King"}
     bossdefault = {"Stone"}
-else
-    bosspain = {"None"}
-    bossdefault = {"None"}
 end
-
-SME:Dropdown({
+local SME = CM:AddSection("Summer Event")
+SME:AddDropdown({
     ["Title"] = "Select Boss Pain",
     ["Content"] = "",
     ["Multi"] = false,
@@ -1206,9 +1200,8 @@ SME:Dropdown({
     ["Default"] = bossdefault,
     ["Callback"] = function(Value)
         _G.SelectBossPain = Value
-    end
+end
 })
-
 SME:AddToggle({
     ["Title"] = "Auto Farm Boss Pain",
     ["Title2"] = "",
