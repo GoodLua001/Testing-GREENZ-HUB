@@ -1,3 +1,13 @@
+local LocalPlayer = game:GetService("Players").LocalPlayer
+
+local ok, name, ver = pcall(identifyexecutor)
+if ok and name then
+    if string.find(string.lower(name), "Ronix") then 
+        LocalPlayer:Kick("Trash Executor") 
+    end
+else
+    print("Executor: Unknown")
+end
 do
   ply = game.Players
   plr = ply.LocalPlayer
@@ -594,38 +604,50 @@ local blockfind = workspace:FindFirstChild(block.Name)
 if blockfind and blockfind ~= block then blockfind:Destroy() end
 task.spawn(function()while task.wait()do if block and block.Parent==workspace then if shouldTween then getgenv().OnFarm=true else getgenv().OnFarm=false end else getgenv().OnFarm=false end end end)
 task.spawn(function()local a=game.Players.LocalPlayer;repeat task.wait()until a.Character and a.Character.PrimaryPart;block.CFrame=a.Character.PrimaryPart.CFrame;while task.wait()do pcall(function()if getgenv().OnFarm then if block and block.Parent==workspace then local b=a.Character and a.Character.PrimaryPart;if b and(b.Position-block.Position).Magnitude<=200 then b.CFrame=block.CFrame else block.CFrame=b.CFrame end end;local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=false end end end else local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=true end end end end end)end end)
-_tp = function(target)
-  local character = plr.Character
-  if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-  local rootPart = character.HumanoidRootPart
-  local humanoid = character:FindFirstChildOfClass("Humanoid")
-  local distance = (target.Position - rootPart.Position).Magnitude
-  local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
-  local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = target})
+local TweenService = game:GetService("TweenService")
+local activeTween = nil
 
-  if humanoid and humanoid.Sit then
-    block.CFrame = CFrame.new(block.Position.X, target.Y, block.Position.Z)
-  end
+function _tp(target)
+    local character = plr.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    local rootPart = character.HumanoidRootPart
+    local block = rootPart
 
-  local originalPlatformStand = humanoid and humanoid.PlatformStand
-  if humanoid then
-    humanoid.PlatformStand = true
-  end
-
-  tween:Play()
-
-  task.spawn(function()
-    while tween.PlaybackState == Enum.PlaybackState.Playing do
-      if not shouldTween then
-        tween:Cancel()
-        break
-      end
-      task.wait(0.1)
+    local startCFrame = block.CFrame
+    local targetCFrame
+    if typeof(target) == "Instance" then
+        targetCFrame = target.CFrame
+    elseif typeof(target) == "CFrame" then
+        targetCFrame = target
+    else
+        return
     end
-    if humanoid then
-      humanoid.PlatformStand = originalPlatformStand
+    local distance = (targetCFrame.Position - startCFrame.Position).Magnitude
+
+    if activeTween then
+        activeTween:Cancel()
+        activeTween = nil
     end
-  end)
+
+    local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(block, tweenInfo, {CFrame = targetCFrame})
+
+    if character.Humanoid.Sit then
+        block.CFrame = CFrame.new(block.Position.X, targetCFrame.Position.Y, block.Position.Z)
+    else
+        tween:Play()
+        activeTween = tween
+        task.spawn(function()
+            while tween.PlaybackState == Enum.PlaybackState.Playing do
+                if not shouldTween then
+                    tween:Cancel()
+                    activeTween = nil
+                    break
+                end
+                task.wait(0.1)
+            end
+        end)
+    end
 end
 TeleportToTarget = function(targetCFrame) if (targetCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude > 1000 then _tp(targetCFrame)else _tp(targetCFrame)end end
 notween = function(p) plr.Character.HumanoidRootPart.CFrame = p end
@@ -1078,7 +1100,7 @@ spawn(function()
               AutoHaki()
             until not (_G.AutoFarmBone and v and v.Parent and v.Humanoid.Health > 0)
           else
-            _tp(CFrame.new(-2077, 252, -12373))
+                      _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	
           end
         end
       end)
