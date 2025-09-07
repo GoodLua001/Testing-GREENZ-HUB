@@ -382,6 +382,16 @@ GetConnectionEnemies = function(a)
     end
   end
 end
+function AutoHaki()
+  local player = game:GetService("Players").LocalPlayer
+  local character = player.Character
+  if character and not character:FindFirstChild("HasBuso") then
+    local remote = game:GetService("ReplicatedStorage").Remotes.CommF_
+    if remote then
+      remote:InvokeServer("Buso") 
+    end
+  end
+end
 LowCpu = function()
   local decalsyeeted = true
   local g = game
@@ -1092,9 +1102,7 @@ spawn(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
               end)
             end
-		    repeat task.wait() Attack.Kill(bone, _G.AutoFarmBone) until not _G.AutoFarmBone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible)
-          else
-            _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	      
+		    repeat task.wait() Attack.Kill(bone, _G.AutoFarmBone) AutoHaki() until not _G.AutoFarmBone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible) 
         end
       end)
     end
@@ -1125,7 +1133,7 @@ spawn(function()
         if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
           local v = GetConnectionEnemies("Cake Prince")
           if v then
-            repeat wait() Attack.Kill2(v, _G.AutoFarmKatakuri)until not _G.AutoFarmKatakuri or not v.Parent or v.Humanoid.Health <= 0
+            repeat wait() Attack.Kill2(v, _G.AutoFarmKatakuri) AutoHaki() until not _G.AutoFarmKatakuri or not v.Parent or v.Humanoid.Health <= 0
           else
             if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
               _tp(CFrame.new(-2151.82, 149.32, -12404.91))
@@ -1152,7 +1160,7 @@ spawn(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
               end)
             end
-            repeat wait() Attack.Kill(v, _G.AutoFarmKatakuri) until not _G.AutoFarmKatakuri or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
+            repeat wait() Attack.Kill(v, _G.AutoFarmKatakuri) AutoHaki() until not _G.AutoFarmKatakuri or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
           else
             _tp(CFrame.new(-2077, 252, -12373))
           end
@@ -1343,80 +1351,50 @@ local Cak = FlurioreGui:CreateTab({
 })
 local Stack = Cak:AddSection("Farm Boss")
 local Mirage = Cak:AddSection("Mirage Island")
-function AttackNoCoolDown()
-    local player = game:GetService("Players").LocalPlayer
-    local character = player.Character
-    if not character then return end
-    local equippedWeapon = nil
-    for _, item in ipairs(character:GetChildren()) do
-        if item:IsA("Tool") then
-            equippedWeapon = item
-            break
+local remote, idremote
+for _, v in next, ({game.ReplicatedStorage.Util, game.ReplicatedStorage.Common, game.ReplicatedStorage.Remotes, game.ReplicatedStorage.Assets, game.ReplicatedStorage.FX}) do
+    for _, n in next, v:GetChildren() do
+        if n:IsA("RemoteEvent") and n:GetAttribute("Id") then
+            remote, idremote = n, n:GetAttribute("Id")
         end
     end
-    if not equippedWeapon then return end
-    local enemiesInRange = GetEnemiesInRange(character, 60)
-    if #enemiesInRange == 0 then return end
-    local storage = game:GetService("ReplicatedStorage")
-    local modules = storage:FindFirstChild("Modules")
-    if not modules then return end
-    local attackEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack")
-    local hitEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit")
-    if not attackEvent or not hitEvent then return end
-    local targets, mainTarget = {}, nil
-    for _, enemy in ipairs(enemiesInRange) do
-        if not enemy:GetAttribute("IsBoat") then
-            local HitboxLimbs = {"RightLowerArm", "RightUpperArm", "LeftLowerArm", "LeftUpperArm", "RightHand", "LeftHand"}
-            local head = enemy:FindFirstChild(HitboxLimbs[math.random(#HitboxLimbs)]) or enemy.PrimaryPart
-            if head then
-                table.insert(targets, { enemy, head })
-                mainTarget = head
+    v.ChildAdded:Connect(function(n)
+        if n:IsA("RemoteEvent") and n:GetAttribute("Id") then
+            remote, idremote = n, n:GetAttribute("Id")
+        end
+    end)
+end
+task.spawn(function()
+    while task.wait(0.05) do
+        local char = game.Players.LocalPlayer.Character
+        local root = char and char:FindFirstChild("HumanoidRootPart")
+        local parts = {}
+        for _, x in ipairs({workspace.Enemies, workspace.Characters}) do
+            for _, v in ipairs(x and x:GetChildren() or {}) do
+                local hrp = v:FindFirstChild("HumanoidRootPart")
+                local hum = v:FindFirstChild("Humanoid")
+                if v ~= char and hrp and hum and hum.Health > 0 and (hrp.Position - root.Position).Magnitude <= 60 then
+                    for _, _v in ipairs(v:GetChildren()) do
+                        if _v:IsA("BasePart") and (hrp.Position - root.Position).Magnitude <= 60 then
+                            parts[#parts+1] = {v, _v}
+                        end
+                    end
+                end
             end
         end
-    end
-    if not mainTarget then return end
-    attackEvent:FireServer(0)
-    local playerScripts = player:FindFirstChild("PlayerScripts")
-    if not playerScripts then return end
-    local localScript = playerScripts:FindFirstChildOfClass("LocalScript")
-    while not localScript do
-        playerScripts.ChildAdded:Wait()
-        localScript = playerScripts:FindFirstChildOfClass("LocalScript")
-    end
-    local hitFunction
-    if getsenv then
-        local success, scriptEnv = pcall(getsenv, localScript)
-        if success and scriptEnv then
-            hitFunction = scriptEnv._G.SendHitsToServer
+        local tool = char:FindFirstChildOfClass("Tool")
+        if #parts > 0 and tool and (tool:GetAttribute("WeaponType") == "Melee" or tool:GetAttribute("WeaponType") == "Sword") then
+            pcall(function()
+                require(game.ReplicatedStorage.Modules.Net):RemoteEvent("RegisterHit", true)
+                game.ReplicatedStorage.Modules.Net["RE/RegisterAttack"]:FireServer()
+                local head = parts[1][1]:FindFirstChild("Head")
+                if not head then return end
+                game.ReplicatedStorage.Modules.Net["RE/RegisterHit"]:FireServer(head, parts, {}, tostring(game.Players.LocalPlayer.UserId):sub(2, 4) .. tostring(coroutine.running()):sub(11, 15))
+                cloneref(remote):FireServer(string.gsub("RE/RegisterHit", ".", function(c)
+                    return string.char(bit32.bxor(string.byte(c), math.floor(workspace:GetServerTimeNow() / 10 % 10) + 1))
+                end),
+                bit32.bxor(idremote + 909090, game.ReplicatedStorage.Modules.Net.seed:InvokeServer() * 2), head, parts)
+            end)
         end
     end
-    local successFlags, combatRemoteThread = pcall(function()
-        return require(modules.Flags).COMBAT_REMOTE_THREAD or false
-    end)
-    if successFlags and combatRemoteThread and hitFunction then
-        hitFunction(mainTarget, targets)
-    elseif successFlags and not combatRemoteThread then
-        hitEvent:FireServer(mainTarget, targets)
-    end
-end
-CameraShakerR = require(game.ReplicatedStorage.Util.CameraShaker)
-CameraShakerR:Stop()
-get_Monster=function()for a,b in pairs(workspace.Enemies:GetChildren())do local c=b:FindFirstChild("UpperTorso")or b:FindFirstChild("Head")if b:FindFirstChild("HumanoidRootPart",true)and c then if(b.Head.Position-plr.Character.HumanoidRootPart.Position).Magnitude<=50 then return true,c.Position end end end;for a,d in pairs(workspace.SeaBeasts:GetChildren())do if d:FindFirstChild("HumanoidRootPart")and d:FindFirstChild("Health")and d.Health.Value>0 then return true,d.HumanoidRootPart.Position end end;for a,d in pairs(workspace.Enemies:GetChildren())do if d:FindFirstChild("Health")and d.Health.Value>0 and d:FindFirstChild("VehicleSeat")then return true,d.Engine.Position end end end
-Actived=function()local a=game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")for b,c in next,getconnections(a.Activated)do if typeof(c.Function)=='function'then getupvalues(c.Function)end end end
-task.spawn(function()
-  RunSer.Heartbeat:Connect(function()
-    pcall(function()      
-      if not _G.Seriality then return end      
-      AttackNoCoolDown() 
-      local Pretool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-      local ToolTip = Pretool.ToolTip
-      local MobAura, Mon = get_Monster()      
-      if ToolTip == "Blox Fruit" then
-        if MobAura then           
-          local LeftClickRemote = Pretool:FindFirstChild('LeftClickRemote');
-          if LeftClickRemote then Actived() LeftClickRemote:FireServer(Vector3.new(0.01,-500,0.01),1,true);LeftClickRemote:FireServer(false)end
-        end     		                         
-      end      
-    end)
-  end)
 end)
