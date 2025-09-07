@@ -710,8 +710,8 @@ local FlurioreGui = FlurioreFixLib:MakeGui({
 	["Description"] = "Free",
 	["Image"] = "94892669378312",
 	["Color"] = Color3.fromRGB(135, 206, 250),
-	["Tab Width"] = 120,
-	["Theme"] = "",
+	["Tab Width"] = 130,
+	["Theme"] = "120866477886106",
 })
 
 FlurioreFixLib:MakeNotify({
