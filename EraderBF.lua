@@ -980,7 +980,8 @@ v2:AddToggle({
     ["Callback"] = function(Value)
         _G.AutoTurnOnV4 = Value
 end
-})spawn(function()
+})
+spawn(function()
   while wait(.2) do
     pcall(function()
       if _G.AutoTurnOnV4 then
