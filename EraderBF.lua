@@ -1114,12 +1114,12 @@ DuM:AddToggle({
     ["Content"] = "",
     ["Default"] = false,
     ["Callback"] = function(Value)
-        _G.AutoFarmKatakuri = Value
+        _G.Auto_Cake_Prince = Value
 end
 })
 spawn(function()
   while wait() do
-    if _G.AutoFarmKatakuri then
+    if _G.Auto_Cake_Prince then
       pcall(function()
         local player = game.Players.LocalPlayer
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -1133,7 +1133,7 @@ spawn(function()
         if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
           local v = GetConnectionEnemies("Cake Prince")
           if v then
-            repeat wait() Attack.Kill2(v, _G.AutoFarmKatakuri) AutoHaki() until not _G.AutoFarmKatakuri or not v.Parent or v.Humanoid.Health <= 0
+            repeat wait() Attack.Kill2(v, _G.Auto_Cake_Prince)until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
           else
             if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
               _tp(CFrame.new(-2151.82, 149.32, -12404.91))
@@ -1160,7 +1160,7 @@ spawn(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
               end)
             end
-            repeat wait() Attack.Kill(v, _G.AutoFarmKatakuri) AutoHaki() until not _G.AutoFarmKatakuri or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
+            repeat wait() Attack.Kill(v, _G.Auto_Cake_Prince) until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
           else
             _tp(CFrame.new(-2077, 252, -12373))
           end
