@@ -934,6 +934,15 @@ v1:AddToggle({
 end
 })
 v1:AddToggle({
+    ["Title"] = "Fast Attack",
+    ["Title2"] = "Not Supported Gas M1",
+    ["Content"] = "",
+    ["Default"] = true,
+    ["Callback"] = function(Value)
+        _G.Seriality = Value
+end
+})
+v1:AddToggle({
     ["Title"] = "Teleport To Y 500 If Player Low Health",
     ["Title2"] = "",
     ["Content"] = "",
@@ -952,8 +961,7 @@ spawn(function()
     end)
   end
 end)
-local v2 = Setting:AddSection("Race")
-v2:AddToggle({
+v1:AddToggle({
     ["Title"] = "Auto Turn On V3",
     ["Title2"] = "",
     ["Content"] = "",
@@ -976,7 +984,7 @@ spawn(function()
         end
     end
 end)
-v2:AddToggle({
+v1:AddToggle({
     ["Title"] = "Auto Turn On V4",
     ["Title2"] = "",
     ["Content"] = "",
@@ -1335,3 +1343,80 @@ local Cak = FlurioreGui:CreateTab({
 })
 local Stack = Cak:AddSection("Farm Boss")
 local Mirage = Cak:AddSection("Mirage Island")
+function AttackNoCoolDown()
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character
+    if not character then return end
+    local equippedWeapon = nil
+    for _, item in ipairs(character:GetChildren()) do
+        if item:IsA("Tool") then
+            equippedWeapon = item
+            break
+        end
+    end
+    if not equippedWeapon then return end
+    local enemiesInRange = GetEnemiesInRange(character, 60)
+    if #enemiesInRange == 0 then return end
+    local storage = game:GetService("ReplicatedStorage")
+    local modules = storage:FindFirstChild("Modules")
+    if not modules then return end
+    local attackEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack")
+    local hitEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit")
+    if not attackEvent or not hitEvent then return end
+    local targets, mainTarget = {}, nil
+    for _, enemy in ipairs(enemiesInRange) do
+        if not enemy:GetAttribute("IsBoat") then
+            local HitboxLimbs = {"RightLowerArm", "RightUpperArm", "LeftLowerArm", "LeftUpperArm", "RightHand", "LeftHand"}
+            local head = enemy:FindFirstChild(HitboxLimbs[math.random(#HitboxLimbs)]) or enemy.PrimaryPart
+            if head then
+                table.insert(targets, { enemy, head })
+                mainTarget = head
+            end
+        end
+    end
+    if not mainTarget then return end
+    attackEvent:FireServer(0)
+    local playerScripts = player:FindFirstChild("PlayerScripts")
+    if not playerScripts then return end
+    local localScript = playerScripts:FindFirstChildOfClass("LocalScript")
+    while not localScript do
+        playerScripts.ChildAdded:Wait()
+        localScript = playerScripts:FindFirstChildOfClass("LocalScript")
+    end
+    local hitFunction
+    if getsenv then
+        local success, scriptEnv = pcall(getsenv, localScript)
+        if success and scriptEnv then
+            hitFunction = scriptEnv._G.SendHitsToServer
+        end
+    end
+    local successFlags, combatRemoteThread = pcall(function()
+        return require(modules.Flags).COMBAT_REMOTE_THREAD or false
+    end)
+    if successFlags and combatRemoteThread and hitFunction then
+        hitFunction(mainTarget, targets)
+    elseif successFlags and not combatRemoteThread then
+        hitEvent:FireServer(mainTarget, targets)
+    end
+end
+CameraShakerR = require(game.ReplicatedStorage.Util.CameraShaker)
+CameraShakerR:Stop()
+get_Monster=function()for a,b in pairs(workspace.Enemies:GetChildren())do local c=b:FindFirstChild("UpperTorso")or b:FindFirstChild("Head")if b:FindFirstChild("HumanoidRootPart",true)and c then if(b.Head.Position-plr.Character.HumanoidRootPart.Position).Magnitude<=50 then return true,c.Position end end end;for a,d in pairs(workspace.SeaBeasts:GetChildren())do if d:FindFirstChild("HumanoidRootPart")and d:FindFirstChild("Health")and d.Health.Value>0 then return true,d.HumanoidRootPart.Position end end;for a,d in pairs(workspace.Enemies:GetChildren())do if d:FindFirstChild("Health")and d.Health.Value>0 and d:FindFirstChild("VehicleSeat")then return true,d.Engine.Position end end end
+Actived=function()local a=game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")for b,c in next,getconnections(a.Activated)do if typeof(c.Function)=='function'then getupvalues(c.Function)end end end
+task.spawn(function()
+  RunSer.Heartbeat:Connect(function()
+    pcall(function()      
+      if not _G.Seriality then return end      
+      AttackNoCoolDown() 
+      local Pretool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+      local ToolTip = Pretool.ToolTip
+      local MobAura, Mon = get_Monster()      
+      if ToolTip == "Blox Fruit" then
+        if MobAura then           
+          local LeftClickRemote = Pretool:FindFirstChild('LeftClickRemote');
+          if LeftClickRemote then Actived() LeftClickRemote:FireServer(Vector3.new(0.01,-500,0.01),1,true);LeftClickRemote:FireServer(false)end
+        end     		                         
+      end      
+    end)
+  end)
+end)
