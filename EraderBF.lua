@@ -960,18 +960,22 @@ v2:AddToggle({
     ["Default"] = false,
     ["Callback"] = function(Value)
         _G.AutoTurnV3 = Value
-end
+    end
 })
-  while wait(.2) do
-    pcall(function()
-      if _G.AutoTurnV3 then
-        repeat
-          replicated.Remotes.CommE:FireServer("ActivateAbility") 
-          wait(30)
-        until not _G.AutoTurnV3   
-      end 
-    end)
-  end
+
+spawn(function()
+    while true do
+        wait(0.2)
+        if _G.AutoTurnV3 then
+            while _G.AutoTurnV3 do
+                pcall(function()
+                    replicated.Remotes.CommE:FireServer("ActivateAbility")
+                end)
+                wait(30)
+            end
+        end
+    end
+end)
 v2:AddToggle({
     ["Title"] = "Auto Turn On V4",
     ["Title2"] = "",
