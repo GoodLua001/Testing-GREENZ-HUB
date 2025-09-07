@@ -596,38 +596,16 @@ local blockfind = workspace:FindFirstChild(block.Name)
 if blockfind and blockfind ~= block then blockfind:Destroy() end
 task.spawn(function()while task.wait()do if block and block.Parent==workspace then if shouldTween then getgenv().OnFarm=true else getgenv().OnFarm=false end else getgenv().OnFarm=false end end end)
 task.spawn(function()local a=game.Players.LocalPlayer;repeat task.wait()until a.Character and a.Character.PrimaryPart;block.CFrame=a.Character.PrimaryPart.CFrame;while task.wait()do pcall(function()if getgenv().OnFarm then if block and block.Parent==workspace then local b=a.Character and a.Character.PrimaryPart;if b and(b.Position-block.Position).Magnitude<=200 then b.CFrame=block.CFrame else block.CFrame=b.CFrame end end;local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=false end end end else local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=true end end end end end)end end)
-_tp = function(target)
-  local character = plr.Character
-if not character then return end
-
-local root = character:FindFirstChild("HumanoidRootPart")
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not root or not humanoid then return end
-
-local goalCF =
-    typeof(target) == "Instance" and target:IsA("BasePart") and target.CFrame
-    or typeof(target) == "CFrame" and target
-    or nil
-
-if not goalCF then return end
-
-local dist = (goalCF.Position - root.Position).Magnitude
-
-if dist <= 200 then
-    root.CFrame = goalCF
-else
-    if humanoid.Sit then
-        root.CFrame = CFrame.new(root.Position.X, goalCF.Position.Y, root.Position.Z)
+_tp = function(CF)
+local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+if hrp then
+    local distance = (hrp.Position - CF.Position).Magnitude
+    if distance <= 200 then
+        hrp.CFrame = CF
+    else
+        local tween = game:GetService("TweenService"):Create(hrp, TweenInfo.new(distance / 200, Enum.EasingStyle.Linear), {CFrame = CF})
+        tween:Play()
     end
-    local info = TweenInfo.new(dist/300, Enum.EasingStyle.Linear)
-    local tween = game:GetService("TweenService"):Create(root, info, {CFrame = goalCF})
-    tween:Play()
-    task.spawn(function()
-        while tween.PlaybackState == Enum.PlaybackState.Playing do
-            if not shouldTween then tween:Cancel() break end
-            task.wait(0.1)
-        end
-    end)
 end
 end
 TeleportToTarget = function(targetCFrame) if (targetCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude > 1000 then _tp(targetCFrame)else _tp(targetCFrame)end end
