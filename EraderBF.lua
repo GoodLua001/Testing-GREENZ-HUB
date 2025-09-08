@@ -106,18 +106,18 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob()
+  BringEnemy()
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
-end
+  end
 end
 Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   BringMob()
+  BringEnemy()
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -128,7 +128,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   BringMob()
+  BringEnemy()
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -139,7 +139,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   BringMob()
+  BringEnemy()
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
   if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
@@ -149,7 +149,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   BringMob()
+  BringEnemy()
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -165,7 +165,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   
+  BringEnemy()
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
@@ -199,7 +199,7 @@ statsSetings = function(Num, value)
     end
   end
 end
-BringMob = function()
+BringEnemy = function()
   if not _B then return end
   for _,v in pairs(workspace.Enemies:GetChildren()) do
     if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
@@ -213,59 +213,6 @@ BringMob = function()
 	  end
 	end                               
   end                    	
-end
-
-Useskills = function(weapon, skill)
-  if weapon == "Melee" then
-    weaponSc("Melee")
-    if skill == "Z" then
-      vim1:SendKeyEvent(true, "Z", false, game);
-      vim1:SendKeyEvent(false, "Z", false, game);
-    elseif skill == "X" then
-      vim1:SendKeyEvent(true, "X", false, game);
-      vim1:SendKeyEvent(false, "X", false, game);
-    elseif skill == "C" then
-      vim1:SendKeyEvent(true, "C", false, game);
-      vim1:SendKeyEvent(false, "C", false, game);
-    end
-  elseif weapon == "Sword" then
-    weaponSc("Sword")
-    if skill == "Z" then
-      vim1:SendKeyEvent(true, "Z", false, game);
-      vim1:SendKeyEvent(false, "Z", false, game);
-    elseif skill == "X" then
-      vim1:SendKeyEvent(true, "X", false, game);
-      vim1:SendKeyEvent(false, "X", false, game);
-    end
-  elseif weapon == "Blox Fruit" then
-    weaponSc("Blox Fruit")
-    if skill == "Z" then
-      vim1:SendKeyEvent(true, "Z", false, game);
-      vim1:SendKeyEvent(false, "Z", false, game);
-    elseif skill == "X" then
-      vim1:SendKeyEvent(true, "X", false, game);
-      vim1:SendKeyEvent(false, "X", false, game);
-    elseif skill == "C" then
-      vim1:SendKeyEvent(true, "C", false, game);
-      vim1:SendKeyEvent(false, "C", false, game);        
-    elseif skill == "V" then
-      vim1:SendKeyEvent(true, "V", false, game);
-      vim1:SendKeyEvent(false, "V", false, game);
-    end
-  elseif weapon == "Gun" then
-    weaponSc("Gun")
-    if skill == "Z" then
-      vim1:SendKeyEvent(true, "Z", false, game);
-      vim1:SendKeyEvent(false, "Z", false, game);
-    elseif skill == "X" then
-      vim1:SendKeyEvent(true, "X", false, game);
-      vim1:SendKeyEvent(false, "X", false, game);
-    end
-  end
-  if weapon == "nil" and skill == "Y" then
-    vim1:SendKeyEvent(true, "Y", false, game);
-    vim1:SendKeyEvent(false, "Y", false, game);
-  end
 end
 local gg = getrawmetatable(game)
 local old = gg.__namecall
