@@ -99,7 +99,7 @@ BringMob = function(value)
     if value then
         for r, v in pairs(workspace.Enemies:GetChildren()) do
             if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.Parent and v:FindFirstChild("HumanoidRootPart") then
-                if (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= config["Bring Range"] then
+                if (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 400 then
                     local Sm = GetMobPosition(v.Name)
                     local Lock = Sm and CFrame.new(Sm) or Sm.CFrame
                     if v:GetPrimaryPartCFrame() ~= Lock then
