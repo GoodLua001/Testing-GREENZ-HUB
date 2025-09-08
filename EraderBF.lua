@@ -95,80 +95,27 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
-getgenv().BringMobs = true
-local Players = game:GetService("Players")
-local CollectionService = game:GetService("CollectionService")
-local Player = Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAdded:Wait()
-
-local Enemies = workspace:WaitForChild("Enemies")
-
-_BringEnemies = function(hadoken)
-	getgenv().BringMobs = getgenv().BringMobs or false
-
-	local TRoot = hadoken:FindFirstChild("HumanoidRootPart") or hadoken.PrimaryPart
-	local THumanoid = hadoken:FindFirstChildWhichIsA("Humanoid")
-
-	if TRoot and THumanoid and THumanoid.Health > 0 then
-		pcall(sethiddenproperty, Player, "SimulationRadius", math.huge)
-
-		local ToCFrame = TRoot.CFrame
-		local name = hadoken.Name
-		local pos = Character:GetPivot().Position
-
-		for _, mob in ipairs(Enemies:GetChildren()) do
-			if mob.Name == name and not CollectionService:HasTag(mob, "QMobs") then
-				local humanoid = mob:FindFirstChildWhichIsA("Humanoid")
-				if humanoid and humanoid.Health > 0 then
-					CollectionService:AddTag(mob, "QMobs")
-					task.spawn(function()
-						while mob and mob.Parent and humanoid and humanoid.Health > 0 do
-							task.wait(0.5)
-						end
-						if mob and mob.Parent then
-							CollectionService:RemoveTag(mob, "QMobs")
-							local a = mob:FindFirstChild("MobBringAttachment")
-							if a then a:Destroy() end
-						end
-					end)
-				end
-			end
-		end
-		for _, k in ipairs(CollectionService:GetTagged("QMobs")) do
-			if k.Name == name then
-				local root = k:FindFirstChild("HumanoidRootPart") or k.PrimaryPart
-				local humanoid = k:FindFirstChildWhichIsA("Humanoid")
-
-				if root and humanoid and humanoid.Health > 0 and (pos - root.Position).Magnitude < 400 then
-					humanoid.WalkSpeed = 0
-					humanoid.JumpPower = 0
-
-					local attachment = root:FindFirstChild("MobBringAttachment") or Instance.new("Attachment")
-					attachment.Name = "MobBringAttachment"
-					attachment.Parent = root
-
-					local align = attachment:FindFirstChild("MobAlignPosition") or Instance.new("AlignPosition")
-					align.Name = "MobAlignPosition"
-					align.Mode = Enum.PositionAlignmentMode.OneAttachment
-					align.Position = ToCFrame.Position
-					align.Responsiveness = 300
-					align.MaxForce = 1e6
-					align.Attachment0 = attachment
-					align.Parent = attachment
-
-					task.spawn(function()
-						while k and k.Parent and humanoid and humanoid.Health > 0 do
-							align.Position = ToCFrame.Position
-							task.wait(0.5)
-						end
-						if attachment and attachment.Parent then
-							attachment:Destroy()
-						end
-					end)
-				end
-			end
-		end
-	end
+BringMob = function(value)
+    if value then
+        for r, v in pairs(workspace.Enemies:GetChildren()) do
+            if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.Parent and v:FindFirstChild("HumanoidRootPart") then
+                if (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= config["Bring Range"] then
+                    local Sm = GetMobPosition(v.Name)
+                    local Lock = Sm and CFrame.new(Sm) or Sm.CFrame
+                    if v:GetPrimaryPartCFrame() ~= Lock then
+                        v:SetPrimaryPartCFrame(Lock)
+                    end
+                    v.HumanoidRootPart.CanCollide = false
+                    v.Head.CanCollide = false
+                    v.Humanoid.WalkSpeed = 0
+                    v.Humanoid.JumpPower = 0
+                    v.Humanoid.AutoRotate = true
+                    v.Humanoid:ChangeState(14)
+                    sethiddenproperty(plr, "SimulationRadius", 3150)
+                end
+            end
+        end
+    end
 end
 local Attack = {}
 Attack.__index = Attack
@@ -180,7 +127,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -191,7 +138,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -202,7 +149,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -213,7 +160,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
   if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
@@ -223,7 +170,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -239,7 +186,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  _BringEnemies(model)
+  BringMob = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
@@ -604,89 +551,20 @@ local blockfind = workspace:FindFirstChild(block.Name)
 if blockfind and blockfind ~= block then blockfind:Destroy() end
 task.spawn(function()while task.wait()do if block and block.Parent==workspace then if shouldTween then getgenv().OnFarm=true else getgenv().OnFarm=false end else getgenv().OnFarm=false end end end)
 task.spawn(function()local a=game.Players.LocalPlayer;repeat task.wait()until a.Character and a.Character.PrimaryPart;block.CFrame=a.Character.PrimaryPart.CFrame;while task.wait()do pcall(function()if getgenv().OnFarm then if block and block.Parent==workspace then local b=a.Character and a.Character.PrimaryPart;if b and(b.Position-block.Position).Magnitude<=200 then b.CFrame=block.CFrame else block.CFrame=b.CFrame end end;local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=false end end end else local c=a.Character;if c then for d,e in pairs(c:GetChildren())do if e:IsA("BasePart")then e.CanCollide=true end end end end end)end end)
-_tp = function(Pos)
-    local plr = game.Players.LocalPlayer
-    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
-        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-        if not Pos then 
-            return 
-        end
-        local nearestTeleport = CheckNearestTeleporter(Pos)
-        if nearestTeleport then
-            requestEntrance(nearestTeleport)
-        end
-        if not plr.Character:FindFirstChild("PartTele") then
-            local PartTele = Instance.new("Part", plr.Character)
-            PartTele.Size = Vector3.new(10,1,10)
-            PartTele.Name = "PartTele"
-            PartTele.Anchored = true
-            PartTele.Transparency = 1
-            PartTele.CanCollide = true
-            PartTele.CFrame = WaitHRP(plr).CFrame 
-            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-                if not isTeleporting then return end
-                task.wait()
-                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-                    WaitHRP(plr).CFrame = PartTele.CFrame
-                end
-            end)
-        end
-        isTeleporting = true
-        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / 360, Enum.EasingStyle.Linear), {CFrame = Pos})
-        Tween:Play()
-        Tween.Completed:Connect(function(status)
-            if status == Enum.PlaybackState.Completed then
-                if plr.Character:FindFirstChild("PartTele") then
-                    plr.Character.PartTele:Destroy()
-                end
-                isTeleporting = false
-            end
-        end)
-    end
+_tp = function(target)
+  local character = plr.Character
+  if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+  local rootPart = character.HumanoidRootPart
+  local distance = (target.Position - rootPart.Position).Magnitude
+  local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
+  local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = target})    
+  if plr.Character.Humanoid.Sit == true then
+    block.CFrame = CFrame.new(block.Position.X, target.Y, block.Position.Z)
+  end  
+  tween:Play()    
+  task.spawn(function() while tween.PlaybackState == Enum.PlaybackState.Playing do if not shouldTween then tween:Cancel() break end task.wait(0.1) end end)
 end
-
-function stopTeleport()
-    isTeleporting = false
-    local plr = game.Players.LocalPlayer
-    if plr.Character:FindFirstChild("PartTele") then
-        plr.Character.PartTele:Destroy()
-    end
-end
-
-spawn(function()
-    while task.wait() do
-        if not isTeleporting then
-            stopTeleport()
-        end
-    end
-end)
-
-spawn(function()
-    local plr = game.Players.LocalPlayer
-    while task.wait() do
-        pcall(function()
-            if plr.Character:FindFirstChild("PartTele") then
-                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
-                    stopTeleport()
-                end
-            end
-        end)
-    end
-end)
-
-local plr = game.Players.LocalPlayer
-local function onCharacterAdded(character)
-    local humanoid = character:WaitForChild("Humanoid")
-    humanoid.Died:Connect(function()
-        stopTeleport()
-    end)
-end
-plr.CharacterAdded:Connect(onCharacterAdded)
-if plr.Character then
-    onCharacterAdded(plr.Character)
-end
-
-TeleportToTarget = function(posCFrame) if (posCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude > 1000 then _tp(posCFrame)else _tp(posCFrame)end end
+TeleportToTarget = function(targetCFrame) if (targetCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude > 1000 then _tp(targetCFrame)else _tp(targetCFrame)end end
 notween = function(p) plr.Character.HumanoidRootPart.CFrame = p end
 function BTP(p)
     local player = game.Players.LocalPlayer
