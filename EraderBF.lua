@@ -111,6 +111,13 @@ Attack.Kill = function(model,Succes)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
+  	if RandomCFrame then
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+      end
   end
 end
 Attack.Kill2 = function(model,Succes)
@@ -122,6 +129,13 @@ Attack.Kill2 = function(model,Succes)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))end
+  	if RandomCFrame then
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+		end
   end
 end
 Attack.KillSea = function(model,Succes)
@@ -623,7 +637,7 @@ local FlurioreGui = FlurioreFixLib:MakeGui({
 	["Image"] = "94892669378312",
 	["Color"] = Color3.fromRGB(135, 206, 250),
 	["Tab Width"] = 130,
-	["Theme"] = getgenv().IdTheme,
+	["Theme"] = "101094089630582"
 })
 
 FlurioreFixLib:MakeNotify({
@@ -834,6 +848,15 @@ spawn(function()
   end
 end)
 v1:AddToggle({
+    ["Title"] = "Spin Position",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        RandomCFrame = Value
+end
+})
+v1:AddToggle({
     ["Title"] = "Auto Turn On V3",
     ["Title2"] = "",
     ["Content"] = "",
@@ -931,6 +954,7 @@ spawn(function()
   while wait() do
     if _G.AutoFarmBone then
       pcall(function()
+      _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125))
         if game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
           local Soul = { "Soul Reaper" }
           local c = GetConnectionEnemies(Soul)
@@ -976,6 +1000,7 @@ spawn(function()
   while wait() do
     if _G.Auto_Cake_Prince then
       pcall(function()
+       _tp(CFrame.new(-2077, 252, -12373))
         local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         if game:GetService("Workspace").Enemies:FindFirstChild("Cake Prince") then
           if (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
@@ -1109,6 +1134,48 @@ local Cak = FlurioreGui:CreateTab({
 	["Name"] = "Tab Stack Farming",
 	["Icon"] = "rbxassetid://7733960981"
 })
+local Mira = Cak:AddSection("Mirage Island")
+Mira:AddToggle({
+    ["Title"] = "Auto Find Mirage",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.FindMirage = Value
+end
+})
+spawn(function()
+  while wait() do
+    if _G.FindMirage then 
+      pcall(function()
+        if not workspace["_WorldOrigin"].Locations:FindFirstChild("Mirage Island", true) then                
+          local myBoat = CheckBoat()
+          if not myBoat then
+            local buyBoatCFrame = CFrame.new(-16927.451, 9.086, 433.864)
+            TeleportToTarget(buyBoatCFrame)
+            if (buyBoatCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 10 then replicated.Remotes.CommF_:InvokeServer("BuyBoat", _G.SelectedBoat) end
+          else
+            if plr.Character.Humanoid.Sit == false then
+              local boatSeatCFrame = myBoat.VehicleSeat.CFrame * CFrame.new(0, 1, 0)
+              _tp(boatSeatCFrame)
+            else            
+              repeat wait()
+                local targetDestination = CFrame.new(-10000000, 31, 37016.25)
+                if CheckEnemiesBoat() or CheckTerrorShark() or CheckPirateGrandBrigade() then
+                  _tp(CFrame.new(-10000000, 150, 37016.25))
+                else
+                  _tp(CFrame.new(-10000000, 31, 37016.25))
+                end
+              until not _G.FindMirage or (targetDestination.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 10 or workspace["_WorldOrigin"].Locations:FindFirstChild("Mirage Island") or plr.Character.Humanoid.Sit == false plr.Character.Humanoid.Sit = false
+            end
+          end
+        else
+          _tp(workspace.Map.MysticIsland.Center.CFrame*CFrame.new(0,300,0))
+        end
+      end)
+    end
+  end
+end)
 local Stack = Cak:AddSection("Farm Boss")
 local Mirage = Cak:AddSection("Mirage Island")
 local Players = game:GetService("Players")
