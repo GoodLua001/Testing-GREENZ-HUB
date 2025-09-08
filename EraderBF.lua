@@ -163,7 +163,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -174,7 +174,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -185,7 +185,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -196,7 +196,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
   if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
@@ -206,7 +206,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -222,7 +222,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob(true)
+  BringMob = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
@@ -1000,7 +1000,7 @@ spawn(function()
 		      if Attack.Alive(v) then
 			    if v.Name == QuestNeta()[1] then
 			      if string.find(QuestTitle, QuestNeta()[5]) then
-				    repeat wait() Attack.Kill(v, _G.Level)until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
+				    repeat wait() Attack.Kill(v, _G.Level) BringMob(true) until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
 				  else
 				    replicated.Remotes.CommF_:InvokeServer("AbandonQuest")
 				  end
@@ -1049,6 +1049,7 @@ spawn(function()
               Attack.Kill(v, _G.AutoFarmBone)
               EquipWeapon(_G.SelectWeapon)
               AutoHaki()
+              BringMob(true)
             until not (_G.AutoFarmBone and v and v.Parent and v.Humanoid.Health > 0)
           else
                       _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	
@@ -1084,6 +1085,7 @@ spawn(function()
               Attack.Kill(c, _G.Auto_Cake_Prince)
               EquipWeapon(_G.SelectWeapon)
               AutoHaki()
+              BringMob(true)
             until not (_G.Auto_Cake_Prince and c and c.Parent and c.Humanoid.Health > 0)
           end
         else
