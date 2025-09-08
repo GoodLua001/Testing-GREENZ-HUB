@@ -607,46 +607,56 @@ task.spawn(function()local a=game.Players.LocalPlayer;repeat task.wait()until a.
 local TweenService = game:GetService("TweenService")
 local activeTween = nil
 
-function _tp(target)
-    local character = plr.Character
-    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-    local rootPart = character.HumanoidRootPart
-    local block = rootPart
-
-    local startCFrame = block.CFrame
-    local targetCFrame
-    if typeof(target) == "Instance" then
-        targetCFrame = target.CFrame
-    elseif typeof(target) == "CFrame" then
-        targetCFrame = target
-    else
-        return
+local function getHRP(plr)
+    if plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+        return plr.Character.HumanoidRootPart
     end
-    local distance = (targetCFrame.Position - startCFrame.Position).Magnitude
+    return nil
+end
 
-    if activeTween then
-        activeTween:Cancel()
-        activeTween = nil
-    end
-
+_tp = function(target)
+    local plr = game.Players.LocalPlayer
+    local rootPart = getHRP(plr)
+    if not rootPart then return end
+    local targetCFrame = typeof(target) == "Instance" and target.CFrame or target
+    local targetPosition = typeof(target) == "Instance" and target.Position or target.Position
+    local distance = (targetPosition - rootPart.Position).Magnitude
     local tweenInfo = TweenInfo.new(distance / 300, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(block, tweenInfo, {CFrame = targetCFrame})
-
-    if character.Humanoid.Sit then
-        block.CFrame = CFrame.new(block.Position.X, targetCFrame.Position.Y, block.Position.Z)
-    else
-        tween:Play()
-        activeTween = tween
-        task.spawn(function()
-            while tween.PlaybackState == Enum.PlaybackState.Playing do
-                if not shouldTween then
-                    tween:Cancel()
-                    activeTween = nil
-                    break
-                end
-                task.wait(0.1)
+    local block = plr.Character:FindFirstChild("PartTele")
+    if not block then
+        block = Instance.new("Part", plr.Character)
+        block.Size = Vector3.new(10,1,10)
+        block.Name = "PartTele"
+        block.Anchored = true
+        block.Transparency = 1
+        block.CanCollide = true
+        block.CFrame = rootPart.CFrame
+    end
+    local isTeleporting = true
+    local tween = game:GetService("TweenService"):Create(block, tweenInfo, {CFrame = targetCFrame})
+    tween:Play()
+    task.spawn(function()
+        while tween.PlaybackState == Enum.PlaybackState.Playing do
+            if not isTeleporting then
+                tween:Cancel()
+                break
             end
-        end)
+            task.wait(0.1)
+        end
+    end)
+    tween.Completed:Connect(function(status)
+        if status == Enum.PlaybackState.Completed and block then
+            block:Destroy()
+        end
+        isTeleporting = false
+    end)
+end
+
+function stopTeleport()
+    local plr = game.Players.LocalPlayer
+    local block = plr.Character and plr.Character:FindFirstChild("PartTele")
+    if block then
+        block:Destroy()
     end
 end
 TeleportToTarget = function(targetCFrame) if (targetCFrame.Position - plr.Character.HumanoidRootPart.Position).Magnitude > 1000 then _tp(targetCFrame)else _tp(targetCFrame)end end
