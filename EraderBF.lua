@@ -95,23 +95,59 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
+local function TweenObject(object, targetCFrame, speed)
+    speed = speed or 350
+    local distance = (targetCFrame.Position - object.Position).Magnitude
+    local info = TweenInfo.new(distance / speed, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(object, info, {CFrame = targetCFrame})
+    tween:Play()
+end
+
+local function GetMobPosition(enemyName)
+    local pos, count = nil, 0
+    for _, enemy in ipairs(Workspace.Enemies:GetChildren()) do
+        if enemy.Name == enemyName and enemy:FindFirstChild("HumanoidRootPart") then
+            if not pos then
+                pos = enemy.HumanoidRootPart.Position
+            else
+                pos = pos + enemy.HumanoidRootPart.Position
+            end
+            count = count + 1
+        end
+    end
+    return count > 0 and pos / count or nil
+end
+
 BringMob = function(value)
     if value then
-        for r, v in pairs(workspace.Enemies:GetChildren()) do
-            if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.Parent and v:FindFirstChild("HumanoidRootPart") then
-                if (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 400 then
-                    local Sm = GetMobPosition(v.Name)
-                    local Lock = Sm and CFrame.new(Sm) or Sm.CFrame
-                    if v:GetPrimaryPartCFrame() ~= Lock then
-                        v:SetPrimaryPartCFrame(Lock)
+        local enemies = Workspace.Enemies:GetChildren()
+        if #enemies > 0 then
+            local totalPos = {}
+            for _, enemy in ipairs(enemies) do
+                if not totalPos[enemy.Name] then
+                    local avgPos = GetMobPosition(enemy.Name)
+                    if avgPos then
+                        totalPos[enemy.Name] = avgPos
                     end
-                    v.HumanoidRootPart.CanCollide = false
-                    v.Head.CanCollide = false
-                    v.Humanoid.WalkSpeed = 0
-                    v.Humanoid.JumpPower = 0
-                    v.Humanoid.AutoRotate = true
-                    v.Humanoid:ChangeState(14)
-                    sethiddenproperty(plr, "SimulationRadius", 3150)
+                end
+            end
+            for _, enemy in ipairs(enemies) do
+                if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 and enemy:FindFirstChild("HumanoidRootPart") then
+                    if (enemy.HumanoidRootPart.Position - HRP.Position).Magnitude <= 350 then
+                        local avgPos = totalPos[enemy.Name]
+                        if avgPos then
+                            local targetCFrame = CFrame.new(avgPos)
+                            local offsetMag = (enemy.HumanoidRootPart.Position - targetCFrame.Position).Magnitude
+                            if offsetMag > 3 and offsetMag <= 280 then
+                                TweenObject(enemy.HumanoidRootPart, targetCFrame, 300)
+                                enemy.HumanoidRootPart.CanCollide = false
+                                enemy.Humanoid.WalkSpeed = 0
+                                enemy.Humanoid.JumpPower = 0
+                                enemy.Humanoid:ChangeState(14)
+                                pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) end)
+                            end
+                        end
+                    end
                 end
             end
         end
@@ -127,7 +163,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -138,7 +174,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -149,7 +185,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
   EquipWeapon(_G.SelectWeapon)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
@@ -160,7 +196,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
   if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
@@ -170,7 +206,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -186,7 +222,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringMob = true
+  BringMob(true)
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
