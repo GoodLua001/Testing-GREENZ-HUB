@@ -199,7 +199,7 @@ statsSetings = function(Num, value)
     end
   end
 end
-BringMob() = function()
+BringMob = function()
   if not _B then return end
   for _,v in pairs(workspace.Enemies:GetChildren()) do
     if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
