@@ -986,17 +986,18 @@ spawn(function()
                 local player = game.Players.LocalPlayer
                 local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
                 local CFrameBone = CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)
-             _tp(CFrameBone)
+                _tp(CFrameBone)
                 if (CFrameBone.Position - root.Position).Magnitude < 10 then
-                local BonesTable = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
-                local bone = GetConnectionEnemies(BonesTable)
-                if bone then
-                    repeat
-                        task.wait()
-                        Attack.Kill(bone, _G.AutoFarm_Bone)
-                        EquipWeapon(_G.SelectWeapon)
-                        AutoHaki()
-                    until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0
+                    local BonesTable = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
+                    local bone = GetConnectionEnemies(BonesTable)
+                    if bone then
+                        repeat
+                            task.wait()
+                            Attack.Kill(bone, _G.AutoFarm_Bone)
+                            EquipWeapon(_G.SelectWeapon)
+                            AutoHaki()
+                        until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0
+                    end
                 end
             end)
         end
