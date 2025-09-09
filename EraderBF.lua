@@ -986,12 +986,8 @@ spawn(function()
                 local player = game.Players.LocalPlayer
                 local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
                 local CFrameBone = CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)
-            while wait() do
              _tp(CFrameBone)
                 if (CFrameBone.Position - root.Position).Magnitude < 10 then
-                    break
-                end
-            end
                 local BonesTable = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
                 local bone = GetConnectionEnemies(BonesTable)
                 if bone then
@@ -1021,22 +1017,16 @@ spawn(function()
       pcall(function()
         local player = game.Players.LocalPlayer
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        local KataCFrame = CFrame.new(-2077, 252, -12373)
-        while wait(Sec) do
-            _tp(KataCFrame)
-        if (KataCFrame.Position - root.Position).Magnitude < 10 then
-            break
-        end
-    end
         local questUI = player.PlayerGui.Main.Quest
         local enemies = workspace.Enemies
         local bigMirror = workspace.Map.CakeLoaf.BigMirror
+        local v = GetConnectionEnemies("Cake Prince")
         if not root then return end
-        if not bigMirror:FindFirstChild("Other") then
+        if not v then
           _tp(CFrame.new(-2077, 252, -12373))
         end        
         if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
-          local v = GetConnectionEnemies("Cake Prince")
+          
           if v then
             repeat wait() Attack.Kill2(v, _G.Auto_Cake_Prince) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
           else
