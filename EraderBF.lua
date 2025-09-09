@@ -982,7 +982,8 @@ end
 spawn(function()
   while wait(Sec) do 
     if _G.AutoFarm_Bone then
-      pcall(function()        
+      pcall(function()      
+                  _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	     
         local player = game.Players.LocalPlayer
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         local questUI = player.PlayerGui.Main.Quest
@@ -1028,6 +1029,7 @@ spawn(function()
   while wait() do
     if _G.Auto_Cake_Prince then
       pcall(function()
+      _tp(CFrame.new(-2077, 252, -12373))
         local player = game.Players.LocalPlayer
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         local questUI = player.PlayerGui.Main.Quest
