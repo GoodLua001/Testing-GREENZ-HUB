@@ -980,40 +980,31 @@ DuM:AddToggle({
 end
 })
 spawn(function()
-  while wait(Sec) do 
-    if _G.AutoFarm_Bone then
-      pcall(function()      
-        local player = game.Players.LocalPlayer
-        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        local questUI = player.PlayerGui.Main.Quest
-        local BonesTable = {"Reborn Skeleton","Living Zombie","Demonic Soul","Posessed Mummy"}
-        if not root then return end
-        local bone = GetConnectionEnemies(BonesTable)
-          if bone then
-	        if _G.AcceptQuestC and not questUI.Visible then
-              local questPos = CFrame.new(-9516.99316,172.017181,6078.46533,0,0,-1,0,1,0,1,0,0)
-              _tp(questPos)
-              while (questPos.Position - root.Position).Magnitude > 50 do
-                wait(0.2)
-              end
-              local randomQuest = math.random(1, 4)
-              local questData = {
-                [1] = {"StartQuest", "HauntedQuest2", 2},
-                [2] = {"StartQuest", "HauntedQuest2", 1},
-                [3] = {"StartQuest", "HauntedQuest1", 1},
-                [4] = {"StartQuest", "HauntedQuest1", 2}
-              }                    
-              local success, response = pcall(function()
-                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
-              end)
+    while wait(Sec) do 
+        if _G.AutoFarm_Bone then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                local CFrameBone = CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)
+            while wait() do
+             _tp(CFrameBone)
+                if (CFrameBone.Position - root.Position).Magnitude < 10 then
+                    break
+                end
             end
-		    repeat task.wait() Attack.Kill(bone, _G.AutoFarm_Bone) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible)
-          else
-            _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	      
+                local BonesTable = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
+                local bone = GetConnectionEnemies(BonesTable)
+                if bone then
+                    repeat
+                        task.wait()
+                        Attack.Kill(bone, _G.AutoFarm_Bone)
+                        EquipWeapon(_G.SelectWeapon)
+                        AutoHaki()
+                    until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0
+                end
+            end)
         end
-      end)
     end
-  end
 end)
 DuM:AddToggle({
     ["Title"] = "Auto Farm Katakuri",
@@ -1030,6 +1021,13 @@ spawn(function()
       pcall(function()
         local player = game.Players.LocalPlayer
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local KataCFrame = CFrame.new(-2077, 252, -12373)
+        while wait(Sec) do
+            _tp(KataCFrame)
+        if (KataCFrame.Position - root.Position).Magnitude < 10 then
+            break
+        end
+    end
         local questUI = player.PlayerGui.Main.Quest
         local enemies = workspace.Enemies
         local bigMirror = workspace.Map.CakeLoaf.BigMirror
@@ -1068,8 +1066,7 @@ spawn(function()
               end)
             end
             repeat wait() Attack.Kill(v, _G.Auto_Cake_Prince) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
-          else
-            _tp(CFrame.new(-2077, 252, -12373))
+
           end
         end
       end)
