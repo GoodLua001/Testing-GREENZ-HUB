@@ -957,7 +957,7 @@ spawn(function()
 		      if Attack.Alive(v) then
 			    if v.Name == QuestNeta()[1] then
 			      if string.find(QuestTitle, QuestNeta()[5]) then
-				    repeat wait() Attack.Kill(v, _G.Level) until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
+				    repeat wait() Attack.Kill(v, _G.Level) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
 				  else
 				    replicated.Remotes.CommF_:InvokeServer("AbandonQuest")
 				  end
@@ -1008,7 +1008,7 @@ spawn(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
               end)
             end
-		    repeat task.wait() Attack.Kill(bone, _G.AutoFarm_Bone) until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible)
+		    repeat task.wait() Attack.Kill(bone, _G.AutoFarm_Bone) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible)
           else
             _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	      
         end
@@ -1042,7 +1042,7 @@ spawn(function()
         if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
           local v = GetConnectionEnemies("Cake Prince")
           if v then
-            repeat wait() Attack.Kill2(v, _G.Auto_Cake_Prince)until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
+            repeat wait() Attack.Kill2(v, _G.Auto_Cake_Prince) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
           else
             if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
               _tp(CFrame.new(-2151.82, 149.32, -12404.91))
@@ -1069,7 +1069,7 @@ spawn(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
               end)
             end
-            repeat wait() Attack.Kill(v, _G.Auto_Cake_Prince) until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
+            repeat wait() Attack.Kill(v, _G.Auto_Cake_Prince) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
           else
             _tp(CFrame.new(-2077, 252, -12373))
           end
@@ -1100,6 +1100,8 @@ spawn(function()
                                 while _G.AutoRaidCastle and v.Parent and v.Humanoid.Health > 0 and workspace.Enemies:FindFirstChild(v.Name) do
                                     wait()
                                     Attack.Kill(v, _G.AutoRaidCastle)
+                                    AutoHaki()
+                                    EquipWeapon(_G.SelectWeapon)
                                 end
                             end
                         end
@@ -1162,7 +1164,7 @@ spawn(function()
                     repeat 
                         task.wait()
                         Attack.Kill(v, _G.AutoFarmPain)
-                        RandomCFrame = true
+                        AutoHaki()
                         EquipWeapon(_G.SelectWeapon)
                     until not _G.AutoFarmPain or not v.Parent or v.Humanoid.Health <= 0
                 end
@@ -1230,7 +1232,7 @@ elseif World3 then
     bossvalue = {"Stone"}
 end
 Stack:AddDropdown({
-    ["Title"] = "Select Boss Pain",
+    ["Title"] = "Select Boss",
     ["Content"] = "",
     ["Multi"] = false,
     ["Options"] = tableboss,
