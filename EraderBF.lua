@@ -980,28 +980,44 @@ DuM:AddToggle({
 end
 })
 spawn(function()
-    while wait(Sec) do 
-        if _G.AutoFarm_Bone then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                local CFrameBone = CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)
-                _tp(CFrameBone)
-                if (CFrameBone.Position - root.Position).Magnitude < 10 then
-                    local BonesTable = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
-                    local bone = GetConnectionEnemies(BonesTable)
-                    if bone then
-                        repeat
-                            task.wait()
-                            Attack.Kill(bone, _G.AutoFarm_Bone)
-                            EquipWeapon(_G.SelectWeapon)
-                            AutoHaki()
-                        until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0
-                    end
-                end
-            end)
+  while wait(Sec) do 
+    if _G.AutoFarm_Bone then
+      pcall(function()        
+        local player = game.Players.LocalPlayer
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local questUI = player.PlayerGui.Main.Quest
+        local BonesTable = {"Reborn Skeleton","Living Zombie","Demonic Soul","Posessed Mummy"}
+        if not root then return end
+        local bone = GetConnectionEnemies(BonesTable)
+          if bone then
+	        if _G.AcceptQuestC and not questUI.Visible then
+              local questPos = CFrame.new(-9516.99316,172.017181,6078.46533,0,0,-1,0,1,0,1,0,0)
+              _tp(questPos)
+              while (questPos.Position - root.Position).Magnitude > 50 do
+                wait(0.2)
+              end
+              local randomQuest = math.random(1, 4)
+              local questData = {
+                [1] = {"StartQuest", "HauntedQuest2", 2},
+                [2] = {"StartQuest", "HauntedQuest2", 1},
+                [3] = {"StartQuest", "HauntedQuest1", 1},
+                [4] = {"StartQuest", "HauntedQuest1", 2}
+              }                    
+              local success, response = pcall(function()
+                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
+              end)
+            end
+		    repeat task.wait()
+		    AutoHaki()
+		    Attack.Kill(bone, _G.AutoFarm_Bone)
+		    EquipWeapon(_G.SelectWeapon)
+		     until not _G.AutoFarm_Bone or bone.Humanoid.Health <= 0 or not bone.Parent or (_G.AcceptQuestC and not questUI.Visible)
+          else
+            _tp(CFrame.new(-9495.6806640625, 453.58624267578125, 5977.3486328125)) 	      
         end
+      end)
     end
+  end
 end)
 DuM:AddToggle({
     ["Title"] = "Auto Farm Katakuri",
@@ -1013,66 +1029,66 @@ DuM:AddToggle({
 end
 })
 spawn(function()
-    while wait() do
-        if _G.Auto_Cake_Prince then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                local questUI = player.PlayerGui.Main.Quest
-                local enemies = workspace.Enemies
-                local bigMirror = workspace.Map.CakeLoaf.BigMirror
-                local v = GetConnectionEnemies("Cake Prince")
-                if not root then return end
-                if not v then
-                    _tp(CFrame.new(-2077, 252, -12373))
-                end        
-                if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
-                    if v then
-                        repeat
-                            wait()
-                            Attack.Kill2(v, _G.Auto_Cake_Prince)
-                            EquipWeapon(_G.SelectWeapon)
-                            AutoHaki()
-                        until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
-                    else
-                        if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
-                            _tp(CFrame.new(-2151.82, 149.32, -12404.91))
-                        end
-                    end
-                else
-                    local CakePrince = {"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}
-                    local v = GetConnectionEnemies(CakePrince)
-                    if v then
-                        if _G.AcceptQuestC and not questUI.Visible then
-                            local questPos = CFrame.new(-1927.92, 37.8, -12842.54)
-                            _tp(questPos)
-                            while (questPos.Position - root.Position).Magnitude > 50 do
-                                wait(0.2)
-                            end
-                            local randomQuest = math.random(1, 4)
-                            local questData = {
-                                 = {"StartQuest", "CakeQuest2", 2},
-                                 = {"StartQuest", "CakeQuest2", 1},
-                                 = {"StartQuest", "CakeQuest1", 1},
-                                 = {"StartQuest", "CakeQuest1", 2}
-                            }                    
-                            local success, response = pcall(function()
-                                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
-                            end)
-                        end
-                        repeat
-                            wait()
-                            Attack.Kill(v, _G.Auto_Cake_Prince)
-                            EquipWeapon(_G.SelectWeapon)
-                            AutoHaki()
-                        until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)
-                    end
-                end
-            end)
+  while wait() do
+    if _G.Auto_Cake_Prince then
+      pcall(function()
+        local player = game.Players.LocalPlayer
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        local questUI = player.PlayerGui.Main.Quest
+        local enemies = workspace.Enemies
+        local bigMirror = workspace.Map.CakeLoaf.BigMirror
+        if not root then return end
+        if not bigMirror:FindFirstChild("Other") then
+          _tp(CFrame.new(-2077, 252, -12373))
+        end        
+        if bigMirror.Other.Transparency == 0 or enemies:FindFirstChild("Cake Prince") then
+          local v = GetConnectionEnemies("Cake Prince")
+          if v then
+            repeat wait()
+            AutoHaki()
+            Attack.Kill2(v, _G.Auto_Cake_Prince)
+            EquipWeapon(_G.SelectWeapon)
+            
+            until not _G.Auto_Cake_Prince or not v.Parent or v.Humanoid.Health <= 0
+          else
+            if bigMirror.Other.Transparency == 0 and (CFrame.new(-1990.67, 4533, -14973.67).Position - root.Position).Magnitude >= 2000 then
+              _tp(CFrame.new(-2151.82, 149.32, -12404.91))
+            end
+          end
+        else
+          local CakePrince = {"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}
+          local v = GetConnectionEnemies(CakePrince)
+          if v then
+            if _G.AcceptQuestC and not questUI.Visible then
+              local questPos = CFrame.new(-1927.92, 37.8, -12842.54)
+              _tp(questPos)
+              while (questPos.Position - root.Position).Magnitude > 50 do
+                wait(0.2)
+              end
+              local randomQuest = math.random(1, 4)
+              local questData = {
+                [1] = {"StartQuest", "CakeQuest2", 2},
+                [2] = {"StartQuest", "CakeQuest2", 1},
+                [3] = {"StartQuest", "CakeQuest1", 1},
+                [4] = {"StartQuest", "CakeQuest1", 2}
+              }                    
+              local success, response = pcall(function()
+                return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(questData[randomQuest]))
+              end)
+            end
+            repeat wait()
+            AutoHaki()
+            Attack.Kill(v, _G.Auto_Cake_Prince)
+            EquipWeapon(_G.SelectWeapon)
+             until not _G.Auto_Cake_Prince or v.Humanoid.Health <= 0 or bigMirror.Other.Transparency == 0 or (_G.AcceptQuestC and not questUI.Visible)                
+          else
+            _tp(CFrame.new(-2077, 252, -12373))
+          end
         end
+      end)
     end
+  end
 end)
-
 DuM:AddToggle({
     ["Title"] = "Auto Farm Pirate",
     ["Title2"] = "",
