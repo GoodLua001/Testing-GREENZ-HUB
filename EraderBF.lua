@@ -1033,7 +1033,7 @@ spawn(function()
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
-                else
+                if not HasSoul then
                     local boneMobs = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
                     local v = GetConnectionEnemies(boneMobs)
                     repeat
@@ -1042,7 +1042,9 @@ spawn(function()
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
                     until not _G.AutoFarm_Bone or not v or not v.Parent or v.Humanoid.Health <= 0
+                else
                     _tp(CFrame.new(-9515.75, 174.8521728515625, 6079.40625))
+                    end
                 end
             end)
         end
