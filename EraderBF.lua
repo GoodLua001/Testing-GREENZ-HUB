@@ -1035,7 +1035,7 @@ spawn(function()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                 else
                     local boneMobs = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
-                    local v = GetConnectionEnemies(cakeMobs)
+                    local v = GetConnectionEnemies(boneMobs)
                     repeat
                         task.wait()
                         Attack.Kill(v, _G.AutoFarm_Bone)
