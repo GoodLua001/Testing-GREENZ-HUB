@@ -83,6 +83,25 @@ hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death
 hookfunction(require(game:GetService("ReplicatedStorage"):WaitForChild("GuideModule")).ChangeDisplayedNPC,function()end)
 hookfunction(error, function()end)
 hookfunction(warn, function()end)
+function AutoHaki()
+
+  local player = game:GetService("Players").LocalPlayer
+
+  local character = player.Character
+
+  if character and not character:FindFirstChild("HasBuso") then
+
+    local remote = game:GetService("ReplicatedStorage").Remotes.CommF_
+
+    if remote then
+
+      remote:InvokeServer("Buso") 
+
+    end
+
+  end
+
+end
 local Rock = workspace:FindFirstChild("Rocks")
 if Rock then Rock:Destroy()end
 gay = (function()
@@ -107,6 +126,7 @@ Attack.Kill = function(model,Succes)
   PosMon = model:GetAttribute("Locked").Position
   BringEnemy()
   EquipWeapon(_G.SelectWeapon)
+  AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
@@ -119,6 +139,7 @@ Attack.Kill2 = function(model,Succes)
   PosMon = model:GetAttribute("Locked").Position
   BringEnemy()
   EquipWeapon(_G.SelectWeapon)
+  AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))end
@@ -998,6 +1019,35 @@ DuM:AddToggle({
         _G.AutoFarm_Bone = Value
 end
 })
+spawn(function()
+    while wait() do
+        if _G.AutoFarm_Bone then
+            pcall(function()
+                local HasSoul = game.ReplicatedStorage:FindFirstChild("Soul Reaper") or game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper")
+                if HasSoul then
+                    local bosses = {"Soul Reaper"}
+                    local v = GetConnectionEnemies(bosses)
+                    repeat
+                        wait()
+                        Attack.Kill(v, _G.AutoFarm_Bone)
+                        EquipWeapon(_G.SelectWeapon)
+                        AutoHaki()
+                    until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
+                else
+                    local boneMobs = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
+                    local v = GetConnectionEnemies(cakeMobs)
+                    repeat
+                        task.wait()
+                        Attack.Kill(v, _G.AutoFarm_Bone)
+                        EquipWeapon(_G.SelectWeapon)
+                        AutoHaki()
+                    until not _G.AutoFarm_Bone or not v or not v.Parent or v.Humanoid.Health <= 0
+                    _tp(CFrame.new(-9515.75, 174.8521728515625, 6079.40625))
+                end
+            end)
+        end
+    end
+end)
 DuM:AddToggle({
     ["Title"] = "Auto Farm Katakuri",
     ["Title2"] = "",
@@ -1020,6 +1070,7 @@ spawn(function()
                         wait()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
+                        AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                 else
                     local cakeMobs = {"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}
@@ -1028,6 +1079,7 @@ spawn(function()
                         task.wait()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
+                        AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                     _tp(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
                 end
