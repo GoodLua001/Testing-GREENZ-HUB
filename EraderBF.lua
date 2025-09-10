@@ -1023,19 +1023,9 @@ spawn(function()
     while wait() do
         if _G.AutoFarm_Bone then
             pcall(function()
-                local HasSoul = game.ReplicatedStorage:FindFirstChild("Soul Reaper") or game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper")
-                if HasSoul then
-                    local bosses = {"Soul Reaper"}
-                    local v = GetConnectionEnemies(bosses)
-                    repeat
-                        wait()
-                        Attack.Kill(v, _G.AutoFarm_Bone)
-                        EquipWeapon(_G.SelectWeapon)
-                        AutoHaki()
-                    until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
-                if not HasSoul then
-                    local boneMobs = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
-                    local v = GetConnectionEnemies(boneMobs)
+                local boneMobs = {"Reborn Skeleton", "Living Zombie", "Demonic Soul", "Posessed Mummy"}
+                local v = GetConnectionEnemies(boneMobs)
+                if v then
                     repeat
                         task.wait()
                         Attack.Kill(v, _G.AutoFarm_Bone)
@@ -1044,7 +1034,6 @@ spawn(function()
                     until not _G.AutoFarm_Bone or not v or not v.Parent or v.Humanoid.Health <= 0
                 else
                     _tp(CFrame.new(-9515.75, 174.8521728515625, 6079.40625))
-                    end
                 end
             end)
         end
