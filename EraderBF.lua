@@ -1069,7 +1069,6 @@ spawn(function()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
-                else
                     _tp(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
                 end
             end)
