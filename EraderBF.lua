@@ -1569,48 +1569,18 @@ spawn(function()
         end)
     end
 end)
-local RaveV4 = FlurioreGui:CreateTab({
+local caka = FlurioreGui:CreateTab({
 	["Name"] = "Tab Upgrade Race",
 	["Icon"] = "rbxassetid://7733960981"
 })
-local v124 = RaveV4:AddSection("Trial + Kill Player")
-v124:AddToggle({
-    ["Title"] = "Teleport To Race Door",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.TPDoor = Value
-end
-})
-spawn(function()
-  while wait(Sec) do
-    pcall(function()
-      if _G.TPDoor then
-	    if tostring(plr.Data.Race.Value) == "Mink" then
-          _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
-	    elseif tostring(plr.Data.Race.Value) == "Fishman" then
-          _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
-	    elseif tostring(plr.Data.Race.Value) == "Cyborg" then
-          _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
-	    elseif tostring(plr.Data.Race.Value) == "Skypiea" then
-          _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
-	    elseif tostring(plr.Data.Race.Value) == "Ghoul" then
-          _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
-	    elseif tostring(plr.Data.Race.Value) == "Human" then
-          _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
-	    end
-      end
-    end)
-  end
-end) 
+local v124 = caka:AddSection("Trial + Kill Player")
 v124:AddToggle({
     ["Title"] = "Auto Trial",
     ["Title2"] = "",
     ["Content"] = "",
     ["Default"] = false,
     ["Callback"] = function(Value)
-        _G.Compelete_Trials = Value
+        _G.Complete_Trials = Value
 end
 })
 GetSeaBeastTrial = function()
@@ -1728,6 +1698,30 @@ spawn(function()
     end)
   end
 end)                  
+v124:AddToggle({
+    ["Title"] = "Kill Player After Trial",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.Defeating = Value
+end
+})
+spawn(function()
+  while task.wait(Sec) do
+    pcall(function()
+      if _G.Defeating then
+	    for _, v in pairs(workspace.Characters:GetChildren()) do
+          if v.Name ~= plr.Name then
+            if v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") and v.Parent and (Root.Position - v.HumanoidRootPart.Position).Magnitude <= 250 then
+              repeat task.wait() EquipWeapon(_G.SelectWeapon) _tp(v.HumanoidRootPart.CFrame * CFrame.new(0,0,15)) sethiddenproperty(plr, "SimulationRadius", math.huge)until _G.Defeating == false or v.Humanoid.Health <= 0 or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid")
+            end
+          end
+        end
+      end
+    end)
+  end
+end)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
