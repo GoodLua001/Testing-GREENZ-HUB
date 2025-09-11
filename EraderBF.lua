@@ -1556,13 +1556,18 @@ Kac:AddToggle({
 end
 })
 spawn(function()
-  while wait(Sec) do
-    pcall(function()
-      if _G.Prehis_DE then
-      if workspace.Map.PrehistoricIsland.Core.SpawnedDragonEggs:FindFirstChild("DragonEgg") then _tp(workspace.Map.PrehistoricIsland.Core.SpawnedDragonEggs:FindFirstChild("DragonEgg").Molten.CFrame) fireproximityprompt(workspace.Map.PrehistoricIsland.Core.SpawnedDragonEggs.DragonEgg.Molten.ProximityPrompt, 30) end        
-      end
-    end)
-  end
+    while wait(Sec) do
+        pcall(function()
+            if _G.Prehis_DE then
+                local eggs = workspace.Map.PrehistoricIsland.Core.SpawnedDragonEggs
+                local dragonEgg = eggs:FindFirstChild("DragonEgg")
+                if dragonEgg then
+                    _tp(dragonEgg.Molten.CFrame)
+                    fireproximityprompt(dragonEgg.Molten.ProximityPrompt, 30)
+                end
+            end
+        end)
+    end
 end)
 local RaveV4 = FlurioreGui:CreateTab({
 	["Name"] = "Tab Upgrade Race",
@@ -1739,7 +1744,7 @@ local Config = {
     AttackDistance = 70,
     AttackMobs = true,
     AttackPlayers = true,
-    AttackCooldown = 0.2,
+    AttackCooldown = 0.1,
     ComboResetTime = 0.3,
     MaxCombo = 4,
     HitboxLimbs = {"RightLowerArm", "RightUpperArm", "LeftLowerArm", "LeftUpperArm", "RightHand", "LeftHand"},
