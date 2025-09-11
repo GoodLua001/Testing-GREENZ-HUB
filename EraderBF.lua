@@ -1066,6 +1066,7 @@ spawn(function()
                 else
                     local cakeMobs = {"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}
                     local v = GetConnectionEnemies(cakeMobs)
+                if v then
                     repeat
                         task.wait()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
@@ -1073,6 +1074,7 @@ spawn(function()
                         AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                     _tp(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
+                    end
                 end
             end)
         end
@@ -1566,6 +1568,161 @@ local RaveV4 = FlurioreGui:CreateTab({
 	["Name"] = "Tab Upgrade Race",
 	["Icon"] = "rbxassetid://7733960981"
 })
+local race = RaceV4:AddSection("Trial + Kill Player")
+race:AddToggle({
+    ["Title"] = "Teleport To Race Door",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.TPDoor = Value
+end
+})
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.TPDoor then
+	    if tostring(plr.Data.Race.Value) == "Mink" then
+          _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
+	    elseif tostring(plr.Data.Race.Value) == "Fishman" then
+          _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
+	    elseif tostring(plr.Data.Race.Value) == "Cyborg" then
+          _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
+	    elseif tostring(plr.Data.Race.Value) == "Skypiea" then
+          _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
+	    elseif tostring(plr.Data.Race.Value) == "Ghoul" then
+          _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
+	    elseif tostring(plr.Data.Race.Value) == "Human" then
+          _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
+	    end
+      end
+    end)
+  end
+end) 
+race:AddToggle({
+    ["Title"] = "Auto Trial",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.Compelete_Trials = Value
+end
+})
+GetSeaBeastTrial = function()
+  if not workspace.Map:FindFirstChild("FishmanTrial") then return nil end
+  if workspace["_WorldOrigin"].Locations:FindFirstChild("Trial of Water") then FishmanTrial = workspace["_WorldOrigin"].Locations:FindFirstChild("Trial of Water") end
+  if FishmanTrial then
+    for _,v in next, workspace.SeaBeasts:GetChildren() do
+      if v:FindFirstChild("HumanoidRootPart") and (v.HumanoidRootPart.Position - FishmanTrial.Position).Magnitude <= 1500 then
+      if v.Health.Value > 0 then return v end
+      end
+    end
+  end
+end
+spawn(function()
+    while wait(Sec) do
+        pcall(function()
+            if _G.Complete_Trials then
+                local race = tostring(plr.Data.Race.Value)
+                local temple = workspace["_WorldOrigin"].Locations:FindFirstChild("Temple of Time")
+                if not temple then
+                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(28286.35546875, 15895.3017578125, 102.62469482421875))
+                elseif temple then
+                if race == "Mink" then
+                    _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
+                elseif race == "Fishman" then
+                    _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
+                elseif race == "Cyborg" then
+                    _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
+                elseif race == "Skypiea" then
+                    _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
+                elseif race == "Ghoul" then
+                    _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
+                elseif race == "Human" then
+                    _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
+                    end
+                end
+            end
+        end)
+    end
+end)
+	   
+	    
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.Complete_Trials then
+        if tostring(plr.Data.Race.Value) == "Mink" then
+          notween(workspace.Map.MinkTrial.Ceiling.CFrame * CFrame.new(0,-20,0))
+	   end
+      end
+    end)
+  end
+end)
+spawn(function()
+  while wait(Sec) do
+    pcall(function() 
+      if _G.Complete_Trials then
+	    if tostring(plr.Data.Race.Value) == "Fishman" then
+	      if GetSeaBeastTrial() then            
+            repeat task.wait()
+              spawn(function()_tp(CFrame.new(GetSeaBeastTrial().HumanoidRootPart.Position.X,game:GetService("Workspace").Map["WaterBase-Plane"].Position.Y + 300,GetSeaBeastTrial().HumanoidRootPart.Position.Z))end)
+		      MousePos = GetSeaBeastTrial().HumanoidRootPart.Position
+              Useskills("Melee","Z")
+	          Useskills("Melee","X")
+	          Useskills("Melee","C")
+              wait(.1)
+              Useskills("Sword","Z")
+              Useskills("Sword","X")
+              wait(.1)
+              Useskills("Blox Fruit","Z")
+              Useskills("Blox Fruit","X")
+              Useskills("Blox Fruit","C")
+              wait(.1)
+              Useskills("Gun","Z")
+              Useskills("Gun","X")
+            until _G.Complete_Trials == false or not GetSeaBeastTrial()
+          end          
+	    end
+      end
+    end)
+  end
+end)
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.Complete_Trials then
+        if tostring(plr.Data.Race.Value) == "Cyborg" then
+         _tp(workspace.Map.CyborgTrial.Floor.CFrame * CFrame.new(0,500,0))
+   	   end
+      end
+    end)
+  end
+end)
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.Complete_Trials then
+        if tostring(plr.Data.Race.Value) == "Skypiea" then
+          notween(workspace.Map.SkyTrial.Model.FinishPart.CFrame)
+  	   end
+      end
+    end)
+  end
+end)
+spawn(function()
+  while wait(.1) do   
+    pcall(function()
+      if _G.Complete_Trials then
+	    if tostring(plr.Data.Race.Value) == "Human" or tostring(plr.Data.Race.Value) == "Ghoul" then	      
+	      local TrialsTables = {"Ancient Vampire","Ancient Zombie"}
+	      local v = GetConnectionEnemies(TrialsTables)
+          if v then repeat wait() Attack.Kill(v, _G.Complete_Trials)until _G.Complete_Trials == false or not v.Parent or v.Humanoid.Health <= 0 end		
+        end
+      end
+    end)
+  end
+end)                  
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
