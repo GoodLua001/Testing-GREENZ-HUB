@@ -1573,8 +1573,8 @@ local RaveV4 = FlurioreGui:CreateTab({
 	["Name"] = "Tab Upgrade Race",
 	["Icon"] = "rbxassetid://7733960981"
 })
-local race = RaceV4:AddSection("Trial + Kill Player")
-race:AddToggle({
+local v124 = RaveV4:AddSection("Trial + Kill Player")
+v124:AddToggle({
     ["Title"] = "Teleport To Race Door",
     ["Title2"] = "",
     ["Content"] = "",
@@ -1604,7 +1604,7 @@ spawn(function()
     end)
   end
 end) 
-race:AddToggle({
+v124:AddToggle({
     ["Title"] = "Auto Trial",
     ["Title2"] = "",
     ["Content"] = "",
