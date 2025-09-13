@@ -1057,8 +1057,9 @@ spawn(function()
                 if hasCakePrince or hasDoughKing then
                     local bosses = {"Cake Prince", "Dough King"}
                     local v = GetConnectionEnemies(bosses)
+                    if v then
                     repeat
-                        wait()
+                        task.wait()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
@@ -1074,6 +1075,7 @@ spawn(function()
                         AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                     _tp(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
+                        end
                     end
                 end
             end)
@@ -1153,9 +1155,9 @@ SME:AddToggle({
     ["Default"] = false,
     ["Callback"] = function(Value)
         _G.AutoFarmPain = Value
+        RandomCFrame = Value
     end
 })
-
 spawn(function()
     while task.wait() do
         if _G.AutoFarmPain then
@@ -1573,7 +1575,16 @@ local caka = FlurioreGui:CreateTab({
 	["Name"] = "Tab Upgrade Race",
 	["Icon"] = "rbxassetid://7733960981"
 })
-local v124 = caka:AddSection("Trial + Kill Player")
+local v124 = caka:AddSection("Race Normal")
+v124:AddToggle({
+    ["Title"] = "Auto Upgrade V3",
+    ["Title2"] = "Not Support Angel And Ghoul",
+    ["Content"] = "V1 - V3",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.AutoUpV3 = Value
+end
+})
 v124:AddToggle({
     ["Title"] = "Auto Trial",
     ["Title2"] = "",
@@ -1599,29 +1610,35 @@ spawn(function()
         pcall(function()
             if _G.Complete_Trials then
                 local race = tostring(plr.Data.Race.Value)
-                local temple = workspace["_WorldOrigin"].Locations:FindFirstChild("Temple of Time")
-                if not temple then
-                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(28286.35546875, 15895.3017578125, 102.62469482421875))
-                elseif temple then
-                if race == "Mink" then
-                    _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
-                elseif race == "Fishman" then
-                    _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
-                elseif race == "Cyborg" then
-                    _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
-                elseif race == "Skypiea" then
-                    _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
-                elseif race == "Ghoul" then
-                    _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
-                elseif race == "Human" then
-                    _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
+                local CFrameV4 = CFrame.new(3030.39453125, 2280.6171875, -7320.18359375)
+                _tp(CFrameV4)
+                if (CFrameV4.Position - Root.Position).Magnitude < 10 then
+                    local args = {
+                        [1] = "RaceV4Progress",
+                        [2] = "Teleport"
+                    }
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+                    wait(0.5)
+                    if race == "Mink" then
+                        _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
+                    elseif race == "Fishman" then
+                        _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
+                    elseif race == "Cyborg" then
+                        _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
+                    elseif race == "Skypiea" then
+                        _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
+                    elseif race == "Ghoul" then
+                        _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
+                    elseif race == "Human" then
+                        _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
                     end
                 end
             end
         end)
     end
 end)
-	   
+
+	    
 	    
 spawn(function()
   while wait(Sec) do
@@ -1711,10 +1728,25 @@ spawn(function()
   while task.wait(Sec) do
     pcall(function()
       if _G.Defeating then
-	    for _, v in pairs(workspace.Characters:GetChildren()) do
-          if v.Name ~= plr.Name then
-            if v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") and v.Parent and (Root.Position - v.HumanoidRootPart.Position).Magnitude <= 250 then
-              repeat task.wait() EquipWeapon(_G.SelectWeapon) _tp(v.HumanoidRootPart.CFrame * CFrame.new(0,0,15)) sethiddenproperty(plr, "SimulationRadius", math.huge)until _G.Defeating == false or v.Humanoid.Health <= 0 or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid")
+        if plr.Character.Humanoid.Health < 3500 then
+          _tp(CFrame.new(0, 500, 0))
+        else
+          for _, v in pairs(workspace.Characters:GetChildren()) do
+            if v.Name ~= plr.Name then
+              if v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") and v.Parent and 
+                (Root.Position - v.HumanoidRootPart.Position).Magnitude <= 250 then
+                  repeat
+                    task.wait()
+                    EquipWeapon(_G.SelectWeapon)
+                    _tp(v.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0))
+                    sethiddenproperty(plr, "SimulationRadius", math.huge)
+                  until 
+                    _G.Defeating == false or 
+                    v.Humanoid.Health <= 0 or 
+                    not v.Parent or 
+                    not v:FindFirstChild("HumanoidRootPart") or 
+                    not v:FindFirstChild("Humanoid")
+              end
             end
           end
         end
@@ -1722,6 +1754,46 @@ spawn(function()
     end)
   end
 end)
+v124:AddToggle({
+    ["Title"] = "Use Skill When Kill Player",
+    ["Title2"] = "",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.AutoSkillSpam = Value
+end
+})
+spawn(function()
+    while task.wait(Sec) do
+        pcall(function()
+            if _G.AutoSkillSpam and _G.Defeating then
+                Useskills("Melee", "Z")
+                Useskills("Melee", "X")
+                Useskills("Melee", "C")
+                wait(.1)
+                Useskills("Sword", "Z")
+                Useskills("Sword", "X")
+                wait(.1)
+                Useskills("Blox Fruit", "Z")
+                Useskills("Blox Fruit", "X")
+                Useskills("Blox Fruit", "C")
+                Useskills("Blox Fruit", "V")
+                wait(.1)
+                Useskills("Gun", "Z")
+                Useskills("Gun", "X")
+            end
+        end)
+    end
+end)
+v124:AddToggle({
+    ["Title"] = "Auto Ken And Race V3",
+    ["Title2"] = "Not Working",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.AutoKenAndV3 = Value
+end
+})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
