@@ -226,9 +226,9 @@ BringEnemy = function()
     for _,v in pairs(workspace.Enemies:GetChildren()) do
         if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.PrimaryPart then
             if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-                v.Humanoid.WalkSpeed = 50
-                v.Humanoid:MoveTo(PosMon)
+                v:PivotTo(CFrame.new(PosMon))
                 v.PrimaryPart.CanCollide = true
+                v.Humanoid.WalkSpeed = 0
                 v.Humanoid.JumpPower = 0
                 if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
                 for _, part in ipairs(v:GetDescendants()) do
@@ -236,9 +236,6 @@ BringEnemy = function()
                         part:SetNetworkOwner(nil)
                     end
                 end
-                v.Humanoid.MoveToFinished:Connect(function()
-                    v.Humanoid.WalkSpeed = 0
-                end)
             end
         end
     end
