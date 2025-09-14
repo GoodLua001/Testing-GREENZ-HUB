@@ -124,7 +124,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   
+  BringEnemy()
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -143,7 +143,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   
+  BringEnemy()
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -174,7 +174,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-   
+  BringEnemy()  
   AutoHaki()
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
