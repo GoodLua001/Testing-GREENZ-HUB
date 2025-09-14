@@ -114,53 +114,160 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
-getgenv().BringMobDistance = 350
+getgenv().BringMobs = true
+local Players = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+local Player = Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Enemies = workspace:WaitForChild("Enemies")
 
-function BringEnemy(mobName)
-    pcall(function()
-        local player = game.Players.LocalPlayer
-        local char = player.Character
-        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-
-        local targetCFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-
-        if setscriptable then setscriptable(player, "SimulationRadius", true) end
-        if sethiddenproperty then sethiddenproperty(player, "SimulationRadius", math.huge) end
-
-        local targets = {}
-        for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-            local hrp = enemy:FindFirstChild("HumanoidRootPart")
-            local hum = enemy:FindFirstChildOfClass("Humanoid")
-            if hrp and hum and hum.Health > 0
-                and (not mobName or enemy.Name == mobName)
-                and not string.find(enemy.Name, "Boss") then
-                if (char.HumanoidRootPart.Position - hrp.Position).Magnitude <= getgenv().BringMobDistance then
-                    table.insert(targets, enemy)
-                end
-            end
-        end
-        if #targets == 0 then return end
-
-        for _, enemy in pairs(targets) do
-            if sethiddenproperty then sethiddenproperty(enemy.HumanoidRootPart, "NetworkOwnershipRule", Enum.NetworkOwnership.Manual) end
-            enemy.HumanoidRootPart.CFrame = targetCFrame
-            enemy.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
-        end
-
-        for _, npc in pairs(workspace.Enemies:GetChildren()) do
-            local hrp = npc:FindFirstChild("HumanoidRootPart")
-            local hum = npc:FindFirstChildOfClass("Humanoid")
-            if hrp and hum and hum.Health == hum.MaxHealth and player:DistanceFromCharacter(hrp.Position) <= 30 then
+_BringEnemies = function(block)
+    getgenv().BringMobs = getgenv().BringMobs or false
+    local name = block.Name
+    for _, mob in ipairs(Enemies:GetChildren()) do
+        if mob.Name == name and not CollectionService:HasTag(mob, "QMobs") then
+            local humanoid = mob:FindFirstChildWhichIsA("Humanoid")
+            local root = mob:FindFirstChild("HumanoidRootPart") or mob.PrimaryPart
+            if humanoid and humanoid.Health > 0 and root then
+                CollectionService:AddTag(mob, "QMobs")
+                local attachment = root:FindFirstChild("MobBringAttachment") or Instance.new("Attachment")
+                attachment.Name = "MobBringAttachment"
+                attachment.Parent = root
+                local align = attachment:FindFirstChild("MobAlignPosition") or Instance.new("AlignPosition")
+                align.Name = "MobAlignPosition"
+                align.Mode = Enum.PositionAlignmentMode.OneAttachment
+                align.Responsiveness = 250
+                align.MaxForce = 1e6
+                align.Attachment0 = attachment
+                align.Parent = attachment
                 task.spawn(function()
-                    local oldPos = hrp.Position
-                    task.wait(3)
-                    if (oldPos - hrp.Position).Magnitude < 0.5 and hum and hum.Health == hum.MaxHealth then
-                        if npc and npc.Parent then npc:Destroy() end
+                    while mob.Parent and humanoid.Health > 0 and block and block.Parent do
+                        align.Position = block.Position
+                        task.wait(0.1)
                     end
+                    if attachment and attachment.Parent then
+                        attachment:Destroy()
+                    end
+                    CollectionService:RemoveTag(mob, "QMobs")
                 end)
             end
         end
-    end)
+    end
+end
+
+local Attack = {}
+Attack.__index = Attack
+Attack.Alive = function(model) if not model then return end local Humanoid = model:FindFirstChild("Humanoid") return Humanoid and Humanoid.Health > 0 end
+Attack.Pos = function(model,dist) return (Root.Position - mode.Position).Magnitude <= dist end
+Attack.Dist = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude <= dist end
+Attack.DistH = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude > dist end
+Attack.Kill = function(model, Succes)
+	if model and Succes then
+		if not model:GetAttribute("Locked") then
+			model:SetAttribute("Locked", model.HumanoidRootPart.CFrame)
+		end
+
+		PosMon = model:GetAttribute("Locked").Position
+		_BringEnemies(model)
+
+		EquipWeapon(_G.SelectWeapon)
+		local Equipped = Player.Character:FindFirstChildOfClass("Tool")
+		local ToolTip = Equipped and Equipped.ToolTip
+
+		if ToolTip == "Blox Fruit" then
+			_tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0))
+		else
+			_tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))
+		end
+
+		if RandomCFrame then
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+		end
+	end
+end
+Attack.Kill2 = function(model, Succes)
+	if model and Succes then
+		if not model:GetAttribute("Locked") then
+			model:SetAttribute("Locked", model.HumanoidRootPart.CFrame)
+		end
+
+		PosMon = model:GetAttribute("Locked").Position
+		_BringEnemies(model)
+
+		EquipWeapon(_G.SelectWeapon)
+		local Equipped = Player.Character:FindFirstChildOfClass("Tool")
+		local ToolTip = Equipped and Equipped.ToolTip
+
+		if ToolTip == "Blox Fruit" then
+			_tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0))
+		else
+			_tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))
+		end
+
+		if RandomCFrame then
+			task.wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+			task.wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0))
+			task.wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+			task.wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+		end
+	end
+end
+Attack.KillSea = function(model,Succes)
+  if model and Succes then
+  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
+  PosMon = model:GetAttribute("Locked").Position
+  BringEnemy()
+  EquipWeapon(_G.SelectWeapon)
+  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+  local ToolTip = Equipped.ToolTip
+  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else notween(model.HumanoidRootPart.CFrame * CFrame.new(0,50,8)) wait(.85)notween(model.HumanoidRootPart.CFrame * CFrame.new(0,400,0)) wait(1)end
+  end
+end
+Attack.Sword = function(model,Succes)
+  if model and Succes then
+  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
+  PosMon = model:GetAttribute("Locked").Position
+  BringEnemy()
+  weaponSc("Sword")
+  _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
+  if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
+  end
+end
+Attack.Mas = function(model,Succes)
+  if model and Succes then
+  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
+  PosMon = model:GetAttribute("Locked").Position
+  BringEnemy()
+    if model.Humanoid.Health <= HealthM then
+      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
+      Useskills("Blox Fruit","Z")
+      Useskills("Blox Fruit","X")
+      Useskills("Blox Fruit","C")
+    else
+      weaponSc("Melee")
+      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
+    end
+  end
+end
+Attack.Masgun = function(model,Succes)
+  if model and Succes then
+  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
+  PosMon = model:GetAttribute("Locked").Position
+  BringEnemy()
+    if model.Humanoid.Health <= HealthM then
+      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
+      Useskills("Gun","Z")
+      Useskills("Gun","X")
+    else
+      weaponSc("Melee")
+      _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
+    end
+  end
 end
 statsSetings = function(Num, value)
   if Num == "Melee" then
@@ -943,10 +1050,10 @@ spawn(function()
 	    elseif plr.PlayerGui.Main.Quest.Visible == true then
 	      if workspace.Enemies:FindFirstChild(QuestNeta()[1]) then
 		    for i, v in pairs(workspace.Enemies:GetChildren()) do
-		      if _tp(v * CFrame.new(0, 30, 0)) then
+		      if Attack.Kill(v, _G.Level) then
 			    if v.Name == QuestNeta()[1] then
 			      if string.find(QuestTitle, QuestNeta()[5]) then
-				    repeat wait() _tp(v * CFrame.new(0, 30, 0)) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
+				    repeat wait() Attack.Kill(v, _G.Level) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
 				  else
 				    replicated.Remotes.CommF_:InvokeServer("AbandonQuest")
 				  end
@@ -977,7 +1084,7 @@ spawn(function()
                 if v then
                     repeat
                         task.wait()
-                        _tp(v * CFrame.new(0, 30, 0))
+                        Attack.Kill(v, _G.AutoFarm_Bone)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
                     until not _G.AutoFarm_Bone or not v or not v.Parent or v.Humanoid.Health <= 0
@@ -1009,7 +1116,7 @@ spawn(function()
                     if v then
                     repeat
                         task.wait()
-                        _tp(v * CFrame.new(0, 30, 0))
+                        Attack.Kill2(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
@@ -1019,7 +1126,7 @@ spawn(function()
                 if v then
                     repeat
                         task.wait()
-                        _tp(v * CFrame.new(0, 30, 0))
+                        Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
@@ -1051,7 +1158,7 @@ spawn(function()
                             if v.Name and (v.HumanoidRootPart.Position - Root.Position).Magnitude <= 2000 then
                                 while _G.AutoRaidCastle and v.Parent and v.Humanoid.Health > 0 and workspace.Enemies:FindFirstChild(v.Name) do
                                     wait()
-                                    _tp(v * CFrame.new(0, 30, 0))
+                                    Attack.Kill(v, _G.AutoRaidCastle)
                                     AutoHaki()
                                     EquipWeapon(_G.SelectWeapon)
                                 end
