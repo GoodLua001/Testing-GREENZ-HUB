@@ -130,7 +130,7 @@ Attack.Kill = function(model,Succes)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(.5)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
+  if RandomCFrame then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
   end
 end
 Attack.Kill2 = function(model,Succes)
@@ -143,7 +143,7 @@ Attack.Kill2 = function(model,Succes)
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
   local ToolTip = Equipped.ToolTip
   if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
+  if RandomCFrame then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
   end
 end
 Attack.KillSea = function(model,Succes)
@@ -164,7 +164,7 @@ Attack.Sword = function(model,Succes)
   BringEnemy()
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
-  if RandomCFrame then wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) wait(0.1)_tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
+if RandomCFrame then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
   end
 end
 Attack.Mas = function(model,Succes)
@@ -223,31 +223,18 @@ statsSetings = function(Num, value)
 end
 BringEnemy = function()
   if not _B then return end
-  local enemies = {}
   for _,v in pairs(workspace.Enemies:GetChildren()) do
     if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-      if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-        table.insert(enemies, v)
-        if #enemies == 1000 then break end
-      end
-    end
-  end
-  local count = #enemies
-  local radius = 5
-  for i, v in ipairs(enemies) do
-    local angle = (2 * math.pi / count) * (i - 1)
-    local offset = Vector3.new(
-      math.cos(angle) * radius,
-      0,
-      math.sin(angle) * radius
-    )
-    v.PrimaryPart.CFrame = CFrame.new(PosMon + offset)
-    v.PrimaryPart.CanCollide = true
-    v.Humanoid.WalkSpeed = 0
-    v.Humanoid.JumpPower = 0
-    if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
-    plr.SimulationRadius = math.huge
-  end
+	  if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
+	    v.PrimaryPart.CFrame = CFrame.new(PosMon)
+		v.PrimaryPart.CanCollide = true;
+		v:FindFirstChild("Humanoid").WalkSpeed = 0;
+		v:FindFirstChild("Humanoid").JumpPower = 0;
+		if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy()end;
+		plr.SimulationRadius = math.huge
+	  end
+	end                               
+  end                    	
 end
 Useskills = function(weapon, skill)
   if weapon == "Melee" then
