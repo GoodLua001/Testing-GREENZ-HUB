@@ -239,6 +239,8 @@ local function L_V2()
                             local n=obj.Name=="Teleporter1" and 1 or obj.Name=="Teleporter2" and 2 or obj.Name=="Teleporter3" and 3
                             local args={ [1]="Add", [2]=n }
                             game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
+                            local args = { [1] = "Chosen", [3] = 1 }
+                            game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
                         end
                     end
                 end
@@ -328,6 +330,7 @@ spawn(function()
                 if c <= 0 and not workspace:FindFirstChild("Diamond", true) then
                     warn("[ChestFarm] Not enough chests, hopping...")
                     Hop("Low")
+                    return
                 end
             end)
 
@@ -336,9 +339,8 @@ spawn(function()
                 if not chest and not workspace:FindFirstChild("Diamond", true) then
                     warn("[ChestFarm] No chest found, hopping...")
                     Hop("Low")
-                    break
+                    return
                 end
-
                 if chest then
                     warn("[ChestFarm] Farming chest:", chest.Name)
                     local prox = chest:FindFirstChildWhichIsA("ProximityPrompt", true)
@@ -354,14 +356,15 @@ spawn(function()
                     if os.time() - startTime >= 10 then
                         warn("[ChestFarm] Chest timeout (10s), skipping:", chest.Name)
                     end
+                    break
                 else
                     task.wait(1)
                 end
-                break
             end
         end
     end
 end)
+
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
