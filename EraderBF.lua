@@ -221,33 +221,33 @@ statsSetings = function(Num, value)
     end
   end
 end
-local function InMyNetWork(object)
-    if isnetworkowner then
-        return isnetworkowner(object)
-    else
-        if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
-            return true
-        end
-        return false
-    end
-end
-
 BringEnemy = function()
-    if not _B then return end
-    for _,v in pairs(workspace.Enemies:GetChildren()) do
-        if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and InMyNetWork(v.HumanoidRootPart) then
-            v.HumanoidRootPart.Size = Vector3.new(60,60,60)
-            v.HumanoidRootPart.CFrame = PosMon
-            v.HumanoidRootPart.CanCollide = false
-            if v:FindFirstChild("Head") then
-                v.Head.CanCollide = false
-            end
-            if v.Humanoid:FindFirstChild("Animator") then
-                v.Humanoid.Animator:Destroy()
-            end
-            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-        end
+  if not _B then return end
+  local enemies = {}
+  for _,v in pairs(workspace.Enemies:GetChildren()) do
+    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+      if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
+        table.insert(enemies, v)
+        if #enemies == 1000 then break end
+      end
     end
+  end
+  local count = #enemies
+  local radius = 5
+  for i, v in ipairs(enemies) do
+    local angle = (2 * math.pi / count) * (i - 1)
+    local offset = Vector3.new(
+      math.cos(angle) * radius,
+      0,
+      math.sin(angle) * radius
+    )
+    v.PrimaryPart.CFrame = CFrame.new(PosMon + offset)
+    v.PrimaryPart.CanCollide = true
+    v.Humanoid.WalkSpeed = 0
+    v.Humanoid.JumpPower = 0
+    if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
+    plr.SimulationRadius = math.huge
+  end
 end
 Useskills = function(weapon, skill)
   if weapon == "Melee" then
