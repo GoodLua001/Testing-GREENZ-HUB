@@ -114,6 +114,114 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
+getgenv().BringMobDistance = 350
+
+BringEnemy = newcclosure(function(mobName)
+    pcall(function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        if not char or not char.HumanoidRootPart then return end
+        local targetCFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+        if setscriptable then setscriptable(player, "SimulationRadius", true) end
+        if sethiddenproperty then sethiddenproperty(player, "SimulationRadius", math.huge) end
+        local targets = {}
+        for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+            local hrp, hum = enemy.HumanoidRootPart, enemy.Humanoid
+            if hrp and hum and hum.Health > 0 and (not mobName or enemy.Name == mobName) and not string.find(enemy.Name, "Boss") then
+                if (char.HumanoidRootPart.Position - hrp.Position).Magnitude <= getgenv().BringMobDistance then
+                    table.insert(targets, enemy)
+                end
+            end
+        end
+        if #targets == 0 then return end
+        for _, enemy in pairs(targets) do
+            if sethiddenproperty then sethiddenproperty(enemy.HumanoidRootPart, "NetworkOwnershipRule", Enum.NetworkOwnership.Manual) end
+            enemy.HumanoidRootPart.CFrame = targetCFrame
+            enemy.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+        end
+        for _, npc in pairs(workspace.Enemies:GetChildren()) do
+            local hrp, hum = npc.HumanoidRootPart, npc.Humanoid
+            if hrp and hum and hum.Health == hum.MaxHealth and player:DistanceFromCharacter(hrp.Position) <= 30 then
+                task.spawn(function()
+                    local oldPos = hrp.Position
+                    task.wait(3)
+                    if (oldPos - hrp.Position).Magnitude < 0.5 and npc.Humanoid and npc.Humanoid.Health == npc.Humanoid.MaxHealth then
+                        if npc and npc.Parent then npc:Destroy() end
+                    end
+                end)
+            end
+        end
+    end)
+end)
+
+local mobs, initPull, randPull = {}, false, 0
+local function teleportMob(part, pos)
+    if part and pos then part.CFrame = CFrame.new(pos) end
+end
+local function countAliveMobs(pos)
+    if not pos or getgenv().BringMobDistance == 0 then return 0 end
+    local count = 0
+    for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+        local hum, root = v.Humanoid, v.HumanoidRootPart
+        if hum and root and hum.Health > 0 and (root.Position - pos.Position).Magnitude <= getgenv().BringMobDistance then
+            count = count + 1
+        end
+    end
+    return count
+end
+local function isPlayerNear(pos)
+    if not pos or getgenv().BringMobDistance == 0 then return false end
+    local player = game.Players.LocalPlayer
+    local root = player.Character and player.Character.HumanoidRootPart
+    return root and (root.Position - pos.Position).Magnitude <= getgenv().BringMobDistance
+end
+
+_G.BringMobFunction = function(pos, name)
+    PosMon, NameMon, initPull, randPull, mobs = pos, name, false, 0, {}
+end
+
+task.spawn(function()
+    local lastThreeMobPull, threeMobInterval = 0, 30
+    while task.wait() do
+        pcall(function()
+            if not _B or not PosMon or getgenv().BringMobDistance == 0 then return end
+            for m, _ in pairs(mobs) do
+                if not m or not m.Parent or not m.HumanoidRootPart then mobs[m] = nil end
+            end
+            if countAliveMobs(PosMon) == 0 then
+                mobs = {}
+                if not initPull then initPull = true end
+                if initPull then randPull = Random.new():NextInteger(1, 2) end
+            end
+            local currentTime = tick()
+            local limit = initPull and (currentTime - lastThreeMobPull >= threeMobInterval) and 3 or (initPull and randPull or 1)
+            if limit == 3 then lastThreeMobPull = currentTime end
+            local pulled = 0
+            for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                if pulled >= limit then break end
+                local isValid = (v.Name == MonFarm or v.Name == NameMon or v.Name == "Factory Staff") and 
+                    not string.find(v.Name, "Boss") and v.Name ~= "Ice Admiral" and v.Name ~= "Don Swan" and 
+                    v.Name ~= "Saber Expert" and v.Name ~= "Longma"
+                local hasPart = v.Humanoid and v.HumanoidRootPart and v.Head
+                local isAlive = hasPart and v.Humanoid.Health > 0
+                local inRange = hasPart and (v.HumanoidRootPart.Position - PosMon.Position).Magnitude <= getgenv().BringMobDistance
+                local isNotGhost = hasPart and not v.HumanoidRootPart.Anchored
+                if isValid and hasPart and isAlive and inRange and isNotGhost and isPlayerNear(PosMon) then
+                    pulled = pulled + 1
+                    local root, hum, head = v.HumanoidRootPart, v.Humanoid, v.Head
+                    root.CanCollide, head.CanCollide, root.Size = false, false, Vector3.new(1, 1, 1)
+                    hum:SetAttribute("WalkSpeed", 0)
+                    hum:SetAttribute("JumpPower", 0)
+                    teleportMob(root, PosMon.Position)
+                    mobs[v] = { LastUpdate = tick(), LastTeleport = tick() }
+                end
+            end
+            if sethiddenproperty then
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end)
+    end
+end)
 local Attack = {}
 Attack.__index = Attack
 Attack.Alive = function(model) if not model then return end local Humanoid = model:FindFirstChild("Humanoid") return Humanoid and Humanoid.Health > 0 end
@@ -218,27 +326,6 @@ statsSetings = function(Num, value)
   elseif Num == "Devil" then
     if plr.Data.Points.Value ~= 0 then
       replicated.Remotes.CommF_:InvokeServer("AddPoint","Demon Fruit",value)
-    end
-  end
-end
-local TweenService = game:GetService("TweenService")
-BringEnemy = function()
-  if not _B then return end
-  local count = 0
-  for _,v in pairs(workspace.Enemies:GetChildren()) do
-    if count == 3 then break end
-    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-      if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-        local goal = {CFrame = CFrame.new(PosMon)}
-        local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-        TweenService:Create(v.PrimaryPart, tweenInfo, goal):Play()
-        v.PrimaryPart.CanCollide = true
-        v.Humanoid.WalkSpeed = 0
-        v.Humanoid.JumpPower = 0
-        if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
-        plr.SimulationRadius = math.huge
-        count = count + 1
-      end
     end
   end
 end
