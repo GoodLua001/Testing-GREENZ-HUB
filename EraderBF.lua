@@ -241,6 +241,21 @@ statsSetings = function(Num, value)
     end
   end
 end
+BringEnemy = function()
+  if not _B then return end
+  for _,v in pairs(workspace.Enemies:GetChildren()) do
+    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+	  if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
+	    v.PrimaryPart.CFrame = CFrame.new(PosMon)
+		v.PrimaryPart.CanCollide = true;
+		v:FindFirstChild("Humanoid").WalkSpeed = 0;
+		v:FindFirstChild("Humanoid").JumpPower = 0;
+		if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy()end;
+		plr.SimulationRadius = math.huge
+	  end
+	end                               
+  end                    	
+end
   Useskills = function(weapon, skill)
   if weapon == "Melee" then
     weaponSc("Melee")
@@ -871,147 +886,9 @@ v1:AddToggle({
     ["Content"] = "",
     ["Default"] = true,
     ["Callback"] = function(Value)
-        getgenv().BringMobs = Value
+        _B = Value
 end
 })
-local plr = game.Players.LocalPlayer
-
-local function TweenObject(Object, Pos, Speed)
-    Speed = Speed or 350
-    local Distance = (Pos.Position - Object.Position).Magnitude
-    local tweenService = game:GetService("TweenService")
-    local info = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
-    local tween1 = tweenService:Create(Object, info, {CFrame = Pos})
-    tween1:Play()
-end
-
-local function GetMobPosition(EnemiesName)
-    local pos
-    local count = 0
-    for _, v in pairs(workspace.Enemies:GetChildren()) do
-        if v.Name == EnemiesName and v:FindFirstChild("HumanoidRootPart") then
-            if not pos then
-                pos = v.HumanoidRootPart.Position
-            else
-                pos = pos + v.HumanoidRootPart.Position
-            end
-            count = count + 1
-        end
-    end
-    if count > 0 then
-        pos = pos / count
-    end
-    return pos
-end
-
-local function BringMob(value)
-    if value then
-        local ememe = workspace.Enemies:GetChildren()
-        if #ememe > 0 then
-            local totalpos = {}
-            for _, v in pairs(ememe) do
-                if not totalpos[v.Name] then
-                    totalpos[v.Name] = GetMobPosition(v.Name)
-                end
-            end
-            for _, v in pairs(workspace.Enemies:GetChildren()) do
-                if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
-                    if (v.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude <= 350 then
-                        for k, f in pairs(totalpos) do
-                            if k and v.Name == k and f then
-                                local Gay = CFrame.new(f.X, f.Y, f.Z)
-                                local Cac = (v.HumanoidRootPart.Position - Gay.Position).Magnitude
-                                if Cac > 3 and Cac <= 280 then
-                                    TweenObject(v.HumanoidRootPart, Gay, 300)
-                                    v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
-                                    v.Humanoid.JumpPower = 0
-                                    v.Humanoid:ChangeState(14)
-                                    pcall(function()
-                                        sethiddenproperty(plr, "SimulationRadius", math.huge)
-                                    end)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-BringMob(true)
-
-task.spawn(function()
-    while task.wait() do
-        if not getgenv().BringMob then print("Deo Bat BringMob") end
-
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        if not character or not character:FindFirstChild("HumanoidRootPart") then print("Cac") end
-        local hrpPlayer = character and character:FindFirstChild("HumanoidRootPart")
-        local enemiesFolder = workspace:FindFirstChild("Enemies")
-        if not enemiesFolder then print("Gay") end
-
-        local enemies = {}
-        for _, mob in ipairs(enemiesFolder:GetChildren()) do
-            if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
-                if mob.Humanoid.Health > 0 then
-                    table.insert(enemies, mob)
-                end
-            end
-        end
-
-        local count = #enemies
-        local radius = 6
-
-        for i, mob in ipairs(enemies) do
-            local hrp = mob:FindFirstChild("HumanoidRootPart")
-            if not hrp then print("Cac") end
-
-            local angle = (2 * math.pi / math.max(count, 1)) * (i - 1)
-            local offset = Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius
-            local targetPos = Vector3.new(
-                hrpPlayer.Position.X + offset.X,
-                hrpPlayer.Position.Y - 3.5, 
-                hrpPlayer.Position.Z + offset.Z
-            )
-            
-            local bp = hrp:FindFirstChild("BodyPosition")
-            if not bp then
-                bp = Instance.new("BodyPosition")
-                bp.Name = "BodyPosition"
-                bp.MaxForce = Vector3.new(1e6, 1e6, 1e6)
-                bp.D = 1000
-                bp.P = 5000
-                bp.Parent = hrp
-            end
-            bp.Position = targetPos
-
-            local bv = hrp:FindFirstChild("BodyVelocity")
-            if bv then bv:Destroy() end
-
-            task.spawn(function()
-                for _, part in pairs(mob:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
-            end)
-
-            local hum = mob:FindFirstChildOfClass("Humanoid")
-            if hum then
-                hum.WalkSpeed = 0
-                hum.JumpPower = 0
-                pcall(function() hum:ChangeState(14) end)
-            end
-
-            pcall(function()
-                sethiddenproperty(player, "SimulationRadius", math.huge)
-            end)
-        end
-    end
-end)
 
 v1:AddToggle({
     ["Title"] = "Fast Attack",
