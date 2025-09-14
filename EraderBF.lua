@@ -222,19 +222,23 @@ statsSetings = function(Num, value)
   end
 end
 BringEnemy = function()
-  if not _B then return end
-  for _,v in pairs(workspace.Enemies:GetChildren()) do
-    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-	  if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-	    v.PrimaryPart.CFrame = CFrame.new(PosMon)
-		v.PrimaryPart.CanCollide = true;
-		v:FindFirstChild("Humanoid").WalkSpeed = 0;
-		v:FindFirstChild("Humanoid").JumpPower = 0;
-		if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy()end;
-		plr.SimulationRadius = math.huge
-	  end
-	end                               
-  end                    	
+    if not _B then return end
+    for _,v in pairs(workspace.Enemies:GetChildren()) do
+        if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.PrimaryPart then
+            if (v.PrimaryPart.Position - PosMon).Magnitude <= 500 then
+                v.Humanoid:MoveTo(PosMon)
+                v.PrimaryPart.CanCollide = true
+                v.Humanoid.WalkSpeed = 50
+                v.Humanoid.JumpPower = 0
+                if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
+                for _, part in ipairs(v:GetDescendants()) do
+                    if part:IsA("BasePart") and part:CanSetNetworkOwnership() then
+                        part:SetNetworkOwner(nil)
+                    end
+                end
+            end
+        end
+    end
 end
 Useskills = function(weapon, skill)
   if weapon == "Melee" then
@@ -687,7 +691,7 @@ local FlurioreGui = FlurioreFixLib:MakeGui({
 	["Image"] = "94892669378312",
 	["Color"] = Color3.fromRGB(135, 206, 250),
 	["Tab Width"] = 130,
-	["Theme"] = "101094089630582"
+	["Theme"] = "72907390481498"
 })
 
 FlurioreFixLib:MakeNotify({
