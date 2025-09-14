@@ -124,7 +124,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -143,7 +143,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -162,7 +162,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -174,7 +174,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
   AutoHaki()
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
@@ -191,7 +191,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -207,7 +207,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
+  StartBring = true
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
@@ -241,55 +241,6 @@ statsSetings = function(Num, value)
     end
   end
 end
-spawn(function()
-	while true do wait()
-		if setscriptable then
-			setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
-		end
-		if sethiddenproperty then
-			sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-		end
-	end
-end)
-   spawn(function()
-      while task.wait() do
-            pcall(function()
-                if _B and BringEnemy() then
-                   for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                       if not string.find(v.Name,"Boss") and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 500 then
-                           if InMyNetWork(v.HumanoidRootPart) then
-                               v.HumanoidRootPart.CFrame = PosMon
-                               v.Humanoid.JumpPower = 0
-                               v.Humanoid.WalkSpeed = 0
-                               v.HumanoidRootPart.Size = Vector3.new(100,100,100)
-                               v.HumanoidRootPart.Transparency = 1
-                               v.HumanoidRootPart.CanCollide = false
-                               v.Head.CanCollide = false
-                               if v.Humanoid:FindFirstChild("Animator") then
-                                   v.Humanoid.Animator:Destroy()
-                               end
-                                  v.Humanoid:ChangeState(11)
-                                  v.Humanoid:ChangeState(14)
-                              end
-                          end
-                      end
-                 end
-            end)
-       end
- end)
-                
-function InMyNetWork(object)
-	if isnetworkowner then
-		return isnetworkowner(object)
-	else
-		if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 200 then 
-			return true
-		end
-		return false
-	end
-end
-
-Useskills = function(weapon, skill)
   if weapon == "Melee" then
     weaponSc("Melee")
     if skill == "Z" then
@@ -922,6 +873,46 @@ v1:AddToggle({
         _B = Value
 end
 })
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            QuestCheck()
+            local enemies = {}
+            for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                if _B and StartBring and (v.Name == MonFarm or v.Name == Mon) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then
+                    table.insert(enemies, v)
+                end
+            end
+
+            for index, v in ipairs(enemies) do
+                local angle = (index - 1) * (math.pi * 2 / #enemies)
+                local offset = Vector3.new(math.cos(angle) * 3, 0, math.sin(angle) * 3)
+                local targetPos = PosMon.Position + offset
+                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                v.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+                v.HumanoidRootPart.CanCollide = true
+                if v:FindFirstChild("Head") then
+                    v.Head.CanCollide = true
+                end
+                if v.Humanoid:FindFirstChild("Animator") then
+                    v.Humanoid.Animator:Destroy()
+                end
+                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end)
+    end
+end)
+
+        function InMyNetWork(object)
+      	if isnetworkowner then
+		return isnetworkowner(object)
+      	else
+	  	if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 340 then 
+ 			return true
+    		end
+ 		return false
+      	end
+   end    
 v1:AddToggle({
     ["Title"] = "Fast Attack",
     ["Title2"] = "Not Supported Gas M1",
@@ -1050,7 +1041,7 @@ spawn(function()
 		      if Attack.Kill(v, _G.Level) then
 			    if v.Name == QuestNeta()[1] then
 			      if string.find(QuestTitle, QuestNeta()[5]) then
-				    repeat wait() Attack.Kill(v, _G.Level) EquipWeapon(_G.SelectWeapon) AutoHaki() until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
+				    repeat wait() Attack.Kill(v, _G.Level) EquipWeapon(_G.SelectWeapon) AutoHaki() StartBring = true until not _G.Level or v.Humanoid.Health <= 0 or not v.Parent or plr.PlayerGui.Main.Quest.Visible == false
 				  else
 				    replicated.Remotes.CommF_:InvokeServer("AbandonQuest")
 				  end
@@ -1084,6 +1075,7 @@ spawn(function()
                         Attack.Kill(v, _G.AutoFarm_Bone)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
+                        StartBring = true
                     until not _G.AutoFarm_Bone or not v or not v.Parent or v.Humanoid.Health <= 0
                 else
                     _tp(CFrame.new(-9515.75, 174.8521728515625, 6079.40625))
@@ -1110,7 +1102,6 @@ spawn(function()
                 if hasCakePrince or hasDoughKing then
                     local bosses = {"Cake Prince", "Dough King"}
                     local v = GetConnectionEnemies(bosses)
-                    if v then
                     repeat
                         task.wait()
                         Attack.Kill2(v, _G.Auto_Cake_Prince)
@@ -1126,9 +1117,9 @@ spawn(function()
                         Attack.Kill(v, _G.Auto_Cake_Prince)
                         EquipWeapon(_G.SelectWeapon)
                         AutoHaki()
+                        StartBring = true
                     until not _G.Auto_Cake_Prince or not v or not v.Parent or v.Humanoid.Health <= 0
                     _tp(CFrame.new(-1579.9111328125, 329.7358703613281, -12310.365234375))
-                        end
                     end
                 end
             end)
@@ -1275,6 +1266,7 @@ spawn(function()
                         wait()
                         Attack.Kill(v, _G.FarmCelestialToken)
                         EquipWeapon(_G.SelectWeapon)
+                        StartBring = true
                     until not _G.FarmCelestialToken or not v.Parent or v.Humanoid.Health <= 0
                 end
             end)
@@ -1305,7 +1297,7 @@ spawn(function()
                 local map = game:GetService("Workspace").Map
                 if not map:FindFirstChild("Celestial Domain") then
                     _tp(CFrameTpCelestial)
-                    wait(2.5)
+                    wait(1.5)
                     local player = game.Players.LocalPlayer
                     local char = player.Character
                     local hrp = char and char:FindFirstChild("HumanoidRootPart")
