@@ -202,44 +202,30 @@ local function L_V1(pos)
         lp.Character:SetPrimaryPartCFrame(pos)
     end
 end
-
 local lp = game:GetService("Players").LocalPlayer
 local vim = game:GetService("VirtualInputManager")
 
 local function L_V2()
     while task.wait(1) do
         if lp.PlayerGui.Interface.LobbyCreate.Visible then
-            local gui = lp.PlayerGui.Interface.LobbyCreate
-            local btn = gui.ButtonList.Button1
-            local createBtn = gui.HeaderFrame.CreateButton
-            if btn.BackgroundColor3 == Color3.fromRGB(255,225,0) then
-                local pos = createBtn.AbsolutePosition
-                local size = createBtn.AbsoluteSize
-                local x = pos.X + size.X/2
-                local y = pos.Y + size.Y/2 + 70
-                vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
-                vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
-            else
-                local absPos = btn.AbsolutePosition
-                local absSize = absPos and btn.AbsoluteSize
-                local x = absPos.X + absSize.X/2 + 25
-                local y = absPos.Y + absSize.Y/2 + 50
-                vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
-                vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
-            end
+            local btn = lp.PlayerGui.Interface.LobbyCreate.ButtonList.Button1
+            local pos = btn.AbsolutePosition
+            local size = btn.AbsoluteSize
+            local x = pos.X + size.X/2
+            local y = pos.Y + size.Y/2
+            vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
+            vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
         else
-            for _,obj in ipairs(workspace:GetChildren()) do
-                if obj:IsA("Model") and (obj.Name=="Teleporter1" or obj.Name=="Teleporter2" or obj.Name=="Teleporter3") then
-                    local g=obj:FindFirstChild("BillboardHolder")
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj:IsA("Model") and (obj.Name == "Teleporter1" or obj.Name == "Teleporter2" or obj.Name == "Teleporter3") then
+                    local g = obj:FindFirstChild("BillboardHolder")
                     if g and g:FindFirstChild("BillboardGui") and g.BillboardGui:FindFirstChild("Players") then
-                        local t=g.BillboardGui.Players.Text
-                        local x,y=t:match("(%d+)/(%d+)")
-                        x,y=tonumber(x),tonumber(y)
-                        if x and y and x==0 then
-                            local n=obj.Name=="Teleporter1" and 1 or obj.Name=="Teleporter2" and 2 or obj.Name=="Teleporter3" and 3
-                            local args={ [1]="Add", [2]=n }
-                            game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
-                            local args = { [1] = "Chosen", [3] = 1 }
+                        local t = g.BillboardGui.Players.Text
+                        local x, y = t:match("(%d+)/(%d+)")
+                        x, y = tonumber(x), tonumber(y)
+                        if x and y and x == 0 then
+                            local n = obj.Name == "Teleporter1" and 1 or obj.Name == "Teleporter2" and 2 or obj.Name == "Teleporter3" and 3
+                            local args = { [1] = "Add", [2] = n }
                             game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
                         end
                     end
@@ -251,6 +237,7 @@ local function L_V2()
         end
     end
 end
+
 
 local chestSeen = {}
 local lp = game.Players.LocalPlayer
