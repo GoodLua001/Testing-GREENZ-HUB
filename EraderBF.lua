@@ -891,7 +891,7 @@ v1:AddToggle({
     ["Content"] = "",
     ["Default"] = true,
     ["Callback"] = function(Value)
-        _G.BringMob = Value
+        _B = Value
 end
 })
 v1:AddToggle({
