@@ -212,7 +212,7 @@ local function L_V2()
             local pos = btn.AbsolutePosition
             local size = btn.AbsoluteSize
             local x = pos.X + size.X/2
-            local y = pos.Y + size.Y/2
+            local y = pos.Y + size.Y/2 - 3
             vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
             vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
         else
