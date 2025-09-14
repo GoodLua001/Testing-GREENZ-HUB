@@ -168,31 +168,64 @@ Attack.Alive = function(model) if not model then return end local Humanoid = mod
 Attack.Pos = function(model,dist) return (Root.Position - mode.Position).Magnitude <= dist end
 Attack.Dist = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude <= dist end
 Attack.DistH = function(model,dist) return (Root.Position - model:FindFirstChild("HumanoidRootPart").Position).Magnitude > dist end
-Attack.Kill = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy() 
-  EquipWeapon(_G.SelectWeapon)
-  AutoHaki()
-  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-  local ToolTip = Equipped.ToolTip
-  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
-  end
+Attack.Kill = function(model, Succes)
+    if model and Succes then
+        if not model:GetAttribute("Locked") then
+            model:SetAttribute("Locked", model.HumanoidRootPart.CFrame)
+        end
+        PosMon = model:GetAttribute("Locked").Position
+
+        BringEnemy(model.Name)
+        EquipWeapon(_G.SelectWeapon)
+        AutoHaki()
+
+        local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+        local ToolTip = Equipped and Equipped.ToolTip
+
+        if ToolTip == "Blox Fruit" then
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0) * CFrame.Angles(0, math.rad(90), 0))
+        else
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.Angles(0, math.rad(180), 0))
+        end
+
+        if RandomCFrame then
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+        end
+    end
 end
-Attack.Kill2 = function(model,Succes)
-  if model and Succes then
-  if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
-  PosMon = model:GetAttribute("Locked").Position
-  BringEnemy()
-  EquipWeapon(_G.SelectWeapon)
-  AutoHaki()
-  local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-  local ToolTip = Equipped.ToolTip
-  if ToolTip == "Blox Fruit" then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,10,0) * CFrame.Angles(0,math.rad(90),0)) else _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,8) * CFrame.Angles(0,math.rad(180),0))end
-  if RandomCFrame then _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30 ,0)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25)) _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))end
-  end
+Attack.Kill2 = function(model, Succes)
+    if model and Succes then
+        if not model:GetAttribute("Locked") then
+            model:SetAttribute("Locked", model.HumanoidRootPart.CFrame)
+        end
+        PosMon = model:GetAttribute("Locked").Position
+
+        BringEnemy(model.Name)
+
+        EquipWeapon(_G.SelectWeapon)
+        AutoHaki()
+
+        local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+        local ToolTip = Equipped and Equipped.ToolTip
+
+        if ToolTip == "Blox Fruit" then
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 10, 0) * CFrame.Angles(0, math.rad(90), 0))
+        else
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0) * CFrame.Angles(0, math.rad(180), 0))
+        end
+
+        if RandomCFrame then
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(25, 30, 0))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(0, 30, 25))
+            _tp(model.HumanoidRootPart.CFrame * CFrame.new(-25, 30, 0))
+        end
+    end
 end
 Attack.KillSea = function(model,Succes)
   if model and Succes then
