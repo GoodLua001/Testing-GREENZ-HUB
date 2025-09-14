@@ -221,14 +221,17 @@ statsSetings = function(Num, value)
     end
   end
 end
+local TweenService = game:GetService("TweenService")
 BringEnemy = function()
   if not _B then return end
   local count = 0
   for _,v in pairs(workspace.Enemies:GetChildren()) do
-    if count == 2 then break end
+    if count == 3 then break end
     if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
       if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-        v.PrimaryPart.CFrame = CFrame.new(PosMon)
+        local goal = {CFrame = CFrame.new(PosMon)}
+        local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+        TweenService:Create(v.PrimaryPart, tweenInfo, goal):Play()
         v.PrimaryPart.CanCollide = true
         v.Humanoid.WalkSpeed = 0
         v.Humanoid.JumpPower = 0
