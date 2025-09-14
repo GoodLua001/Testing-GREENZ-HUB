@@ -124,7 +124,7 @@ Attack.Kill = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -143,7 +143,7 @@ Attack.Kill2 = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -162,7 +162,7 @@ Attack.KillSea = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
   EquipWeapon(_G.SelectWeapon)
   AutoHaki()
   local Equipped = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
@@ -174,7 +174,7 @@ Attack.Sword = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
   AutoHaki()
   weaponSc("Sword")
   _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
@@ -191,7 +191,7 @@ Attack.Mas = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
       Useskills("Blox Fruit","Z")
@@ -207,7 +207,7 @@ Attack.Masgun = function(model,Succes)
   if model and Succes then
   if not model:GetAttribute("Locked") then model:SetAttribute("Locked",model.HumanoidRootPart.CFrame) end
   PosMon = model:GetAttribute("Locked").Position
-  StartBring = true
+   
     if model.Humanoid.Health <= HealthM then
       _tp(model.HumanoidRootPart.CFrame * CFrame.new(0,35,8))
       Useskills("Gun","Z")
