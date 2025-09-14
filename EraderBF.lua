@@ -241,6 +241,7 @@ statsSetings = function(Num, value)
     end
   end
 end
+  Useskills = function(weapon, skill)
   if weapon == "Melee" then
     weaponSc("Melee")
     if skill == "Z" then
