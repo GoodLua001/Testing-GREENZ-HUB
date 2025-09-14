@@ -876,20 +876,20 @@ end
 })
 local plr = game.Players.LocalPlayer
 
-TweenObject = function(Object, Pos, Speed)
-    if Speed == nil then Speed = 350 end
+local function TweenObject(Object, Pos, Speed)
+    Speed = Speed or 350
     local Distance = (Pos.Position - Object.Position).Magnitude
     local tweenService = game:GetService("TweenService")
-    local info = TweenInfo.new(Distance/Speed, Enum.EasingStyle.Linear)
+    local info = TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear)
     local tween1 = tweenService:Create(Object, info, {CFrame = Pos})
     tween1:Play()
 end
 
-GetMobPosition = function(EnemiesName)
+local function GetMobPosition(EnemiesName)
     local pos
     local count = 0
-    for r, v in pairs(workspace.Enemies:GetChildren()) do
-        if v.Name == EnemiesName then
+    for _, v in pairs(workspace.Enemies:GetChildren()) do
+        if v.Name == EnemiesName and v:FindFirstChild("HumanoidRootPart") then
             if not pos then
                 pos = v.HumanoidRootPart.Position
             else
@@ -904,9 +904,9 @@ GetMobPosition = function(EnemiesName)
     return pos
 end
 
-BringMob = function(value)
+local function BringMob(value)
     if value then
-        local ememe = game.Workspace.Enemies:GetChildren()
+        local ememe = workspace.Enemies:GetChildren()
         if #ememe > 0 then
             local totalpos = {}
             for _, v in pairs(ememe) do
@@ -927,7 +927,9 @@ BringMob = function(value)
                                     v.Humanoid.WalkSpeed = 0
                                     v.Humanoid.JumpPower = 0
                                     v.Humanoid:ChangeState(14)
-                                    sethiddenproperty(plr, "SimulationRadius", math.huge)
+                                    pcall(function()
+                                        sethiddenproperty(plr, "SimulationRadius", math.huge)
+                                    end)
                                 end
                             end
                         end
@@ -937,16 +939,17 @@ BringMob = function(value)
         end
     end
 end
+
 BringMob(true)
 
-task.spawn(LPH_NO_VIRTUALIZE(function()
+task.spawn(function()
     while task.wait() do
         if not getgenv().BringMob then print("Deo Bat BringMob") end
 
         local player = game.Players.LocalPlayer
         local character = player.Character
         if not character or not character:FindFirstChild("HumanoidRootPart") then print("Cac") end
-        local hrpPlayer = character.HumanoidRootPart
+        local hrpPlayer = character and character:FindFirstChild("HumanoidRootPart")
         local enemiesFolder = workspace:FindFirstChild("Enemies")
         if not enemiesFolder then print("Gay") end
 
@@ -964,7 +967,7 @@ task.spawn(LPH_NO_VIRTUALIZE(function()
 
         for i, mob in ipairs(enemies) do
             local hrp = mob:FindFirstChild("HumanoidRootPart")
-            if not hrp then Print("Cac") end
+            if not hrp then print("Cac") end
 
             local angle = (2 * math.pi / math.max(count, 1)) * (i - 1)
             local offset = Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius
@@ -1008,7 +1011,8 @@ task.spawn(LPH_NO_VIRTUALIZE(function()
             end)
         end
     end
-end))
+end)
+
 v1:AddToggle({
     ["Title"] = "Fast Attack",
     ["Title2"] = "Not Supported Gas M1",
