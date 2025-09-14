@@ -221,22 +221,31 @@ statsSetings = function(Num, value)
     end
   end
 end
+local function InMyNetWork(object)
+    if isnetworkowner then
+        return isnetworkowner(object)
+    else
+        if (object.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1000 then
+            return true
+        end
+        return false
+    end
+end
+
 BringEnemy = function()
     if not _B then return end
     for _,v in pairs(workspace.Enemies:GetChildren()) do
-        if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.PrimaryPart then
-            if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
-                v:PivotTo(CFrame.new(PosMon))
-                v.PrimaryPart.CanCollide = true
-                v.Humanoid.WalkSpeed = 0
-                v.Humanoid.JumpPower = 0
-                if v.Humanoid:FindFirstChild("Animator") then v.Humanoid.Animator:Destroy() end
-                for _, part in ipairs(v:GetDescendants()) do
-                    if part:IsA("BasePart") and part:CanSetNetworkOwnership() then
-                        part:SetNetworkOwner(nil)
-                    end
-                end
+        if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and InMyNetWork(v.HumanoidRootPart) then
+            v.HumanoidRootPart.Size = Vector3.new(60,60,60)
+            v.HumanoidRootPart.CFrame = PosMon
+            v.HumanoidRootPart.CanCollide = false
+            if v:FindFirstChild("Head") then
+                v.Head.CanCollide = false
             end
+            if v.Humanoid:FindFirstChild("Animator") then
+                v.Humanoid.Animator:Destroy()
+            end
+            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
         end
     end
 end
