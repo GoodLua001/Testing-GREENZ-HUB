@@ -114,59 +114,6 @@ gay = (function()
   local Water = workspace._WorldOrigin["Foam;"]
   if Water and workspace._WorldOrigin["Foam;"] then Water:Destroy() end        
 end)()
-BringEnemy = function()
-    if not _B then return end
-    local Players = game:GetService("Players")
-    local CollectionService = game:GetService("CollectionService")
-    local Player = Players.LocalPlayer
-    local Character = Player.Character or Player.CharacterAdded:Wait()
-    local Enemies = workspace:WaitForChild("Enemies")
-    local pos = Character:GetPivot().Position
-    local count = 0
-
-    for _, mob in ipairs(Enemies:GetChildren()) do
-        if mob:FindFirstChildWhichIsA("Humanoid") and mob:FindFirstChildWhichIsA("Humanoid").Health > 0 then
-            if (mob.PrimaryPart.Position - pos).Magnitude <= 340 and not CollectionService:HasTag(mob, "QMobs") then
-                CollectionService:AddTag(mob, "QMobs")
-                count += 1
-                if count >= 2 then break end
-            end
-        end
-    end
-
-    for _, k in ipairs(CollectionService:GetTagged("QMobs")) do
-        local root = k:FindFirstChild("HumanoidRootPart") or k.PrimaryPart
-        local humanoid = k:FindFirstChildWhichIsA("Humanoid")
-        if root and humanoid and humanoid.Health > 0 and (pos - root.Position).Magnitude < 400 then
-            humanoid.WalkSpeed = 0
-            humanoid.JumpPower = 0
-
-            local attachment = root:FindFirstChild("MobBringAttachment") or Instance.new("Attachment")
-            attachment.Name = "MobBringAttachment"
-            attachment.Parent = root
-
-            local align = attachment:FindFirstChild("MobAlignPosition") or Instance.new("AlignPosition")
-            align.Name = "MobAlignPosition"
-            align.Mode = Enum.PositionAlignmentMode.OneAttachment
-            align.Position = pos
-            align.Responsiveness = 300
-            align.MaxForce = 1e6
-            align.Attachment0 = attachment
-            align.Parent = attachment
-
-            task.spawn(function()
-                while k and k.Parent and humanoid and humanoid.Health > 0 do
-                    align.Position = pos
-                    task.wait(0.5)
-                end
-                if attachment and attachment.Parent then
-                    attachment:Destroy()
-                end
-                CollectionService:RemoveTag(k, "QMobs")
-            end)
-        end
-    end
-end
 local Attack = {}
 Attack.__index = Attack
 Attack.Alive = function(model) if not model then return end local Humanoid = model:FindFirstChild("Humanoid") return Humanoid and Humanoid.Health > 0 end
@@ -293,6 +240,21 @@ statsSetings = function(Num, value)
       replicated.Remotes.CommF_:InvokeServer("AddPoint","Demon Fruit",value)
     end
   end
+end
+BringEnemy = function()
+    if not _B then return end
+    for _, v in pairs(workspace.Enemies:GetChildren()) do
+        local h = v:FindFirstChild("Humanoid")
+        if h and h.Health > 0 then
+            if (v.PrimaryPart.Position - PosMon).Magnitude <= 300 then
+                h.WalkSpeed = 75
+                h.JumpPower = 0
+                if h:FindFirstChild("Animator") then h.Animator:Destroy() end
+                h:MoveTo(PosMon)
+                plr.SimulationRadius = math.huge
+            end
+        end
+    end
 end
 Useskills = function(weapon, skill)
   if weapon == "Melee" then
