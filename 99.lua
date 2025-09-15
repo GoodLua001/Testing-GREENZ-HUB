@@ -205,53 +205,59 @@ end
 local lp = game:GetService("Players").LocalPlayer
 local vim = game:GetService("VirtualInputManager")
 
-local lp = game:GetService("Players").LocalPlayer
-local vim = game:GetService("VirtualInputManager")
-
 local function L_V2()
     while task.wait(1) do
         if lp.PlayerGui.Interface.LobbyCreate.Visible then
             local gui = lp.PlayerGui.Interface.LobbyCreate
             local btn = gui.ButtonList.Button1
             local createBtn = gui.HeaderFrame.CreateButton
-            if btn.BackgroundColor3 == Color3.fromRGB(255,225,0) then
+            
+            if btn.BackgroundColor3 == Color3.fromRGB(255, 225, 0) then
                 local pos = createBtn.AbsolutePosition
                 local size = createBtn.AbsoluteSize
-                local x = pos.X + size.X/2
-                local y = pos.Y + size.Y/2 + 70
+                local x = pos.X + (size.X / 2) + 30
+                local y = pos.Y + (size.Y / 2) + 50
                 vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
+                task.wait(0.1)
                 vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
             else
-                local absPos = btn.AbsolutePosition
-                local absSize = absPos and btn.AbsoluteSize
-                local x = absPos.X + absSize.X/2 + 25
-                local y = absPos.Y + absSize.Y/2 + 50
+                local pos = btn.AbsolutePosition
+                local size = btn.AbsoluteSize
+                local x = pos.X + (size.X / 2) + 30
+                local y = pos.Y + (size.Y / 2) + 50
                 vim:SendMouseButtonEvent(x, y, 0, true, game, 0)
+                task.wait(0.1)
                 vim:SendMouseButtonEvent(x, y, 0, false, game, 0)
             end
         else
-            for _,obj in ipairs(workspace:GetChildren()) do
-                if obj:IsA("Model") and (obj.Name=="Teleporter1" or obj.Name=="Teleporter2" or obj.Name=="Teleporter3") then
-                    local g=obj:FindFirstChild("BillboardHolder")
-                    if g and g:FindFirstChild("BillboardGui") and g.BillboardGui:FindFirstChild("Players") then
-                        local t=g.BillboardGui.Players.Text
-                        local x,y=t:match("(%d+)/(%d+)")
-                        x,y=tonumber(x),tonumber(y)
-                        if x and y and x==0 then
-                            local n=obj.Name=="Teleporter1" and 1 or obj.Name=="Teleporter2" and 2 or obj.Name=="Teleporter3" and 3
-                            local args={ [1]="Add", [2]=n }
-                            game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj:IsA("Model") and (obj.Name == "Teleporter1" or obj.Name == "Teleporter2" or obj.Name == "Teleporter3") then
+                    local holder = obj:FindFirstChild("BillboardHolder")
+                    if holder and holder:FindFirstChild("BillboardGui") and holder.BillboardGui:FindFirstChild("Players") then
+                        local playersText = holder.BillboardGui.Players.Text
+                        local current, max = playersText:match("(%d+)/(%d+)")
+                        current, max = tonumber(current), tonumber(max)
+                        
+                        if current and max and current == 0 then
+                            local teleporterNum = obj.Name == "Teleporter1" and 1 or 
+                                                obj.Name == "Teleporter2" and 2 or 
+                                                obj.Name == "Teleporter3" and 3 or nil
+                            
+                            if teleporterNum then
+                                local args = {"Add", teleporterNum}
+                                game:GetService("ReplicatedStorage").RemoteEvents.TeleportEvent:FireServer(unpack(args))
+                            end
                         end
                     end
                 end
             end
         end
+        
         if lp.PlayerGui.TeleporterAssets.TextButton.Visible then
             break
         end
     end
 end
-
 
 local chestSeen = {}
 local lp = game.Players.LocalPlayer
@@ -312,33 +318,26 @@ spawn(function()
                     end
                 end
                 warn("[ChestFarm] Checking chests, found:", c)
-                if c > 0 then
+                if c > 0 or workspace:FindFirstChild("Diamond", true) then
                     foundChest = true
                     break
-                end
-                task.wait(5)
-            end
-
-            local c = 0
-            for _, v in workspace.Items:GetChildren() do
-                if v:IsA("Model") and v.Name:find("Chest") and not v.Name:find("Snow") and v:FindFirstChildWhichIsA("ProximityPrompt", true) then
-                    c = c + 1
-                end
-            end
-            warn("[ChestFarm] Final chest count before farming:", c)
-
-            task.delay(2, function()
-                if c <= 0 and not workspace:FindFirstChild("Diamond", true) then
-                    warn("[ChestFarm] Not enough chests, hopping...")
+                else
+                    warn("[ChestFarm] Not enough chests and no diamond, hopping...")
                     Hop("Low")
                     return
                 end
-            end)
+            end
+
+            if not foundChest then
+                warn("[ChestFarm] Not enough chests and no diamond, hopping...")
+                Hop("Low")
+                return
+            end
 
             while true do
                 local chest = L_V3()
                 if not chest and not workspace:FindFirstChild("Diamond", true) then
-                    warn("[ChestFarm] No chest found, hopping...")
+                    warn("[ChestFarm] No chest found and no diamond, hopping...")
                     Hop("Low")
                     return
                 end
@@ -348,18 +347,16 @@ spawn(function()
                     local startTime = os.time()
                     while prox and prox.Parent and os.time() - startTime < 10 do
                         L_V1(CFrame.new(chest:GetPivot().Position))
-                        task.wait(0.5)
+                        task.wait(0.2)
                         fireproximityprompt(prox)
                         warn("[ChestFarm] Prompt fired on:", chest.Name)
-                        task.wait(0.5)
+                        task.wait(0.1)
                         prox = chest:FindFirstChildWhichIsA("ProximityPrompt", true)
                     end
                     if os.time() - startTime >= 10 then
                         warn("[ChestFarm] Chest timeout (10s), skipping:", chest.Name)
                     end
                     break
-                else
-                    task.wait(1)
                 end
             end
         end
