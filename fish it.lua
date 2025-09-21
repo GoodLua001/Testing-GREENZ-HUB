@@ -3,27 +3,22 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local folder = "Fish It | " .. LocalPlayer.Name
 local file = folder .. "/pos.json"
-
 if not isfolder(folder) then
     makefolder(folder)
 end
-
 if not isfile(file) then
     writefile(file, HttpService:JSONEncode({List = {}, LastSelected = nil}))
 end
-
 local function encodeCFrame(cf)
     local c = {cf:GetComponents()}
     return c
 end
-
 local function decodeCFrame(tbl)
     if type(tbl) == "table" and #tbl == 12 then
         return CFrame.new(unpack(tbl))
     end
     return nil
 end
-
 local function loadData()
     local ok, result = pcall(function()
         return HttpService:JSONDecode(readfile(file))
@@ -33,11 +28,9 @@ local function loadData()
     end
     return {List = {}, LastSelected = nil}
 end
-
 local function saveData(tbl)
     writefile(file, HttpService:JSONEncode(tbl))
 end
-
 local data = loadData()
 getgenv().PosSave = {}
 for _,v in ipairs(data.List or {}) do
@@ -62,7 +55,6 @@ function itemslist:SetList(newList)
         dropdown:AddList(name)
     end
 end
-
 local function refreshDropdown()
     if dropdown then
         local list = {}
@@ -83,14 +75,12 @@ function IsPlayerAlive(player)
     if not humanoid or humanoid.Health <= 0 then return false end
     return true
 end
-
 function GetDistance(target1, taget2)
     if not taget2 then
         taget2 = game.Players.LocalPlayer.Character.HumanoidRootPart
     end
     return (target1.Position - taget2.Position).Magnitude
 end
-
 function CheckRod()
     local backpackDisplay = game:GetService("Players").LocalPlayer.PlayerGui.Backpack.Display
     for _, v in pairs(backpackDisplay:GetChildren()) do
@@ -113,15 +103,15 @@ end
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title="Zero X Hub",
-    SubTitle="", 
-    TabWidth=160, 
+    SubTitle="",
+    TabWidth=160,
     Theme="Darker",
     Acrylic=false,
-    Size=UDim2.fromOffset(500, 320), 
+    Size=UDim2.fromOffset(500, 320),
     MinimizeKey=Enum.KeyCode.End
 })
 local Tabs = {
-  M=Window:AddTab({ Title="General" }),
+    M=Window:AddTab({ Title="General" }),
 }
 local v1 = Tabs.M:AddDropdown("v1", {
     Title = "Select Pos",
@@ -138,7 +128,6 @@ local v1 = Tabs.M:AddDropdown("v1", {
         end
     end
 })
-
 Tabs.M:AddButton({
     Title = "Save Pos",
     Callback = function()
