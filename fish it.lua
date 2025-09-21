@@ -9,7 +9,7 @@ local Window = Fluent:CreateWindow({
     MinimizeKey=Enum.KeyCode.End
 })
 local Tabs = {
-  S=Window:AddTab({ Title="General" }),
+  M=Window:AddTab({ Title="General" }),
 }
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
