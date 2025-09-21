@@ -1,16 +1,3 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local Window = Fluent:CreateWindow({
-    Title="Zero X Hub",
-    SubTitle="", 
-    TabWidth=160, 
-    Theme="Darker",
-    Acrylic=false,
-    Size=UDim2.fromOffset(500, 320), 
-    MinimizeKey=Enum.KeyCode.End
-})
-local Tabs = {
-  M=Window:AddTab({ Title="General" }),
-}
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -58,7 +45,19 @@ for _,v in ipairs(data.List or {}) do
     if cf then table.insert(getgenv().PosSave, cf) end
 end
 getgenv().Pos = decodeCFrame(data.LastSelected) or nil
-
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title="Zero X Hub",
+    SubTitle="", 
+    TabWidth=160, 
+    Theme="Darker",
+    Acrylic=false,
+    Size=UDim2.fromOffset(500, 320), 
+    MinimizeKey=Enum.KeyCode.End
+})
+local Tabs = {
+  M=Window:AddTab({ Title="General" }),
+}
 local v1 = Tabs.M:AddDropdown("v1", {
     Title = "Select Pos",
     Description = "",
