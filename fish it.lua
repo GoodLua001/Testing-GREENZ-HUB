@@ -62,7 +62,7 @@ getgenv().Pos = decodeCFrame(data.LastSelected) or nil
 local v1 = Tabs.M:AddDropdown("v1", {
     Title = "Select Pos",
     Description = "",
-    Multi = false
+    Multi = false,
     Default = "Select Pos PosSave",
     Callback = function(selected)
         for _,cf in ipairs(getgenv().PosSave) do
@@ -160,7 +160,7 @@ local v2 = Tabs.M:AddToggle("v2", {
         getgenv().LockPos = state
     end
 })
-local v3 = Tabs.M:AddToggle("v3" {
+local v3 = Tabs.M:AddToggle("v3", {
     Title = "Start Fishing",
     Description = "",
     Default = false,
@@ -168,7 +168,6 @@ local v3 = Tabs.M:AddToggle("v3" {
         getgenv().Fishing = state
     end
 })
-
 function IsPlayerAlive(player)
     if not player then
         player = game.Players.LocalPlayer
