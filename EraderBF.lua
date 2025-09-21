@@ -681,12 +681,21 @@ elseif a>=2650 and a<=2674 then
     Qdata=1; Qname="SubmergedQuest2"; NameMon="Sea Chanter"
     PosQ=CFrame.new(10882.264,-2086.322,10034.226)
     PosM=CFrame.new(10621.0342,-2087.8440,10102.0332)
-
-elseif a>=2675 and a<=2750 then
+elseif a>=2675 and a<=2725 then
     Mon="Ocean Prophet"
     Qdata=2; Qname="SubmergedQuest2"; NameMon="Ocean Prophet"
     PosQ=CFrame.new(10882.264,-2086.322,10034.226)
     PosM=CFrame.new(11056.1445,-2001.6717,10117.4493)
+elseif a>=2726 and a<=2750 then
+    Mon="High Disciple"
+    Qdata=1; Qname="SubmergedQuest3"; NameMon="High Disciple"
+    PosQ=CFrame.new(9770.83008, -1998.69495, 9743.32812, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+    PosM=CFrame.new(9594.49219, -1943.95752, 9793.58594, 0.965929627, 0, 0.258804798, 0, 1, 0, -0.258804798, 0, 0.965929627)
+elseif a>=2751 and a<=2800 then
+    Mon="Grand Devotees"
+    Qdata=2; Qname="SubmergedQuest3"; NameMon="Grand Devotees"
+    PosQ=CFrame.new(9770.83008, -1998.69495, 9743.32812, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+    PosM=CFrame.new(9656.43945, -1991.80444, 10078, 0.965929627, 0, 0.258804798, 0, 1, 0, -0.258804798, 0, 0.965929627)
 end end end
 MaterialMon=function()local a=game.Players.LocalPlayer;local b=a.Character and a.Character:FindFirstChild("HumanoidRootPart")if not b then return end;shouldRequestEntrance=function(c,d)local e=(b.Position-c).Magnitude;if e>=d then replicated.Remotes.CommF_:InvokeServer("requestEntrance",c)end end;if World1 then if SelectMaterial=="Angel Wings"then MMon={"Shanda","Royal Squad","Royal Soldier","Wysper","Thunder God"}MPos=CFrame.new(-4698,845,-1912)SP="Default"local c=Vector3.new(-4607.82275,872.54248,-1667.55688)shouldRequestEntrance(c,10000)elseif SelectMaterial=="Leather + Scrap Metal"then MMon={"Brute","Pirate"}MPos=CFrame.new(-1145,15,4350)SP="Default"elseif SelectMaterial=="Magma Ore"then MMon={"Military Soldier","Military Spy","Magma Admiral"}MPos=CFrame.new(-5815,84,8820)SP="Default"elseif SelectMaterial=="Fish Tail"then MMon={"Fishman Warrior","Fishman Commando","Fishman Lord"}MPos=CFrame.new(61123,19,1569)SP="Default"local c=Vector3.new(61163.8515625,5.342342376708984,1819.7841796875)shouldRequestEntrance(c,17000)end elseif World2 then if SelectMaterial=="Leather + Scrap Metal"then MMon={"Marine Captain"}MPos=CFrame.new(-2010.5059814453125,73.00115966796875,-3326.620849609375)SP="Default"elseif SelectMaterial=="Magma Ore"then MMon={"Magma Ninja","Lava Pirate"}MPos=CFrame.new(-5428,78,-5959)SP="Default"elseif SelectMaterial=="Ectoplasm"then MMon={"Ship Deckhand","Ship Engineer","Ship Steward","Ship Officer"}MPos=CFrame.new(911.35827636719,125.95812988281,33159.5390625)SP="Default"local c=Vector3.new(61163.8515625,5.342342376708984,1819.7841796875)shouldRequestEntrance(c,18000)elseif SelectMaterial=="Mystic Droplet"then MMon={"Water Fighter"}MPos=CFrame.new(-3385,239,-10542)SP="Default"elseif SelectMaterial=="Radioactive Material"then MMon={"Factory Staff"}MPos=CFrame.new(295,73,-56)SP="Default"elseif SelectMaterial=="Vampire Fang"then MMon={"Vampire"}MPos=CFrame.new(-6033,7,-1317)SP="Default"end elseif World3 then if SelectMaterial=="Scrap Metal"then MMon={"Jungle Pirate","Forest Pirate"}MPos=CFrame.new(-11975.78515625,331.7734069824219,-10620.0302734375)SP="Default"elseif SelectMaterial=="Fish Tail"then MMon={"Fishman Raider","Fishman Captain"}MPos=CFrame.new(-10993,332,-8940)SP="Default"elseif SelectMaterial=="Conjured Cocoa"then MMon={"Chocolate Bar Battler","Cocoa Warrior"}MPos=CFrame.new(620.6344604492188,78.93644714355469,-12581.369140625)SP="Default"elseif SelectMaterial=="Dragon Scale"then MMon={"Dragon Crew Archer","Dragon Crew Warrior"}MPos=CFrame.new(6594,383,139)SP="Default"elseif SelectMaterial=="Gunpowder"then MMon={"Pistol Billionaire"}MPos=CFrame.new(-84.8556900024414, 85.62061309814453, 6132.0087890625)SP="Default"elseif SelectMaterial=="Mini Tusk"then MMon={"Mythological Pirate"}MPos=CFrame.new(-13545,470,-6917)SP="Default"elseif SelectMaterial=="Demonic Wisp"then MMon={"Demonic Soul"}MPos=CFrame.new(-9495.6806640625,453.58624267578125,5977.3486328125)SP="Default"end end end
 QuestNeta = function()
@@ -1257,57 +1266,186 @@ SME:AddToggle({
     ["Default"] = false,
     ["Callback"] = function(Value)
         _G.AutoRipCommander = Value
+        RandomCFrame = Value
 end
 })
 spawn(function()
-    local CFrameTpOni
-    if World1 then
-        CFrameTpCelestial = CFrame.new(-614.1772, 7.8933, 1535.4930)
-    elseif World2 then
-        CFrameTpCelestial = CFrame.new(-2025.7010, 72.7401, -2706.4855)
-    elseif World3 then
-        CFrameTpCelestial = CFrame.new(-12577.8281, 336.9557, -7440.9580)
-    end
     while task.wait() do
         if _G.FarmCelestialToken then
             pcall(function()
-                local map = game:GetService("Workspace").Map
-                if not map:FindFirstChild("Celestial Domain") then
-                    _tp(CFrameTpCelestial)
-                    wait(1.5)
-                    local player = game.Players.LocalPlayer
-                    local char = player.Character
-                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-
-                    if hrp and (hrp.Position - CFrameTpCelestial.Position).Magnitude < 5 then
-                        local args = {
-    [1] = "InitiateTeleportToTemple"
-}
-
-                        local net = game:GetService("ReplicatedStorage").Modules.Net
-                        net:FindFirstChild("RF/CelestialDomainTransportation"):InvokeServer(unpack(args))
-                    end
-                end
-                if map:FindFirstChild("Celestial Domain") then
-                    local args = {
-                        "InitiateTeleportToInterior"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RF/OniTempleTransportation"):InvokeServer(unpack(args))
-                    if map:FindFirstChild("Celestial Domain (Interior)") then
-                        local Rip = { "Rip Commander" }
-                        local v = GetConnectionEnemies(Rip)
-                        repeat 
-                            wait()
-                            Attack.Kill(v, _G.AutoRipCommander)
-                            EquipWeapon(_G.SelectWeapon)
-                        until not _G.AutoRipCommander or not v.Parent or v.Humanoid.Health <= 0
-                    end
-                end
-
+                local Rip = { "Rip Commander" }
+                local v = GetConnectionEnemies(Rip)
+                repeat
+                    task.wait()
+                    Attack.Kill(v, _G.AutoRipCommander)
+                    EquipWeapon(_G.SelectWeapon)
+                until not _G.AutoRipCommander or not v.Parent or v.Humanoid.Health <= 0
             end)
         end
     end
 end)
+local Fish = CM:AddSection("Fishing Farm")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- Services/Modules
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local Net = Modules:WaitForChild("Net")
+local FishReplicated = ReplicatedStorage:WaitForChild("FishReplicated")
+local FishingRequest = FishReplicated:FindFirstChild("FishingRequest")
+local FishingClient = FishReplicated:WaitForChild("FishingClient")
+local Config = require(FishingClient:WaitForChild("Config"))
+local Util = ReplicatedStorage:WaitForChild("Util")
+local GetWaterHeightAtLocation = require(Util:WaitForChild("GetWaterHeightAtLocation"))
+local COMMF_ = Net:FindFirstChild("RF/JobsRemoteFunction")
+local CraftRF = Net:FindFirstChild("RF/Craft")
+
+-- 🔧 Auto ensure rod & bait
+local function EnsureRodAndBait()
+    if not COMMF_ then return end
+    pcall(function()
+        COMMF_:InvokeServer("FishingNPC", "FirstTimeFreeRod")
+        if _G.SelectedRod then
+            COMMF_:InvokeServer("LoadItem", _G.SelectedRod, {"Gear"})
+        end
+    end)
+
+    task.wait(0.5)
+    local FishingData = LocalPlayer:FindFirstChild("Data") and LocalPlayer.Data:FindFirstChild("FishingData")
+    if FishingData and (FishingData:GetAttribute("SelectedBait") == "None" or FishingData:GetAttribute("SelectedBait") == nil) then
+        local success, inventory = pcall(function()
+            return COMMF_:InvokeServer("getInventory")
+        end)
+        if success and inventory then
+            for _, v in pairs(inventory) do
+                if v.Type == "Bait" and v.Name == _G.SelectedBait then
+                    COMMF_:InvokeServer("LoadItem", v.Name, {"Usables"})
+                    return
+                end
+            end
+        end
+        if CraftRF and _G.SelectedBait then
+            CraftRF:InvokeServer("Craft", _G.SelectedBait)
+            task.wait(2)
+        end
+    end
+end
+
+-- 🔧 Equip Rod
+local function EquipRod()
+    local Character = LocalPlayer.Character
+    if not Character then return end
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    if not Character:FindFirstChild(_G.SelectedRod) then
+        local BackpackRod = LocalPlayer.Backpack:FindFirstChild(_G.SelectedRod)
+        if BackpackRod and Humanoid then
+            Humanoid:EquipTool(BackpackRod)
+            task.wait(0.3)
+        end
+    end
+end
+
+-- 🔧 Get cast position
+local function GetCastPosition()
+    local Character = LocalPlayer.Character
+    if not Character then return end
+    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    local waterY = GetWaterHeightAtLocation(HumanoidRootPart.Position)
+    local direction = HumanoidRootPart.CFrame.LookVector * (Config.Rod.MaxLaunchDistance or 50)
+
+    local _, hitPos = Workspace:FindPartOnRayWithIgnoreList(
+        Ray.new(Character.Head.Position, direction),
+        {Character, Workspace.Characters, Workspace.Enemies})
+
+    if not hitPos then
+        return HumanoidRootPart.Position + Vector3.new(0, -10, 0)
+    end
+
+    return hitPos
+end
+
+-- 🔧 Cast & Catch
+local function CastLine()
+    if not FishingRequest then return end
+    pcall(function()
+        FishingRequest:InvokeServer("StartCasting")
+        task.wait(0.7)
+        FishingRequest:InvokeServer("CastLineAtLocation", GetCastPosition(), 100, true)
+    end)
+end
+
+local function CatchFish()
+    if not FishingRequest then return end
+    pcall(function()
+        FishingRequest:InvokeServer("Catching", 1)
+        task.wait(0.25)
+        FishingRequest:InvokeServer("Catch", 1)
+    end)
+end
+
+-- UI Dropdowns (⚠️ Fix default value → string thay vì table)
+Fish:AddDropdown({
+    ["Title"] = "Select Fishing Rod",
+    ["Content"] = "Chọn Cần Câu",
+    ["Multi"] = false,
+    ["Options"] = {"Fishing Rod","Gold Rod","Shark Rod","Shell Rod","Treasure Rod"},
+    ["Default"] = "Fishing Rod", -- ✅ string, không phải table
+    ["Callback"] = function(Value)
+        _G.SelectedRod = tostring(Value)
+    end
+})
+
+Fish:AddDropdown({
+    ["Title"] = "Select Bait",
+    ["Content"] = "Chọn Mồi Câu",
+    ["Multi"] = false,
+    ["Options"] = {"Basic Bait","Kelp Bait","Good Bait","Abyssal Bait","Frozen Bait","Epic Bait","Carnivore Bait"},
+    ["Default"] = "Basic Bait", -- ✅ string
+    ["Callback"] = function(Value)
+        _G.SelectedBait = tostring(Value)
+    end
+})
+Fish:AddToggle({
+    ["Title"] = "Auto Farm Fishing",
+    ["Title2"] = "Tự Động Câu Cá",
+    ["Content"] = "",
+    ["Default"] = false,
+    ["Callback"] = function(Value)
+        _G.AutoFishing = Value
+        if Value then
+            task.spawn(function()
+                while _G.AutoFishing do
+                    task.wait(0.5)
+                    pcall(function()
+                        local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                        if not Character then return end
+
+                        EnsureRodAndBait()
+                        EquipRod()
+
+                        local Rod = Character:FindFirstChild(_G.SelectedRod)
+                        if Rod then
+                            local state = Rod:GetAttribute("ServerState") or Rod:GetAttribute("State")
+                            -- Debug log
+                            -- print("Rod State:", state)
+                            if state == "Biting" then
+                                CatchFish()
+                            elseif state == "ReeledIn" or state == "Idle" or not state then
+                                CastLine()
+                            end
+                        else
+                            warn("[AutoFishing] Rod not found in Character")
+                        end
+                    end)
+                end
+            end)
+        end
+    end
+})
 local Cak = FlurioreGui:CreateTab({
 	["Name"] = "Tab Stack Farming",
 	["Icon"] = "rbxassetid://7733960981"
@@ -1710,15 +1848,6 @@ local caka = FlurioreGui:CreateTab({
 })
 local v124 = caka:AddSection("Race Normal")
 v124:AddToggle({
-    ["Title"] = "Auto Upgrade V3",
-    ["Title2"] = "Not Support Angel And Ghoul",
-    ["Content"] = "V1 - V3",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoUpV3 = Value
-end
-})
-v124:AddToggle({
     ["Title"] = "Auto Trial",
     ["Title2"] = "",
     ["Content"] = "",
@@ -1738,41 +1867,6 @@ GetSeaBeastTrial = function()
     end
   end
 end
-spawn(function()
-    while wait(Sec) do
-        pcall(function()
-            if _G.Complete_Trials then
-                local race = tostring(plr.Data.Race.Value)
-                local CFrameV4 = CFrame.new(3030.39453125, 2280.6171875, -7320.18359375)
-                _tp(CFrameV4)
-                if (CFrameV4.Position - Root.Position).Magnitude < 10 then
-                    local args = {
-                        [1] = "RaceV4Progress",
-                        [2] = "Teleport"
-                    }
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                    wait(0.5)
-                    if race == "Mink" then
-                        _tp(CFrame.new(29020.66015625, 14889.4267578125, -379.2682800292969))
-                    elseif race == "Fishman" then
-                        _tp(CFrame.new(28224.056640625, 14889.4267578125, -210.5872039794922))
-                    elseif race == "Cyborg" then
-                        _tp(CFrame.new(28492.4140625, 14894.4267578125, -422.1100158691406))
-                    elseif race == "Skypiea" then
-                        _tp(CFrame.new(28967.408203125, 14918.0751953125, 234.31198120117188))
-                    elseif race == "Ghoul" then
-                        _tp(CFrame.new(28672.720703125, 14889.1279296875, 454.5961608886719))
-                    elseif race == "Human" then
-                        _tp(CFrame.new(29237.294921875, 14889.4267578125, -206.94955444335938))
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-	    
-	    
 spawn(function()
   while wait(Sec) do
     pcall(function()
@@ -1887,46 +1981,6 @@ spawn(function()
     end)
   end
 end)
-v124:AddToggle({
-    ["Title"] = "Use Skill When Kill Player",
-    ["Title2"] = "",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoSkillSpam = Value
-end
-})
-spawn(function()
-    while task.wait(Sec) do
-        pcall(function()
-            if _G.AutoSkillSpam and _G.Defeating then
-                Useskills("Melee", "Z")
-                Useskills("Melee", "X")
-                Useskills("Melee", "C")
-                wait(.1)
-                Useskills("Sword", "Z")
-                Useskills("Sword", "X")
-                wait(.1)
-                Useskills("Blox Fruit", "Z")
-                Useskills("Blox Fruit", "X")
-                Useskills("Blox Fruit", "C")
-                Useskills("Blox Fruit", "V")
-                wait(.1)
-                Useskills("Gun", "Z")
-                Useskills("Gun", "X")
-            end
-        end)
-    end
-end)
-v124:AddToggle({
-    ["Title"] = "Auto Ken And Race V3",
-    ["Title2"] = "Not Working",
-    ["Content"] = "",
-    ["Default"] = false,
-    ["Callback"] = function(Value)
-        _G.AutoKenAndV3 = Value
-end
-})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
