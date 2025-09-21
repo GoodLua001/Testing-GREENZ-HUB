@@ -45,6 +45,71 @@ for _,v in ipairs(data.List or {}) do
     if cf then table.insert(getgenv().PosSave, cf) end
 end
 getgenv().Pos = decodeCFrame(data.LastSelected) or nil
+local function updateDropdown()
+    if dropdown then
+        for _, cf in ipairs(getgenv().PosSave) do
+            dropdown:AddList(tostring(cf))
+        end
+    end
+end
+function itemslist:SetList(newList)
+    for _, v in pairs(dropdown.ScrollingFrame:GetChildren()) do
+        if v:IsA("Frame") and v.Name == "Items" then
+            v:Destroy()
+        end
+    end
+    for _, name in ipairs(newList) do
+        dropdown:AddList(name)
+    end
+end
+
+local function refreshDropdown()
+    if dropdown then
+        local list = {}
+        for _, cf in ipairs(getgenv().PosSave) do
+            table.insert(list, tostring(cf))
+        end
+        dropdown:SetList(list)
+    end
+end
+function IsPlayerAlive(player)
+    if not player then
+        player = game.Players.LocalPlayer
+    end
+    if not player or not player:IsA("Player") then return false end
+    local character = player.Character
+    if not character then return false end
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return false end
+    return true
+end
+
+function GetDistance(target1, taget2)
+    if not taget2 then
+        taget2 = game.Players.LocalPlayer.Character.HumanoidRootPart
+    end
+    return (target1.Position - taget2.Position).Magnitude
+end
+
+function CheckRod()
+    local backpackDisplay = game:GetService("Players").LocalPlayer.PlayerGui.Backpack.Display
+    for _, v in pairs(backpackDisplay:GetChildren()) do
+        local inner = v:FindFirstChild("Inner")
+        if inner then
+            local tags = inner:FindFirstChild("Tags")
+            if tags then
+                local itemName = tags:FindFirstChild("ItemName")
+                if itemName and itemName:IsA("TextLabel") then
+                    local name = itemName.Text
+                    if string.find(name, "Rod") and not string.find(name, "Rods") and v.AbsoluteSize == Vector2.new(58, 58) then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title="Zero X Hub",
@@ -62,7 +127,6 @@ local v1 = Tabs.M:AddDropdown("v1", {
     Title = "Select Pos",
     Description = "",
     Multi = false,
-    Default = "Select Pos PosSave",
     Callback = function(selected)
         for _,cf in ipairs(getgenv().PosSave) do
             if tostring(cf) == selected then
@@ -74,13 +138,6 @@ local v1 = Tabs.M:AddDropdown("v1", {
         end
     end
 })
-local function updateDropdown()
-    if dropdown then
-        for _, cf in ipairs(getgenv().PosSave) do
-            dropdown:AddList(tostring(cf))
-        end
-    end
-end
 
 Tabs.M:AddButton({
     Title = "Save Pos",
@@ -105,28 +162,6 @@ Tabs.M:AddButton({
         end
     end
 })
-
-function itemslist:SetList(newList)
-    for _, v in pairs(dropdown.ScrollingFrame:GetChildren()) do
-        if v:IsA("Frame") and v.Name == "Items" then
-            v:Destroy()
-        end
-    end
-    for _, name in ipairs(newList) do
-        dropdown:AddList(name)
-    end
-end
-
-local function refreshDropdown()
-    if dropdown then
-        local list = {}
-        for _, cf in ipairs(getgenv().PosSave) do
-            table.insert(list, tostring(cf))
-        end
-        dropdown:SetList(list)
-    end
-end
-
 Tabs.M:AddButton({
     Title = "Remove Pos",
     Callback = function()
@@ -167,45 +202,6 @@ local v3 = Tabs.M:AddToggle("v3", {
         getgenv().Fishing = state
     end
 })
-function IsPlayerAlive(player)
-    if not player then
-        player = game.Players.LocalPlayer
-    end
-    if not player or not player:IsA("Player") then return false end
-    local character = player.Character
-    if not character then return false end
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid or humanoid.Health <= 0 then return false end
-    return true
-end
-
-function GetDistance(target1, taget2)
-    if not taget2 then
-        taget2 = game.Players.LocalPlayer.Character.HumanoidRootPart
-    end
-    return (target1.Position - taget2.Position).Magnitude
-end
-
-function CheckRod()
-    local backpackDisplay = game:GetService("Players").LocalPlayer.PlayerGui.Backpack.Display
-    for _, v in pairs(backpackDisplay:GetChildren()) do
-        local inner = v:FindFirstChild("Inner")
-        if inner then
-            local tags = inner:FindFirstChild("Tags")
-            if tags then
-                local itemName = tags:FindFirstChild("ItemName")
-                if itemName and itemName:IsA("TextLabel") then
-                    local name = itemName.Text
-                    if string.find(name, "Rod") and not string.find(name, "Rods") and v.AbsoluteSize == Vector2.new(58, 58) then
-                        return true
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
 spawn(function()
     pcall(function()
         while task.wait(0.1) do
