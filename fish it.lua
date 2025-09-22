@@ -11,7 +11,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     M=Window:AddTab({ Title="General" }),
 }
-local v1 = Tabs.AddDropdown("v1", {
+local v1 = Tabs.M:AddDropdown("v1", {
     Title = "Select Pos",
     Description = "",
     Options = table.create(#getgenv().PosSave, function(i) return tostring(getgenv().PosSave[i]) end),
