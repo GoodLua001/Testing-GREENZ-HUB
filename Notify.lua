@@ -1,3 +1,4 @@
+game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam", "Marines")
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
@@ -262,4 +263,3 @@ local Http = game:GetService("HttpService")
    Next = Servers.nextPageCursor
   until Server
   TPS:TeleportToPlaceInstance(_place,Server.id,plr)
-end
