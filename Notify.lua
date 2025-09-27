@@ -134,6 +134,35 @@ function rz_Functions:WaitMirageChilds(mirage)
     mirage:WaitForChild("DescendantAdded"):Wait()
     task.wait(0,1)
 end
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local PlaceID = game.PlaceId
+
+local function hopServer()
+    local currentJobId = game.JobId
+
+    local Servers = {}
+    local success, response = pcall(function()
+        return game:GetService("HttpService"):JSONDecode(
+            game:GetService("HttpService"):GetAsync(
+                "https://games.roblox.com/v1/games/"..PlaceID.."/servers/Public?sortOrder=Asc&limit=100"
+            )
+        )
+    end)
+
+    if success and response and response.data then
+        for _, server in pairs(response.data) do
+            if server.playing < server.maxPlayers and server.id ~= currentJobId then
+                table.insert(Servers, server.id)
+            end
+        end
+
+        if #Servers > 0 then
+            local randomServer = Servers[math.random(1, #Servers)]
+            TeleportService:TeleportToPlaceInstance(PlaceID, randomServer, Players.LocalPlayer)
+        end
+    end
+end
 function rz_Functions:OnMirageAdded(mirage)
     if not mirage or not mirage:IsA("Model") then return end
     local dangerLevel = mirage:GetAttribute("DangerLevel")
@@ -248,18 +277,4 @@ task.delay(300, rz_Functions.Barista)
 task.delay(600, rz_Functions.MoonPhase)
 task.delay(600, rz_Functions.LowServer)
 wait(3)
-local Http = game:GetService("HttpService")
-  local TPS = game:GetService("TeleportService")
-  local Api = "https://games.roblox.com/v1/games/"
-  local _place = game.PlaceId
-  local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
-   function ListServers(cursor)
-     local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
-     return Http:JSONDecode(Raw)
-   end
-   local Server, Next; repeat
-   local Servers = ListServers(Next)
-   Server = Servers.data[1]
-   Next = Servers.nextPageCursor
-  until Server
-  TPS:TeleportToPlaceInstance(_place,Server.id,plr)
+hopServer()
