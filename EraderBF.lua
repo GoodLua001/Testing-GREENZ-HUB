@@ -537,3 +537,125 @@ function FastAttack:Attack()
         task.wait(0.1)
     end)
 end
+------------------------------------------------------------------------------------------
+local hello = Tabs.Main:AddDropdown("hello", {
+	Title = "Select Mode Farm",
+	Description = "",
+	Values = {"Level", "Bones", "Cake"},
+	Multi = false,
+	Default = 1,
+	Callback = function(selected)
+		getgenv().SetValue("SelectSimpleFarm", selected)
+    end
+})
+local trietngu = Tabs.Main:AddToggle("trietngu", {
+	Title = "Start Farm",
+	Description = "",
+	Default = false,
+	Callback = function(state)
+		getgenv().SetValue("StartFarm", state)
+	end
+})
+local bua = Tabs.Main:AddSection("Boss")
+local cc = Tabs.Main:AddDropdown("cc", {
+	Title = "Select Boss Fully",
+	Description = "",
+	Values = {"Darkbeard", "rip_indra", "Dough King", "Tyrant of the Skies"},
+	Multi = false,
+	Default = 2,
+	Callback = function(selected)
+		getgenv().SetValue("SelectBossFully", selected)
+	end
+})
+local cp = Tabs.Main:AddToggle("cp", {
+	Title = "Start Farm",
+	Description = "",
+	Default = false,
+	Callback = function(state)
+		getgenv().SetValue("StartFarmBoss", state)
+	end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if getgenv().Settings["StartFarm"] and getgenv().Settings["SelectSimpleFarm"] == "Level" then
+            local plr = _G.Server["pl"]["LocalPlayer"]
+            local Q = QuestCheck()
+            local QL, NPC, MN, QN, LR, MC, MCS = Q[1], Q[2], Q[3], Q[4], Q[5], Q[7], Q[9]
+
+            if not _G.LastLevelCheck then
+                _G.LastLevelCheck, _G.LastLevel = tick(), plr.Data.Level.Value
+            end
+            if tick() - _G.LastLevelCheck >= 500 then
+                if plr.Data.Level.Value == _G.LastLevel then
+                    Hop("Low")
+                    return
+                end
+                _G.LastLevelCheck, _G.LastLevel = tick(), plr.Data.Level.Value
+            end
+
+            if plr.Data.Level.Value >= 2200 and plr.Data.Level.Value < 2300 and CheckBoss("Cake Prince") then
+                KillBoss("Cake Prince")
+            elseif LR and plr.Data.Level.Value >= LR then
+                local questActive = plr.PlayerGui.Main.Quest.Visible and MN and string.find(plr.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, MN)
+                if not questActive then
+                    if NPC and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                        local nums = {}; for num in tostring(NPC):gmatch("[-%d%.]+") do table.insert(nums, tonumber(num)) end
+                        if #nums >= 3 then
+                            local npcCF = CFrame.new(nums[1], nums[2], nums[3])
+                            TP1(npcCF)
+                            repeat task.wait() until (plr.Character.HumanoidRootPart.Position - npcCF.Position).Magnitude <= 5
+                            task.wait(0.1)
+                            _G.Server["rs"].Remotes.CommF_:InvokeServer("StartQuest", QN, QL)
+                            return
+                        end
+                    end
+                else
+                    local function getMob()
+                        local plrPos, nearest, dist = plr.Character.HumanoidRootPart.Position, nil, math.huge
+                        for _, e in pairs(_G.Server["ws"]["Enemies"]:GetChildren()) do
+                            if e:FindFirstChild("HumanoidRootPart") and e:FindFirstChild("Humanoid") and e.Humanoid.Health > 0 and string.find(e.Name, MN) then
+                                local d = (e.HumanoidRootPart.Position - plrPos).Magnitude
+                                if d < dist then dist, nearest = d, e end
+                            end
+                        end
+                        return nearest
+                    end
+                    local mob = getMob()
+                    if mob then
+                        repeat
+                            if IsPlayerNearby(mob.HumanoidRootPart.Position, 100) and (World2 or World3) then Hop("Low") return end
+                            AutoHaki()
+                            EquipWeapon("Melee")
+                            pcall(function() BringMob(mob.Name, mob.HumanoidRootPart.Position, 350, 3) end)
+                            local targetCF = mob.HumanoidRootPart.CFrame * CFrame.new(0,30,0)
+                            TP1(targetCF)
+                            repeat task.wait() until (plr.Character.HumanoidRootPart.Position - targetCF.Position).Magnitude <= 5 or not mob or not mob:FindFirstChild("Humanoid") or mob.Humanoid.Health <= 0
+                            task.wait(0.1)
+                            mob = getMob()
+                        until not mob or not mob:FindFirstChild("Humanoid") or mob.Humanoid.Health <= 0 or not plr.PlayerGui.Main.Quest.Visible
+                        StopBring()
+                    end
+                    if plr.PlayerGui.Main.Quest.Visible and MN and string.find(plr.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, MN) and (not mob or not mob:FindFirstChild("Humanoid") or mob.Humanoid.Health <= 0) then
+                        if MCS and MCS > 0 and MC and #MC > 0 then
+                            local list = {}
+                            for _, cfStr in pairs(MC) do
+                                local nums = {}; for num in tostring(cfStr):gmatch("[-%d%.]+") do table.insert(nums, tonumber(num)) end
+                                if #nums >= 3 then table.insert(list, CFrame.new(nums[1], nums[2], nums[3])) end
+                            end
+                            if #list > 0 then
+                                local cf = list[math.random(1, #list)]
+                                TP1(cf + Vector3.new(0,20,0))
+                                repeat task.wait() until (plr.Character.HumanoidRootPart.Position - cf.Position).Magnitude <= 3
+                                task.wait(1)
+                            end
+                        end
+                    end
+                end
+            else
+                task.wait(5)
+                local newQ = QuestCheck()
+                if newQ and newQ[5] and plr.Data.Level.Value >= newQ[5] then return end
+            end
+        end
+    end
+end)
