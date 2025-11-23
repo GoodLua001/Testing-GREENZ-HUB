@@ -1,3 +1,18 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Zero X Hub [Premium] ",
+    SubTitle = "by Saries",
+    TabWidth = 155,
+    Size = UDim2.fromOffset(485, 370),
+    Acrylic = false,
+    Theme = "Darker",
+    MinimizeKey = Enum.KeyCode.End
+})
+local Tabs = {
+    Shop = Window:AddTab({ Title = "Shop", Icon = ""}),
+    Setting = Window:AddTab({ Title = "Settings", Icon = ""}),
+    Main = Window:AddTab({ Title = "General", Icon = ""}),
+}
 if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
         World1 = true
     elseif game.PlaceId == 4442272183 or game.PlaceId == 79091703265657 then
@@ -1169,162 +1184,6 @@ if plr.Character then
     onCharacterAdded(plr.Character)
 
 end
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-local Modules = ReplicatedStorage:WaitForChild("Modules")
-local Net = Modules:WaitForChild("Net")
-local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
-local RegisterHit = Net:WaitForChild("RE/RegisterHit")
-
-local SUCCESS_FLAGS, COMBAT_REMOTE_THREAD = pcall(function()
-    return require(Modules.Flags).COMBAT_REMOTE_THREAD or false
-end)
-local SUCCESS_HIT, HIT_FUNCTION = pcall(function()
-    return (getmenv or getsenv)(Net)._G.SendHitsToServer
-end)
-
-local function SendAttack(Cooldown, Args)
-    RegisterAttack:FireServer(Cooldown)
-    if SUCCESS_FLAGS and COMBAT_REMOTE_THREAD and SUCCESS_HIT and HIT_FUNCTION then
-        HIT_FUNCTION(Args[1], Args[2])
-    else
-        RegisterHit:FireServer(Args[1], Args[2])
-    end
-end
-
-local FastAttack = {
-    Distance = 60,
-    Debounce = 0,
-    TargetMobInstance = nil,
-    TargetMobName = nil
-}
-
-function FastAttack:IsEntityAlive(entity)
-    local humanoid = entity and entity:FindFirstChild("Humanoid")
-    return humanoid and humanoid.Health > 0
-end
-
-function FastAttack:SetTargetMob(mob)
-    if typeof(mob) == "string" then
-        self.TargetMobName = mob
-        self.TargetMobInstance = nil
-    elseif typeof(mob) == "Instance" and mob.Parent == Workspace.Enemies and self:IsEntityAlive(mob) then
-        self.TargetMobInstance = mob
-        self.TargetMobName = mob.Name
-    else
-        self.TargetMobInstance = nil
-        self.TargetMobName = nil
-    end
-end
-
-function FastAttack:GetTargets()
-    local character = LocalPlayer.Character
-    local hrp = character and character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return {} end
-    local targets = {}
-    if self.TargetMobInstance and self:IsEntityAlive(self.TargetMobInstance) then
-        if (hrp.Position - self.TargetMobInstance.HumanoidRootPart.Position).Magnitude <= self.Distance then
-            table.insert(targets, self.TargetMobInstance)
-        end
-    end
-    if self.TargetMobName then
-        for _, v in pairs(Workspace.Enemies:GetChildren()) do
-            if v.Name == self.TargetMobName and self:IsEntityAlive(v) and v:FindFirstChild("HumanoidRootPart") then
-                if (hrp.Position - v.HumanoidRootPart.Position).Magnitude <= self.Distance then
-                    if not table.find(targets, v) then
-                        table.insert(targets, v)
-                    end
-                end
-            end
-        end
-    end
-    for _, v in pairs(Workspace.Enemies:GetChildren()) do
-        if self:IsEntityAlive(v) and v:FindFirstChild("HumanoidRootPart") then
-            local dist = (hrp.Position - v.HumanoidRootPart.Position).Magnitude
-            if dist <= self.Distance then
-                if not table.find(targets, v) then
-                    table.insert(targets, v)
-                end
-            end
-        end
-    end
-    return targets
-end
-
-function FastAttack:Attack()
-    local character = LocalPlayer.Character
-    local hrp = character and character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-    local weapon = character:FindFirstChildOfClass("Tool")
-    if not weapon then return end
-    local currentTime = tick()
-    if currentTime - self.Debounce < 0.1 then return end
-    self.Debounce = currentTime
-    local targets = self:GetTargets()
-    if #targets == 0 then return end
-    local hitTargets = {}
-    for _, target in ipairs(targets) do
-        local rootPart = target:FindFirstChild("HumanoidRootPart") or target:FindFirstChild("Head")
-        if rootPart then
-            table.insert(hitTargets, {target, rootPart})
-        end
-    end
-    if #hitTargets > 0 then
-        pcall(function()
-            SendAttack(0.1, {hitTargets[1][2], hitTargets})
-        end)
-    end
-end
-
-task.spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            FastAttack:Attack()
-        end)
-    end
-end)
-
-spawn(function()
-    local gg = getrawmetatable(game)
-    local old = gg.__namecall
-    setreadonly(gg, false)
-    gg.__namecall = newcclosure(function(...)
-        local method = getnamecallmethod()
-        local args = {...}
-        if tostring(method) == "FireServer" then
-            if tostring(args[1]) == "RemoteEvent" then
-                if tostring(args[2]) ~= "true" and tostring(args[2]) ~= "false" then
-                    if getgenv().Aimbot and aimpos then
-                        if typeof(args[2]) == "Vector3" then
-                            args[2] = aimpos
-                        elseif typeof(args[2]) == "CFrame" then
-                            args[2] = CFrame.new(aimpos)
-                        end
-                        return old(unpack(args))
-                    end
-                end
-            end
-        end
-        return old(...)
-    end)
-end)
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local Window = Fluent:CreateWindow({
-    Title = "Zero X Hub [Premium] ",
-    SubTitle = "by Saries",
-    TabWidth = 155,
-    Size = UDim2.fromOffset(485, 370),
-    Acrylic = false,
-    Theme = "Darker",
-    MinimizeKey = Enum.KeyCode.End
-})
-local Tabs = {
-    Shop = Window:AddTab({ Title = "Shop", Icon = ""}),
-    Setting = Window:AddTab({ Title = "Settings", Icon = ""}),
-    Main = Window:AddTab({ Title = "General", Icon = ""}),
-}
 local v1 = Tabs.Shop:AddSection("Soon!")
 local v2 = Tabs.Setting:AddSection("Settings")
 local v3 = Tabs.Setting:AddDropdown("v3", {
@@ -1566,4 +1425,145 @@ spawn(function()
             end)
         end
     end
+end)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local Net = Modules:WaitForChild("Net")
+local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
+local RegisterHit = Net:WaitForChild("RE/RegisterHit")
+
+local SUCCESS_FLAGS, COMBAT_REMOTE_THREAD = pcall(function()
+    return require(Modules.Flags).COMBAT_REMOTE_THREAD or false
+end)
+local SUCCESS_HIT, HIT_FUNCTION = pcall(function()
+    return (getmenv or getsenv)(Net)._G.SendHitsToServer
+end)
+
+local function SendAttack(Cooldown, Args)
+    RegisterAttack:FireServer(Cooldown)
+    if SUCCESS_FLAGS and COMBAT_REMOTE_THREAD and SUCCESS_HIT and HIT_FUNCTION then
+        HIT_FUNCTION(Args[1], Args[2])
+    else
+        RegisterHit:FireServer(Args[1], Args[2])
+    end
+end
+
+local FastAttack = {
+    Distance = 60,
+    Debounce = 0,
+    TargetMobInstance = nil,
+    TargetMobName = nil
+}
+
+function FastAttack:IsEntityAlive(entity)
+    local humanoid = entity and entity:FindFirstChild("Humanoid")
+    return humanoid and humanoid.Health > 0
+end
+
+function FastAttack:SetTargetMob(mob)
+    if typeof(mob) == "string" then
+        self.TargetMobName = mob
+        self.TargetMobInstance = nil
+    elseif typeof(mob) == "Instance" and mob.Parent == Workspace.Enemies and self:IsEntityAlive(mob) then
+        self.TargetMobInstance = mob
+        self.TargetMobName = mob.Name
+    else
+        self.TargetMobInstance = nil
+        self.TargetMobName = nil
+    end
+end
+
+function FastAttack:GetTargets()
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return {} end
+    local targets = {}
+    if self.TargetMobInstance and self:IsEntityAlive(self.TargetMobInstance) then
+        if (hrp.Position - self.TargetMobInstance.HumanoidRootPart.Position).Magnitude <= self.Distance then
+            table.insert(targets, self.TargetMobInstance)
+        end
+    end
+    if self.TargetMobName then
+        for _, v in pairs(Workspace.Enemies:GetChildren()) do
+            if v.Name == self.TargetMobName and self:IsEntityAlive(v) and v:FindFirstChild("HumanoidRootPart") then
+                if (hrp.Position - v.HumanoidRootPart.Position).Magnitude <= self.Distance then
+                    if not table.find(targets, v) then
+                        table.insert(targets, v)
+                    end
+                end
+            end
+        end
+    end
+    for _, v in pairs(Workspace.Enemies:GetChildren()) do
+        if self:IsEntityAlive(v) and v:FindFirstChild("HumanoidRootPart") then
+            local dist = (hrp.Position - v.HumanoidRootPart.Position).Magnitude
+            if dist <= self.Distance then
+                if not table.find(targets, v) then
+                    table.insert(targets, v)
+                end
+            end
+        end
+    end
+    return targets
+end
+
+function FastAttack:Attack()
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    local weapon = character:FindFirstChildOfClass("Tool")
+    if not weapon then return end
+    local currentTime = tick()
+    if currentTime - self.Debounce < 0.1 then return end
+    self.Debounce = currentTime
+    local targets = self:GetTargets()
+    if #targets == 0 then return end
+    local hitTargets = {}
+    for _, target in ipairs(targets) do
+        local rootPart = target:FindFirstChild("HumanoidRootPart") or target:FindFirstChild("Head")
+        if rootPart then
+            table.insert(hitTargets, {target, rootPart})
+        end
+    end
+    if #hitTargets > 0 then
+        pcall(function()
+            SendAttack(0.1, {hitTargets[1][2], hitTargets})
+        end)
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            FastAttack:Attack()
+        end)
+    end
+end)
+
+spawn(function()
+    local gg = getrawmetatable(game)
+    local old = gg.__namecall
+    setreadonly(gg, false)
+    gg.__namecall = newcclosure(function(...)
+        local method = getnamecallmethod()
+        local args = {...}
+        if tostring(method) == "FireServer" then
+            if tostring(args[1]) == "RemoteEvent" then
+                if tostring(args[2]) ~= "true" and tostring(args[2]) ~= "false" then
+                    if getgenv().Aimbot and aimpos then
+                        if typeof(args[2]) == "Vector3" then
+                            args[2] = aimpos
+                        elseif typeof(args[2]) == "CFrame" then
+                            args[2] = CFrame.new(aimpos)
+                        end
+                        return old(unpack(args))
+                    end
+                end
+            end
+        end
+        return old(...)
+    end)
 end)
