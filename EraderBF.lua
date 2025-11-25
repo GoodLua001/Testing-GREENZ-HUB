@@ -630,7 +630,189 @@ function Hop()
         end
     end
 end
+function topos(Pos)
 
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+        if not Pos then 
+
+            return 
+
+        end
+
+        local Distance = (Pos.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+
+        local nearestTeleport = CheckNearestTeleporter(Pos)
+
+        if nearestTeleport then
+
+            requestEntrance(nearestTeleport)
+
+        end
+
+        if not plr.Character:FindFirstChild("PartTele") then
+
+            local PartTele = Instance.new("Part", plr.Character)
+
+            PartTele.Size = Vector3.new(10,1,10)
+
+            PartTele.Name = "PartTele"
+
+            PartTele.Anchored = true
+
+            PartTele.Transparency = 1
+
+            PartTele.CanCollide = false
+
+            PartTele.CFrame = WaitHRP(plr).CFrame 
+
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+
+                if not isTeleporting then return end
+
+                task.wait()
+
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+
+                    local targetCFrame = PartTele.CFrame
+
+                    WaitHRP(plr).CFrame = CFrame.new(targetCFrame.Position.X, Pos.Position.Y, targetCFrame.Position.Z)
+
+                end
+
+            end)
+
+        end
+
+        isTeleporting = true
+
+        local SpeedTw = getgenv().TweenSpeed
+
+        if Distance <= 250 then
+
+            SpeedTw = SpeedTw * 3
+
+        end
+
+        local targetCFrame = CFrame.new(Pos.Position.X, Pos.Position.Y, Pos.Position.Z)
+
+        local Tween = game:GetService("TweenService"):Create(plr.Character.PartTele, TweenInfo.new(Distance / SpeedTw, Enum.EasingStyle.Linear), {CFrame = Pos})
+
+        Tween:Play()
+
+        Tween.Completed:Connect(function(status)
+
+            if status == Enum.PlaybackState.Completed then
+
+                if plr.Character:FindFirstChild("PartTele") then
+
+                    plr.Character.PartTele:Destroy()
+
+                end
+
+                isTeleporting = false
+
+            end
+
+        end)
+
+    end
+
+end
+
+
+
+getgenv().TweenSpeed = 350
+
+
+
+function stopTeleport()
+
+    isTeleporting = false
+
+    local plr = game.Players.LocalPlayer
+
+    if plr.Character:FindFirstChild("PartTele") then
+
+        plr.Character.PartTele:Destroy()
+
+    end
+
+end
+
+
+
+spawn(function()
+
+    while task.wait() do
+
+        if not isTeleporting then
+
+            stopTeleport()
+
+        end
+
+    end
+
+end)
+
+
+
+spawn(function()
+
+    local plr = game.Players.LocalPlayer
+
+    while task.wait() do
+
+        pcall(function()
+
+            if plr.Character:FindFirstChild("PartTele") then
+
+                if (plr.Character.HumanoidRootPart.Position - plr.Character.PartTele.Position).Magnitude >= 100 then
+
+                    stopTeleport()
+
+                end
+
+            end
+
+        end)
+
+    end
+
+end)
+
+
+
+local plr = game.Players.LocalPlayer
+
+
+
+local function onCharacterAdded(character)
+
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.Died:Connect(function()
+
+        stopTeleport()
+
+    end)
+
+end
+
+
+
+plr.CharacterAdded:Connect(onCharacterAdded)
+
+
+
+if plr.Character then
+
+    onCharacterAdded(plr.Character)
+
+end
 function CheckBoss(targets)
     local targetList = typeof(targets) == "table" and targets or {targets}
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
@@ -1107,20 +1289,20 @@ function Farm_Level()
                 repeat 
                     task.wait(0.1)
                     print("get quest")
-                    TP1(NPC)
+                    topos(NPC)
                     HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
             elseif currentLoc ~= "Submerged Island" and currentLoc ~= "Sealed Cavern" then
                 if World3 then
                     local submarineCF = CFrame.new(-16269.4121, 24.7584076, 1371.70752, -0.999348342, -0.00479344372, 0.0357791297, -0.00262145093, 0.998164296, 0.0605080314, -0.036003489, 0.0603748076, -0.997526407)
-                    TP1(submarineCF)
+                    topos(submarineCF)
                     if HRP and (HRP.Position - submarineCF.Position).Magnitude <= 5 then
                         local args = { "TravelToSubmergedIsland" }
                         game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer(unpack(args))
                     end
                 end
             end
-        else
+        elseif level <= 2599 then
             repeat 
                 task.wait(0.1)
                 print("get quest")
@@ -1135,6 +1317,7 @@ function Farm_Level()
         KillMobList(QuestCheck()[3], nil, false)
     end
 end
+
 function Farm_Bone()
     if CheckBoss({"Soul Reaper"}) then
         KillBoss({"Soul Reaper"}, true)
@@ -1152,7 +1335,7 @@ end
 getgenv().NoClip = true
 spawn(function()
     while task.wait(0.1) do
-        local s, e = pcall(Farm_Bone)
+        local s, e = pcall(Farm_Level)
         if not s then
             print(e)
             print(debug.traceback())
