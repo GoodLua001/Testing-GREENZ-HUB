@@ -349,7 +349,39 @@ function shouldtp(instant)
     end
     return true
 end
+getgenv().NoClip = false
 
+game:GetService("RunService").Stepped:Connect(function()
+    pcall(function()
+        if not (game:GetService("Players").LocalPlayer.Character 
+            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Head") 
+            and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) then return end
+        if getgenv().NoClip or getgenv().Settings["Start Farm"] then
+            if not game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
+                local bv = Instance.new("BodyVelocity")
+                bv.Name = "BodyClip"
+                bv.Velocity = Vector3.new(0, 0, 0)
+                bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                bv.P = 15000
+                bv.Parent = game:GetService("Players").LocalPlayer.Character.Head
+            end
+            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                end
+            end
+        else
+            if game:GetService("Players").LocalPlayer.Character.Head:FindFirstChild("BodyClip") then
+                game:GetService("Players").LocalPlayer.Character.Head.BodyClip:Destroy()
+            end
+            for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CanCollide = true
+                end
+            end
+        end
+    end)
+end)
 function TP1(pos, notinstant)
     if not pos then return end
     local lastPauseTime = tick()
@@ -1117,6 +1149,7 @@ function Farm_Cake()
         KillMobList({"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}, nil, true)
     end
 end
+getgenv().NoClip = true
 spawn(function()
     while task.wait(0.1) do
         local s, e = pcall(Farm_Level)
