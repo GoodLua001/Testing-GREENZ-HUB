@@ -1265,8 +1265,9 @@ createEnemySpawns()
 
 wait(2)
 function Farm_Level()
-    if not (QuestCheck()[5] and LocalPlayer.Data.Level.Value >= QuestCheck()[5]) then return end
-    
+    if not (QuestCheck()[5] and LocalPlayer.Data.Level.Value >= QuestCheck()[5]) then 
+        return 
+    end    
     local NPC = typeof(QuestCheck()[2]) == "CFrame" and QuestCheck()[2] 
         or typeof(QuestCheck()[2]) == "table" and CFrame.new(unpack(QuestCheck()[2])) 
         or CFrame.new(QuestCheck()[2].X, QuestCheck()[2].Y, QuestCheck()[2].Z)
@@ -1278,38 +1279,35 @@ function Farm_Level()
     if LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] 
         and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-    elseif not Gui and NPC then
-        local level = LocalPlayer.Data.Level.Value
-        local player = LocalPlayer
-        local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        
+        return
+    end    
+    if not Gui and NPC then
         if level >= 2600 then
-            local currentLoc = player:GetAttribute("CurrentLocation")
-            if currentLoc == "Submerged Island" or currentLoc == "Sealed Cavern" then
-                repeat 
-                    task.wait(0.1)
-                    print("get quest")
-                    topos(NPC)
-                    HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
-            elseif currentLoc ~= "Submerged Island" and currentLoc ~= "Sealed Cavern" then
+            local currentLoc = LocalPlayer:GetAttribute("CurrentLocation")
+            
+            if currentLoc ~= "Submerged Island" and currentLoc ~= "Sealed Cavern" then
                 if World3 then
                     local submarineCF = CFrame.new(-16269.4121, 24.7584076, 1371.70752, -0.999348342, -0.00479344372, 0.0357791297, -0.00262145093, 0.998164296, 0.0605080314, -0.036003489, 0.0603748076, -0.997526407)
                     topos(submarineCF)
+                    
+                    local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     if HRP and (HRP.Position - submarineCF.Position).Magnitude <= 5 then
-                        local args = { "TravelToSubmergedIsland" }
+                        local args = {"TravelToSubmergedIsland"}
                         game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer(unpack(args))
                     end
                 end
+                return
             end
-        elseif level <= 2599 then
-            repeat 
-                task.wait(0.1)
-                print("get quest")
-                TP1(NPC)
-                HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
         end
+        
+        repeat 
+            task.wait(0.1)
+            print("get quest")
+            if level <= 2599 or level >= 2600 then
+                TP1(NPC)
+            end
+            local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
         
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", QuestCheck()[4], QuestCheck()[1])
     else
