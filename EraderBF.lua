@@ -1290,6 +1290,9 @@ function Farm_Level()
                 task.wait(0.1)
                 game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("TravelToSubmergedIsland")
                 task.wait(3)
+        if LocalPlayer:GetAttribute("CurrentLocation") == "Submerged Island" and LocalPlayer:GetAttribute("CurrentLocation") == "Sealed Cavern" then
+                TP1(CFrame.new(10541.1914, -1205.84863, 9705.28027, -0.329102635, -0.1672149, -0.929371059, -0.178716004, 0.977438927, -0.112577677, 0.927228153, 0.129043877, -0.351561666))
+                end
             end
         end
     elseif LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
