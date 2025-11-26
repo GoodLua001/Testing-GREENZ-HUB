@@ -1269,22 +1269,28 @@ function Check_Sub(p)
     local h = workspace.Characters:FindFirstChild(p) and workspace.Characters[p]:FindFirstChild("HumanoidRootPart")
     return h and h.Position.X > 0 or false
 end
+
 function Farm_Level()
     if not (QuestCheck()[5] and LocalPlayer.Data.Level.Value >= QuestCheck()[5]) then return end
+    
     local NPC = typeof(QuestCheck()[2]) == "CFrame" and QuestCheck()[2] or typeof(QuestCheck()[2]) == "table" and CFrame.new(unpack(QuestCheck()[2])) or CFrame.new(QuestCheck()[2].X, QuestCheck()[2].Y, QuestCheck()[2].Z)
     local Gui = LocalPlayer.PlayerGui.Main.Quest.Visible
         and QuestCheck()[3]
         and string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3])
+    
     if Level.Value >= 2600 and not Check_Sub() then
-        if (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10 then
-            repeat 
-               TP1(CFrame.new(-16270, 25, 1373))
-               task.wait(0.1)
-            until (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 or Check_Sub()
-            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("AskKilledTikiBoss")
-            task.wait(0.1)
-            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("TravelToSubmergedIsland")
-            task.wait(3)
+        if LocalPlayer:GetAttribute("CurrentLocation") ~= "Submerged Island" and LocalPlayer:GetAttribute("CurrentLocation") ~= "Sealed Cavern" then
+            if (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10 then
+                repeat 
+                    TP1(CFrame.new(-16270, 25, 1373))
+                    task.wait(0.1)
+                until (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 or Check_Sub()
+                
+                game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("AskKilledTikiBoss")
+                task.wait(0.1)
+                game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("TravelToSubmergedIsland")
+                task.wait(3)
+            end
         end
     elseif LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
@@ -1294,6 +1300,7 @@ function Farm_Level()
             TP1(NPC)
             local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
+        
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", QuestCheck()[4], QuestCheck()[1])
     else
         KillMobList(QuestCheck()[3], nil, false)
