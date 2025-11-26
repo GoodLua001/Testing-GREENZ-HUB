@@ -1437,7 +1437,6 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Default = false,
 	Callback = function(Value)
 	    getgenv().StartFarm = Value
-	    getgenv().NoClip = Value
 	end
 })
 spawn(function()
