@@ -631,6 +631,43 @@ function Hop()
         end
     end
 end
+function TeleportWorld(world)
+    if typeof(world) == "string" then
+        world = world:gsub(" ", ""):gsub("Sea", "")
+        world = tonumber(world)
+    end
+    if world == 1 then
+        local args = {
+            [1] = "TravelMain"
+        }
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(args))
+    elseif world == 2 then
+        local args = {
+            [1] = "TravelDressrosa"
+        }
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(args))
+    elseif world == 3 then
+        local args = {
+            [1] = "TravelZou"
+        }
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(args))
+    end
+end
+function UseSkill()
+    local used = {}
+    for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if (v.ToolTip == "Melee" or v.ToolTip == "Sword" or v.ToolTip == "Blox Fruit" or v.ToolTip == "Gun") and not used[v.Name] then
+            EquipWeapon(v.Name)
+            task.wait(0.1)
+            down("Z", 0.1)
+            down("X", 0.1)
+            down("C", 0.1)
+            down("F", 0.1)
+            used[v.Name] = true
+            task.wait(0.2)
+        end
+    end
+end
 function topos(Pos)
 
     local plr = game.Players.LocalPlayer
@@ -813,6 +850,17 @@ if plr.Character then
 
     onCharacterAdded(plr.Character)
 
+end
+function Check_Eye()
+    local success, result = pcall(function()
+        local e = workspace.Map.TikiOutpost.IslandModel
+        local c = e.IslandChunks.E
+        for _, v in pairs({c.Eye3, c.Eye4, e.Eye1, e.Eye2}) do
+            if not v or v.Transparency == 1 then return false end
+        end
+        return true
+    end)
+    return success and result
 end
 function CheckBoss(targets)
     local targetList = typeof(targets) == "table" and targets or {targets}
@@ -1329,13 +1377,114 @@ function Farm_Cake()
         KillMobList({"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}, nil, true)
     end
 end
-getgenv().NoClip = true
+function Tyrant_of_the_Skies()
+    if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+    if CheckBoss({"Tyrant of the Skies"}) then
+        KillBoss({"Tyrant of the Skies"}, true)
+    elseif Check_Eye() then
+        local positions = {
+            Vector3.new(-16250, 155, 1466),
+            Vector3.new(-16338, 155, 1457),
+            Vector3.new(-16213, 155, 1465),
+            Vector3.new(-16216, 155, 1321),
+            Vector3.new(-16254, 155, 1321),
+            Vector3.new(-16291, 155, 1312),
+            Vector3.new(-16334, 155, 1325)
+        }
+        for _, v in pairs(positions) do
+            if GetDistance(v) > 10 then
+                repeat
+                    TP1(CFrame.new(v))
+                    task.wait(0.1)
+                until GetDistance(v) <= 10 or not Check_Eye() or CheckBoss({"Tyrant of the Skies"})
+                UseSkill()
+                UseSkill()
+                task.wait(3)
+            end
+        end
+    elseif CheckBoss({"Isle Outlaw", "Island Boy", "Isle Champion", "Serpent Hunter", "Skull Slayer"}) then
+        KillBoss({"Isle Outlaw", "Island Boy", "Isle Champion", "Serpent Hunter", "Skull Slayer"}, false, Check_Eye, true)
+    else
+        local rand = math.random(1, 2)
+        if rand == 1 then
+            repeat
+                TP1(CFrame.new(-16584, 107, 1307))
+                task.wait(0.1)
+            until GetDistance(CFrame.new(-16584, 107, 1307)) < 10 or CheckBoss({"Isle Outlaw", "Island Boy", "Isle Champion", "Serpent Hunter", "Skull Slayer"})
+        else
+            repeat
+                TP1(CFrame.new(-16568, 56, -214))
+                task.wait(0.1)
+            until GetDistance(CFrame.new(-16584, 107, 1307)) < 10 or CheckBoss({"Isle Outlaw", "Island Boy", "Isle Champion", "Serpent Hunter", "Skull Slayer"})
+        end
+    end
+end
+
+
+local v1 = Tabs.Main:AddSection("Simple Farm")
+local v2 = Tabs.Main:AddDropdown("v2", {
+    Title = "Select Method Farm",
+    Values = {"Level", "Bone", "Katakuri", "Tyrant of the Skies"},
+    Multi = false,
+    Default = "Level",
+    Callback = function(Value)
+        getgenv().SelectModeFarm = Value
+    end
+})
+local v3 = Tabs.Main:AddToggle("v3", {
+	Title = "Start Farm",
+	Description = "",
+	Default = false,
+	Callback = function(Value)
+	    getgenv().StartFarm = Value
+	    if Value == true then
+	        getgenv().NoClip = true
+	    elseif Value == false then
+	        getgenv().NoClip = false
+	    end
+	end
+})
 spawn(function()
     while task.wait(0.1) do
-        local s, e = pcall(Farm_Level)
-        if not s then
-            print(e)
-            print(debug.traceback())
+        if getgenv().StartFarm and getgenv().SelectModeFarm == "Level" then
+            local q, r = pcall(Farm_Level)
+            if not q then
+                print(q)
+                print(debug.traceback())
+            end
+        end
+    end
+end)
+spawn(function()
+    while task.wait(0.1) do
+        if getgenv().StartFarm and getgenv().SelectModeFarm == "Bone" then
+            local t, y = pcall(Farm_Bone)
+            if not t then
+                print(t)
+                print(debug.traceback())
+            end
+        end
+    end
+end)
+spawn(function()
+    while task.wait(0.1) do
+        if getgenv().StartFarm and getgenv().SelectModeFarm == "Katakuri" then
+            local u, i = pcall(Farm_Cake)
+            if not u then
+                print(u)
+                print(debug.traceback())
+            end
+        end
+    end
+end)
+spawn(function()
+    while task.wait(0.1) do
+        if getgenv().StartFarm and getgenv().SelectModeFarm == "Tyrant of the Skies" then
+           local d, f = pcall(Tyrant_of_the_Skies)
+           if not d then
+                print(d)
+                print(debug.traceback())
+           end
         end
     end
 end)
