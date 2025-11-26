@@ -1264,58 +1264,41 @@ end
 createEnemySpawns()
 
 wait(2)
+function Check_Sub(p)
+    if not p then p = LocalPlayer.Name end
+    local h = workspace.Characters:FindFirstChild(p) and workspace.Characters[p]:FindFirstChild("HumanoidRootPart")
+    return h and h.Position.X > 0 or false
+end
 function Farm_Level()
-    if not (QuestCheck()[5] and LocalPlayer.Data.Level.Value >= QuestCheck()[5]) then 
-        return 
-    end    
-    local NPC = typeof(QuestCheck()[2]) == "CFrame" and QuestCheck()[2] 
-        or typeof(QuestCheck()[2]) == "table" and CFrame.new(unpack(QuestCheck()[2])) 
-        or CFrame.new(QuestCheck()[2].X, QuestCheck()[2].Y, QuestCheck()[2].Z)
-    
+    if not (QuestCheck()[5] and LocalPlayer.Data.Level.Value >= QuestCheck()[5]) then return end
+    local NPC = typeof(QuestCheck()[2]) == "CFrame" and QuestCheck()[2] or typeof(QuestCheck()[2]) == "table" and CFrame.new(unpack(QuestCheck()[2])) or CFrame.new(QuestCheck()[2].X, QuestCheck()[2].Y, QuestCheck()[2].Z)
     local Gui = LocalPlayer.PlayerGui.Main.Quest.Visible
         and QuestCheck()[3]
         and string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3])
-    
-    if LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] 
-        and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-        return
-    end    
-    if not Gui and NPC then
-        if level >= 2600 then
-            local currentLoc = LocalPlayer:GetAttribute("CurrentLocation")
-            
-            if currentLoc ~= "Submerged Island" and currentLoc ~= "Sealed Cavern" then
-                if World3 then
-                    local submarineCF = CFrame.new(-16269.4121, 24.7584076, 1371.70752, -0.999348342, -0.00479344372, 0.0357791297, -0.00262145093, 0.998164296, 0.0605080314, -0.036003489, 0.0603748076, -0.997526407)
-                    topos(submarineCF)
-                    
-                    local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    if HRP and (HRP.Position - submarineCF.Position).Magnitude <= 5 then
-                        local args = {"TravelToSubmergedIsland"}
-                        game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer(unpack(args))
-                    end
-                end
-                return
-            end
+    if Level.Value >= 2600 and not Check_Sub() then
+        if (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10 then
+            repeat 
+               TP1(CFrame.new(-16270, 25, 1373))
+               task.wait(0.1)
+            until (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 or Check_Sub()
+            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("AskKilledTikiBoss")
+            task.wait(0.1)
+            game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("TravelToSubmergedIsland")
+            task.wait(3)
         end
-        
+    elseif LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
+         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+         elseif not Gui and NPC then
         repeat 
             task.wait(0.1)
-            print("get quest")
-            if level <= 2599 or level >= 2600 then
-                TP1(NPC)
-            end
+            TP1(NPC)
             local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         until HRP and (HRP.Position - NPC.Position).Magnitude <= 5
-        
         game.ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", QuestCheck()[4], QuestCheck()[1])
     else
-        print("kill mob")
         KillMobList(QuestCheck()[3], nil, false)
     end
 end
-
 function Farm_Bone()
     if CheckBoss({"Soul Reaper"}) then
         KillBoss({"Soul Reaper"}, true)
