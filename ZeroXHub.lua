@@ -1437,7 +1437,7 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Default = false,
 	Callback = function(Value)
 	    getgenv().StartFarm = Value
-	    if Value == false then
+	    if not Value then
 	        RemoveVelocity()
 	    end
 	end
