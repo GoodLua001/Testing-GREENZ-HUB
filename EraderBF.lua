@@ -1275,20 +1275,22 @@ function Farm_Level()
     local Gui = LocalPlayer.PlayerGui.Main.Quest.Visible
         and QuestCheck()[3]
         and string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3])
-    if Level.Value >= 2600 and not Check_Sub() then
+    if Level.Value >= 2600 and not player:GetAttribute("CurrentLocation") == "Submerged Island" and not player:GetAttribute("CurrentLocation") == "Sealed Cavern" then
         if (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10 then
             repeat 
                TP1(CFrame.new(-16270, 25, 1373))
                task.wait(0.1)
-            until (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 or Check_Sub()
+            until (CFrame.new(-16270, 25, 1373).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 
+   or Check_Sub()
+
             game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("AskKilledTikiBoss")
             task.wait(0.1)
             game:GetService("ReplicatedStorage").Modules.Net:FindFirstChild("RF/SubmarineWorkerSpeak"):InvokeServer("TravelToSubmergedIsland")
             task.wait(3)
         end
     elseif LocalPlayer.PlayerGui.Main.Quest.Visible and QuestCheck()[3] and not string.find(LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, QuestCheck()[3]) then
-         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-         elseif not Gui and NPC then
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+    elseif not Gui and NPC then
         repeat 
             task.wait(0.1)
             TP1(NPC)
@@ -1299,6 +1301,7 @@ function Farm_Level()
         KillMobList(QuestCheck()[3], nil, false)
     end
 end
+
 function Farm_Bone()
     if CheckBoss({"Soul Reaper"}) then
         KillBoss({"Soul Reaper"}, true)
