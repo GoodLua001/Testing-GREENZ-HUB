@@ -1,3 +1,4 @@
+print("Cak")
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title = "Zero X Hub [Premium] ",
@@ -1297,7 +1298,7 @@ function Farm_Level()
                     repeat 
                         TP1(CFrame.new(10541.1914, -1205.84863, 9705.28027, -0.329102635, -0.1672149, -0.929371059, -0.178716004, 0.977438927, -0.112577677, 0.927228153, 0.129043877, -0.351561666))
                         task.wait(0.1)
-                    until (CFrame.new(10541.1914, -1205.84863, 9705.28027, -0.329102635, -0.1672149, -0.929371059, -0.178716004, 0.977438927, -0.112577677, 0.927228153, 0.129043877, -0.351561666)).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 or Check_Sub()
+                    until (CFrame.new(10541.1914, -1205.84863, 9705.28027, -0.329102635, -0.1672149, -0.929371059, -0.178716004, 0.977438927, -0.112577677, 0.927228153, 0.129043877, -0.351561666)).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10
                 end
             end
         end
@@ -1315,8 +1316,6 @@ function Farm_Level()
         KillMobList(QuestCheck()[3], nil, false)
     end
 end
-
-
 function Farm_Bone()
     if CheckBoss({"Soul Reaper"}) then
         KillBoss({"Soul Reaper"}, true)
