@@ -7,7 +7,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(485, 370),
     Acrylic = false,
     Theme = "Darker",
-    MinimizeKey = Enum.KeyCode.End
+    MinimizeKey = Enum.ZIndexBehavior.Sibling
 })
 local Tabs = {
     Shop = Window:AddTab({ Title = "Shop", Icon = ""}),
@@ -1076,16 +1076,7 @@ function FastAttack:GetTargets()
             end
         end
     end
-    table.sort(targets, function(a, b)
-        local da = (hrp.Position - a.HumanoidRootPart.Position).Magnitude
-        local db = (hrp.Position - b.HumanoidRootPart.Position).Magnitude
-        return da < db
-    end)
-    local limited = {}
-    for i = 1, math.min(2, #targets) do
-        table.insert(limited, targets[i])
-    end
-    return limited
+    return targets
 end
 
 function FastAttack:Attack()
@@ -1113,19 +1104,13 @@ function FastAttack:Attack()
     end
 end
 
-spawn(function()
+task.spawn(function()
     while task.wait(0.1) do
         pcall(function()
-            if #FastAttack:GetTargets() > 0 then
-                FastAttack:Attack()
-                task.wait(0.1)
-            end
+            FastAttack:Attack()
         end)
     end
 end)
-
-
-
 local Tabel = {}
 function createEnemySpawns()
     local EnemySpawns = Instance.new("Folder", workspace)
@@ -1419,8 +1404,46 @@ function Tyrant_of_the_Skies()
         end
     end
 end
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ToggleButton"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
+local TextButton = Instance.new("TextButton")
+TextButton.Parent = ScreenGui
+TextButton.Active = true
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0, 20, 0.1, -6)
+TextButton.Size = UDim2.new(0, 50, 0, 50)
+TextButton.ZIndex = 10
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.Font = Enum.Font.GothamBold
 
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = TextButton
+local MenuEnabled = false
+local function updateButton()
+    if MenuEnabled then
+        TextButton.Text = "OFF"
+    else
+        TextButton.Text = "ON"
+    end
+end
+updateButton()
+
+TextButton.MouseButton1Click:Connect(function()
+    MenuEnabled = not MenuEnabled
+    pcall(function()
+        if Window and Window.Minimize then
+            Window:Minimize()
+        end
+    end)
+    updateButton()
+end)
 local v1 = Tabs.Main:AddSection("Simple Farm")
 local v2 = Tabs.Main:AddDropdown("v2", {
     Title = "Select Method Farm",
