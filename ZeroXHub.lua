@@ -1510,25 +1510,44 @@ spawn(function()
     end
 end)
 local v4 = Tabs.Main:AddSection("Boss Farm")
-if World1 then
     local bosses1 = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"},
-    local nboss = "The Gorilla King"
-elseif World2 then
-    local bosses1 = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}.
-    local nboss = "Diamond"
-elseif World3 then
-    local bosses1 = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"},
-    local nboss = "Stone"
-end
-local v5 = Tabs.Main:AddDropdown("v5", {
-    Title = "Select Boss Attack",
-    Values = bosses1,
-    Multi = false,
-    Default = nboss,
-    Callback = function(Value)
-        _G.SelectBoss = Value
-    end
+    local nboss1 = "The Gorilla King"
+    local bosses2 = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}.
+    local nboss2 = "Diamond"
+    local bosses3 = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"},
+    local nboss3 = "Stone"
+if World1 then
+    local v5 = Tabs.Main:AddDropdown("v5", {
+        Title = "Select Boss Attack",
+        Values = bosses1,
+        Multi = false,
+        Default = nboss1,
+        Callback = function(Value)
+            _G.SelectBoss = Value
+        end
+    })
 })
+elseif World2 then
+    local v6 = Tabs.Main:AddDropdown("v6", {
+        Title = "Select Boss Attack",
+        Values = bosses2,
+        Multi = false,
+        Default = nboss2,
+        Callback = function(Value)
+            _G.SelectBoss = Value
+        end
+    })
+elseif World3 then
+    local v7 = Tabs.Main:AddDropdown("v7", {
+        Title = "Select Boss Attack",
+        Values = bosses3,
+        Multi = false,
+        Default = nboss3,
+        Callback = function(Value)
+            _G.SelectBoss = Value
+        end
+    })
+end
 spawn(function()
     while task.wait(0.1) do
         if CheckBoss(_G.SelectBoss) then
