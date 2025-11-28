@@ -248,9 +248,11 @@ function NormalTween(Pos)
     return tween
 end
 
-function StopTween()
-    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+function StopTween(v)
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and not v then
         NormalTween(LocalPlayer.Character.HumanoidRootPart.CFrame)
+        task.wait(0.1)
+        RemoveVelocity()
     end
 end
 
@@ -1460,9 +1462,7 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Default = false,
 	Callback = function(Value)
 	    getgenv().StartFarm = Value
-	    if not Value then
-	        RemoveVelocity()
-	    end
+	    StopTween(Value)
 	end
 })
 spawn(function()
@@ -1506,6 +1506,29 @@ spawn(function()
                 print(d)
                 print(debug.traceback())
            end
+        end
+    end
+end)
+local v4 = Tabs.Main:AddSection("Boss Farm")
+if World1 then
+    local boss = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"}
+elseif World2 then
+    local boss = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}
+elseif World3 then
+    local boss = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"}
+end
+local v5 = Tabs.Main:AddDropdown("v5", {
+    Title = "Select Boss Attack",
+    Values = boss,
+    Multi = false,
+    Callback = function(Value)
+        _G.SelectBoss = Value
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if CheckBoss(_G.SelectBoss) then
+            KillBoss({_G.SelectBoss}, true)
         end
     end
 end)
