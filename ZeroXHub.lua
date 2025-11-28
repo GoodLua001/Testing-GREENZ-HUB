@@ -1511,16 +1511,20 @@ spawn(function()
 end)
 local v4 = Tabs.Main:AddSection("Boss Farm")
 if World1 then
-    local boss = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"}
+    local bosses1 = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"},
+    local nboss = "The Gorilla King"
 elseif World2 then
-    local boss = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}
+    local bosses1 = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}.
+    local nboss = "Diamond"
 elseif World3 then
-    local boss = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"}
+    local bosses1 = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"},
+    local nboss = "Stone"
 end
 local v5 = Tabs.Main:AddDropdown("v5", {
     Title = "Select Boss Attack",
-    Values = boss,
+    Values = bosses1,
     Multi = false,
+    Default = nboss,
     Callback = function(Value)
         _G.SelectBoss = Value
     end
