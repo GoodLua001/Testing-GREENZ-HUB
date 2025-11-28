@@ -1527,10 +1527,20 @@ local v5 = Tabs.Main:AddDropdown("v5", {
         _G.SelectBoss = Value
     end
 })
+local v6 = Tabs.Main:AddToggle("v6", {
+    Title = "Start Farm"
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.StartFarm = Value
+    end
+})
 spawn(function()
     while task.wait(0.1) do
-        if CheckBoss(_G.SelectBoss) then
-            KillBoss({_G.SelectBoss}, true)
+        if _G.StartFarm then
+            if CheckBoss(_G.SelectBoss) then
+                KillBoss({_G.SelectBoss}, true)
+            end
         end
     end
 end)
