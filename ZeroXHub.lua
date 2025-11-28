@@ -1537,7 +1537,7 @@ local v6 = Tabs.Main:AddToggle("v6", {
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.StartFarm then
+        if _G.StartFarm and _G.StartFarm ~= "Click To Select" then
             if CheckBoss(_G.SelectBoss) then
                 KillBoss({_G.SelectBoss}, true)
             end
