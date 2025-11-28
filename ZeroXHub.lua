@@ -1528,7 +1528,7 @@ local v5 = Tabs.Main:AddDropdown("v5", {
     end
 })
 local v6 = Tabs.Main:AddToggle("v6", {
-    Title = "Start Farm"
+    Title = "Start Farm",
     Description = "",
     Default = false,
     Callback = function(Value)
