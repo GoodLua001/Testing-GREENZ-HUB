@@ -1510,44 +1510,23 @@ spawn(function()
     end
 end)
 local v4 = Tabs.Main:AddSection("Boss Farm")
-    local bosses1 = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"},
-    local nboss1 = "The Gorilla King"
-    local bosses2 = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}.
-    local nboss2 = "Diamond"
-    local bosses3 = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"},
-    local nboss3 = "Stone"
+local boss = {}
 if World1 then
-    local v5 = Tabs.Main:AddDropdown("v5", {
-        Title = "Select Boss Attack",
-        Values = bosses1,
-        Multi = false,
-        Default = nboss1,
-        Callback = function(Value)
-            _G.SelectBoss = Value
-        end
-    })
-})
+    local boss = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"}
 elseif World2 then
-    local v6 = Tabs.Main:AddDropdown("v6", {
-        Title = "Select Boss Attack",
-        Values = bosses2,
-        Multi = false,
-        Default = nboss2,
-        Callback = function(Value)
-            _G.SelectBoss = Value
-        end
-    })
+    local boss = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}
 elseif World3 then
-    local v7 = Tabs.Main:AddDropdown("v7", {
-        Title = "Select Boss Attack",
-        Values = bosses3,
-        Multi = false,
-        Default = nboss3,
-        Callback = function(Value)
-            _G.SelectBoss = Value
-        end
-    })
+    local boss = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"}
 end
+local v5 = Tabs.Main:AddDropdown("v5", {
+    Title = "Select Boss Attack",
+    Values = boss,
+    Multi = false,
+    Default = "Click To Select",
+    Callback = function(Value)
+        _G.SelectBoss = Value
+    end
+})
 spawn(function()
     while task.wait(0.1) do
         if CheckBoss(_G.SelectBoss) then
