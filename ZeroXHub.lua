@@ -666,6 +666,154 @@ getgenv().SetValue = function(key,value)
 end
 
 getgenv().Load()
+_G.ServerData = {} 
+_G.ServerData['Chest'] = {}
+_G.ChestsConnection = {}
+function SortChest()
+    local LOROOT = game.Players.LocalPlayer.Character.PrimaryPart or game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
+    if LOROOT then
+        table.sort(_G.ServerData['Chest'], function(chestA, chestB)  
+            local distanceA
+            local distanceB
+            if chestA:IsA('Model') then 
+                distanceA = (Vector3.new(chestA:GetModelCFrame()) - LOROOT.Position).Magnitude
+            end 
+            if chestB:IsA('Model') then 
+                distanceB = (Vector3.new(chestB:GetModelCFrame()) - LOROOT.Position).Magnitude 
+            end
+            if not distanceA then  distanceA = (chestA.Position - LOROOT.Position).Magnitude end
+            if not distanceB then  distanceB = (chestB.Position - LOROOT.Position).Magnitude end
+            return distanceA < distanceB 
+        end)
+    end
+end
+function AddChest(chest)
+    wait()
+    if table.find(_G.ServerData['Chest'], chest) or not chest.Parent then return end 
+    if not string.find(chest.Name,'Chest') or not (chest.ClassName == ('Part') or chest.ClassName == ('BasePart')) then return end
+    if (chest.Position-CFrame.new(-1.4128437, 0.292379826, -6.53605461, 0.999743819, -1.41806034e-09, -0.0226347167, 4.24517754e-09, 1, 1.2485377e-07, 0.0226347167, -1.24917875e-07, 0.999743819).Position).Magnitude <= 10 then 
+        return 
+    end 
+    local CallSuccess,Returned = pcall(function()
+        return GetDistance(chest)
+    end)
+    if not CallSuccess or not Returned then return end
+    table.insert(_G.ServerData['Chest'], chest)  
+    local parentChangedConnection
+    parentChangedConnection = chest:GetPropertyChangedSignal('Parent'):Connect(function()
+        local index = table.find(_G.ServerData['Chest'], chest)
+        table.remove(_G.ServerData['Chest'], index)
+        parentChangedConnection:Disconnect()
+        SortChest()
+    end)
+end
+
+function LoadChest()
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v.Name:find("Chest") and v.Name:match("%d+") and v.CanTouch then
+            task.spawn(function()
+                AddChest(v)
+                local parentFullName = v and v.Parent and tostring(v.Parent:GetFullName())
+                if parentFullName and not _G.ChestsConnection[parentFullName] then
+                    _G.ChestsConnection[parentFullName] = v.Parent.ChildAdded:Connect(AddChest)
+                end
+            end)
+        end
+    end 
+    task.delay(3,function()
+        SortChest()
+    end)
+end
+task.spawn(function()
+	while task.wait(1) do
+		pcall(LoadChest)
+	end
+end)
+function getNearestChest()
+    for _, v in pairs(_G.ServerData['Chest']) do
+        if v and v.Parent and v:IsA("BasePart") then
+            return v
+        end
+    end
+    return false
+end
+local plr = game.Players.LocalPlayer
+local chr = plr.Character or plr.CharacterAdded:Wait()
+local h = chr:FindFirstChild("Humanoid") or false
+local check = 0
+_G.ChestCollect = 0
+
+function PickChest(Chest)
+    if not _G.ChestCollect or typeof(_G.ChestCollect) ~= "number" then
+        _G.ChestCollect = 0
+    end
+    if not Chest or not Chest.Parent then
+        return
+    end
+    local conn
+    conn = Chest:GetPropertyChangedSignal("Parent"):Connect(function()
+        if conn then
+            conn:Disconnect()
+            conn = nil
+        end
+        _G.ChestCollect += 1
+        if typeof(SortChest) == "function" then
+            local ok, err = pcall(SortChest)
+            if not ok then
+                print("SortChest Error:", err)
+            end
+        end
+    end)
+    local OldChestCollect = _G.ChestCollect
+    local timeout = tick() + 8
+    repeat
+        task.wait()
+        local ok, err = pcall(function()
+            if not h or h.Health <= 0 then
+                chr = plr.Character or plr.CharacterAdded:Wait()
+                h = chr:FindFirstChild("Humanoid") or false
+            end
+            if Chest and Chest.Parent and Chest:IsA("BasePart") then
+                chr:SetPrimaryPartCFrame(Chest.CFrame)
+                task.delay(1.3, function()
+                    if Chest then
+                        Chest.CanTouch = false
+                    end
+                end)
+            end
+        end)
+        if not ok then
+            print("PickChest Loop Error:", err)
+        end
+        if tick() > timeout then
+            break
+        end
+    until not Chest or not Chest.Parent or not Chest.CanTouch
+    check += 1
+    if check >= 7 and not CheckBackPack({"God's Chalice", "Fist of darkness", "Sweet Chalice"}) then
+        local hum = chr:FindFirstChildOfClass("Humanoid")
+        if hum and not CheckBackPack({"God's Chalice", "Fist of darkness", "Sweet Chalice"}) then
+            local ok, err = pcall(function()
+                hum:ChangeState(15)
+            end)
+            if not ok then
+                print("Humanoid ChangeState Error:", err)
+            end
+        end
+        check = 0
+        task.wait(3)
+    end
+    if Chest and Chest.Parent then
+        local ok, err = pcall(function()
+            Chest:Destroy()
+        end)
+        if not ok then
+            print("Chest Destroy Error:", err)
+        end
+    elseif _G.ChestCollect == OldChestCollect then
+        _G.ChestCollect += 1
+    end
+end
 function TeleportWorld(world)
     if typeof(world) == "string" then
         world = world:gsub(" ", ""):gsub("Sea", "")
@@ -1545,6 +1693,26 @@ function Rip_Indra()
         until not NearestChest or CheckBoss({"rip_indra","rip_indra True Form"}) or CheckBackPack({"God's Chalice"})
     end
 end
+function CheckBackPack(bx)
+    local BackpackandCharacter = { LocalPlayer.Backpack, LocalPlayer.Character }
+    for _, by in pairs(BackpackandCharacter) do
+        if by then
+            for _, v in pairs(by:GetChildren()) do
+                if type(bx) == "table" then
+                    if table.find(bx, v.Name) then
+                        return v
+                    end
+                else
+                    if v.Name == bx then
+                        return v
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
 function Check_Enough_Cacoa()
     return GetCountMaterials("Conjured Cocoa") >= 10
 end
@@ -1643,6 +1811,7 @@ local v2 = Tabs.Main:AddDropdown("v2", {
     Default = getgenv().SelectModeFarm == "Level",
     Callback = function(Value)
         getgenv().SelectModeFarm = Value
+        getgenv().SaveSetting()
     end
 })
 local v3 = Tabs.Main:AddToggle("v3", {
@@ -1650,7 +1819,8 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Description = "",
 	Default = false,
 	Callback = function(Value)
-	    getgenv().StartFarm = Value
+        getgenv().StartFarm = Value
+        getgenv().SaveSetting()
 	    StopTween(Value)
 	end
 })
@@ -1705,6 +1875,7 @@ local v5 = Tabs.Stack:AddToggle("v5", {
     Default = false,
     Callback = function(Value)
         _G.NewWorld = Value
+        getgenv().SaveSetting()
     end
 })
 spawn(function()
@@ -1745,6 +1916,7 @@ local v7 = Tabs.Stack:AddToggle("v7", {
     Default = false,
     Callback = function(Value)
         _G.AttackRip = Value
+        getgenv().SaveSetting()
     end
 })
 spawn(function()
@@ -1770,6 +1942,7 @@ local v8 = Tabs.Stack:AddToggle("v8", {
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
+        getgenv().SaveSetting()
     end
 })
 spawn(function()
@@ -1786,6 +1959,7 @@ local v10 = Tabs.Stack:AddToggle("v10", {
     Default = false,
     Callback = function(Value)
         _G.AttackDough = Value
+        getgenv().SaveSetting()
     end
 })
 spawn(function()
@@ -1811,6 +1985,7 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Default = false,
     Callback = function(Value)
         _G.FullyDough = Value
+        getgenv().SaveSetting()
     end
 })
 spawn(function()
