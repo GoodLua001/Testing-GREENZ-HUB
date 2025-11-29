@@ -1781,7 +1781,7 @@ spawn(function()
 end)
 local v9 = Tabs.Stack:AddSection("Boss Dough King")
 local v10 = Tabs.Stack:AddToggle("v10", {
-    Tile = "Attack Dough King",
+    Title = "Attack Dough King",
     Description = "",
     Default = false,
     Callback = function(Value)
