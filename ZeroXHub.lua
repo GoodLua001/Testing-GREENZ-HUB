@@ -13,6 +13,7 @@ local Tabs = {
     Shop = Window:AddTab({ Title = "Shop", Icon = ""}),
     Setting = Window:AddTab({ Title = "Settings", Icon = ""}),
     Main = Window:AddTab({ Title = "General", Icon = ""}),
+    Stack = Window:AddTab({ Title = "Stack Farming", Icon = ""}),
 }
 
 if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
@@ -633,6 +634,38 @@ function Hop()
         end
     end
 end
+local HttpService = game:GetService("HttpService")
+local Player = game.Players.LocalPlayer
+local Path = "Zero X Hub/Blox Fruits/"
+local File = Path .. Player.Name .. ".json"
+
+getgenv().Settings = getgenv().Settings or {}
+
+getgenv().Load = function()
+    if not (readfile and writefile and isfile and isfolder) then return warn("Status : Undetected Executor") end
+    if not isfolder("Zero X Hub") then makefolder("Zero X Hub") end
+    if not isfolder(Path) then makefolder(Path) end
+    if not isfile(File) then
+        writefile(File, HttpService:JSONEncode(getgenv().Settings))
+    else
+        local Decode = HttpService:JSONDecode(readfile(File))
+        for i,v in pairs(Decode) do
+            getgenv().Settings[i] = v
+        end
+    end
+end
+
+getgenv().SaveSetting = function()
+    if not (readfile and writefile and isfile and isfolder) then return warn("Status : Undetected Executor") end
+    writefile(File, HttpService:JSONEncode(getgenv().Settings))
+end
+
+getgenv().SetValue = function(key,value)
+    getgenv().Settings[key] = value
+    getgenv().SaveSetting()
+end
+
+getgenv().Load()
 function TeleportWorld(world)
     if typeof(world) == "string" then
         world = world:gsub(" ", ""):gsub("Sea", "")
@@ -1406,6 +1439,112 @@ function Tyrant_of_the_Skies()
         end
     end
 end
+function Check_Color()
+    local circle = game.Workspace:FindFirstChild("Map") and game.Workspace.Map:FindFirstChild("Boat Castle") and game.Workspace.Map["Boat Castle"]:FindFirstChild("Summoner") and game.Workspace.Map["Boat Castle"].Summoner:FindFirstChild("Circle")
+    if not circle then return false end
+    for _,v in next, circle:GetChildren() do
+        if v.Name=="Part" then
+            if v:FindFirstChild("Part") then
+                if v.Part.BrickColor.Name~="Lime green" then
+                    return v.BrickColor.Name
+                end
+            else
+                return v.BrickColor.Name
+            end
+        end
+    end
+    return "cmm"
+end
+function Pick_Color()
+    local circle = workspace:FindFirstChild("Map") and workspace.Map:FindFirstChild("Boat Castle") and workspace.Map["Boat Castle"]:FindFirstChild("Summoner") and workspace.Map["Boat Castle"].Summoner:FindFirstChild("Circle")
+    if not circle then return end
+    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+    for _,v in next,circle:GetChildren() do
+        if v:FindFirstChild("TouchInterest") then
+            firetouchinterest(hrp,v,0)
+            firetouchinterest(hrp,v,1)
+        end
+    end
+end
+local Haki1,Haki2,Haki3=false,false,false
+function Rip_Indra()
+    local NearestChest=getNearestChest()
+    if CheckBoss({"rip_indra","rip_indra True Form"}) then
+        if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+        repeat
+            KillBoss({"rip_indra","rip_indra True Form"})
+            task.wait(0.1)
+        until not CheckBoss({"rip_indra","rip_indra True Form"})
+    elseif CheckBackPack({"God's Chalice"}) then
+        if Check_Color() and Check_Color()~="cmm" then
+            repeat
+                game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Equip"})
+                Pick_Color()
+                task.wait(2)
+                game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Equip"})
+                Pick_Color()
+                task.wait(2)
+                game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Equip"})
+                Pick_Color()
+                task.wait(2)
+            until not Check_Color() or Check_Color()=="cmm"
+        elseif Check_Color()==false then
+            repeat TP1(CFrame.new(-5075.50927734375,314.5155029296875,-3150.0224609375)) until Check_Color()
+        elseif Check_Color()=="cmm" then
+            repeat
+                EquipWeapon("God's Chalice")
+                TP1(CFrame.new(-5562.37255859375,314.0408630371094,-2659.544189453125))
+                task.wait(0.1)
+            until Check_Color()~="cmm" or not Check_Color() or not CheckBackPack({"God's Chalice"}) or CheckBoss({"rip_indra","rip_indra True Form"})
+        end
+    elseif getgenv().Config["Bosses"]["Hop To Find Boss"] and CheckApi("indra") then
+        if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+        repeat HopApi("indra") task.wait(0.1) until not CheckApi("indra") or CheckBoss({"rip_indra","rip_indra True Form"})
+    elseif not Haki1 then
+        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Equip"}) == "Winter Sky" then Haki1=true end
+        if Haki1 then return end
+        task.wait(1)
+        if GetCountMaterials("Pink Pig Berry")<15 and not Haki1 then if Haki1 then return end print("need Pink Pig Berry") CollectB("all",true,1)
+        else
+            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+            if not CheckHakiSeller("Winter Sky") then repeat print("hop") Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/pink?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Winter Sky") end
+            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Craft"})
+        end
+    elseif not Haki2 then
+        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Equip"}) == "Snow White" then Haki2=true end
+        if Haki2 then return end
+        task.wait(1)
+        if GetCountMaterials("White Cloud Berry")<10 and not Haki2 then if Haki2 then return end print("need White Cloud Berry") CollectB("all",true,1)
+        else
+            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+            if not CheckHakiSeller("Snow White") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/white?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Snow White") end
+            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Craft"})
+        end
+    elseif not Haki3 then
+        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Equip"}) == "Pure Red" then Haki3=true end
+        if Haki3 then return end
+        task.wait(1)
+        if GetCountMaterials("Red Cherry Berry")<15 and not Haki3 then if Haki3 then return end print("need Red Cherry Berry") CollectB("all",true,1)
+        else
+            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+            if not CheckHakiSeller("Pure Red") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/red?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Pure Red") end
+            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Craft"})
+        end
+    elseif NearestChest then
+        if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+        repeat
+            PickChest(NearestChest)
+            NearestChest=getNearestChest()
+            task.wait(0.1)
+        until not NearestChest or CheckBoss({"rip_indra","rip_indra True Form"}) or CheckBackPack({"God's Chalice"})
+    end
+end
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ToggleButton"
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -1509,38 +1648,84 @@ spawn(function()
         end
     end
 end)
-local v4 = Tabs.Main:AddSection("Boss Farm")
-local boss = {}
-if World1 then
-    boss = {"The Gorilla King", "Bobby", "The Saw", "Yeti", "Vice Admiral", "Greybeard", "Swan", "Magma Admiral", "Fishman Lord", "Wysper", "Thunder God", "Cyborg", "Ice Admiral"}
-elseif World2 then
-    boss = {"Diamond", "Jeremy", "Fajita", "Don Swan", "Smoke Admiral", "Cursed Captain", "Darkbeard", "Order", "Tide Keeper"}
-elseif World3 then
-    boss = {"Stone", "Island Empress", "Kilo Admiral", "Captain Elephant", "Beautiful Pirate", "Longma", "Cake Queen", "Dough King", "Cake Prince", "rip_indra", "Soul Reaper"}
-end
-local v5 = Tabs.Main:AddDropdown("v5", {
-    Title = "Select Boss Attack",
-    Values = boss,
-    Multi = false,
-    Default = "Click To Select",
-    Callback = function(Value)
-        _G.SelectBoss = Value
-    end
-})
-local v6 = Tabs.Main:AddToggle("v6", {
-    Title = "Start Farm",
+local v4 = Tabs.Stack:AddSection("Auto World")
+local v5 = Tabs.Stack:AddToggle("v5", {
+    Title = "Auto New World",
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.StartFarm = Value
+        _G.NewWorld = Value
     end
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.StartFarm then
-            if CheckBoss(_G.SelectBoss) then
-                KillBoss({_G.SelectBoss}, true)
+        if _G.NewWorld then
+            if game:GetService("Players").LocalPlayer.Data.Level.Value >= 700 and World1 then
+                if (game:GetService("Workspace")).Map.Ice.Door.CanCollide == false and (game:GetService("Workspace")).Map.Ice.Door.Transparency == 1 then
+                    TP1(CFrame.new(4849.29883, 5.65138149, 719.611877))
+                    wait(1)
+                    if (CFrame.new(4849.29883, 5.65138149, 719.611877).Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < 10 then
+                        (game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("DressrosaQuestProgress", "Detective")
+                        wait(1)
+                        EquipWeapon("Key")
+                        wait(0.5)
+                        repeat
+                            TP1(CFrame.new(1347.7124, 37.3751602, -1325.6488))
+                            task.wait()
+                        until (Vector3.new(1347.7124, 37.3751602, -1325.6488) - (game:GetService("Players")).LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3
+                        wait(0.5)
+                    end
+                elseif (game:GetService("Workspace")).Map.Ice.Door.CanCollide == false and (game:GetService("Workspace")).Map.Ice.Door.Transparency == 1 then
+                    if CheckBoss({"Ice Admiral"}) then
+                        KillBoss({"Ice Admiral"}, true)
+                    elseif not CheckBoss({"Ice Admiral"}) then
+                        Hop()
+                    else
+                        (game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("TravelDressrosa")
+                    end
+                end
             end
         end
     end
 end)
+local v6 = Tabs.Stack:AddSection("Boss Rip Indra")
+local v7 = Tabs.Stack:AddToggle("v7", {
+    Tile = "Attack Rip Indra",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AttackRip = Value
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if _G.AttackRip and World3 then
+            if CheckBoss({"rip_indra True Form"}) then
+                KillBoss({"rip_indra True Form"}, true)
+            elseif not CheckBoss({"rip_indra True Form"}) then
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Zero X Hub",
+                    Text = "Not Found rip_indra True Form",
+                    Duration = 3,
+                    Icon = "rbxassetid://83754196059446"
+                })
+            end
+        end
+    end
+end)
+local v8 = Tabs.Stack:AddToggle("v8", {
+    Title = "Fully Rip Indra",
+    Description = "Summon + Attack Rip Indra",
+    Default = false,
+    Callback = function(Value)
+        _G.FullyRip = Value
+    end
+})
+spawn(function()
+    while task.wait(1) do
+        if _G.FullyRip then
+            Rip_Indra()
+        end
+    end
+end)
+local v9 = Tabs.Stack:AddSection("Boss Dough King")
