@@ -1545,6 +1545,56 @@ function Rip_Indra()
         until not NearestChest or CheckBoss({"rip_indra","rip_indra True Form"}) or CheckBackPack({"God's Chalice"})
     end
 end
+function Check_Enough_Cacoa()
+    return GetCountMaterials("Conjured Cocoa") >= 10
+end
+
+function Check_Sweet_Chalice()
+    return CheckBackPack({"Sweet Chalice"}) == nil
+end
+
+function Dough_King()
+    if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+    local NearestChest = getNearestChest()
+    if CheckBoss({"Dough King"}) then
+        getgenv().Cake = false
+        KillBoss({"Dough King"}, true)
+    elseif CheckBackPack({"Sweet Chalice"}) then
+        if not CheckCake() then
+            if CheckBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}) then
+                getgenv().Cake = true
+                KillBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}, false, Check_Sweet_Chalice, false)
+            else
+                getgenv().Cake = false
+                repeat
+                    TP1(CFrame.new(-2091.911865234375,70.00884246826172,-12142.8359375))
+                    task.wait(0.1)
+                until CheckBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}) or Check_Sweet_Chalice() or not CheckBackPack({"Sweet Chalice"})
+            end
+        end
+    elseif CheckBackPack({"God's Chalice"}) then
+        getgenv().Cake = false
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SweetChaliceNpc")
+    elseif not Check_Enough_Cacoa() then
+        getgenv().Cake = false
+        if CheckBoss({"Chocolate Bar Battler","Cocoa Warrior"}) then
+            KillBoss({"Chocolate Bar Battler","Cocoa Warrior"}, false, Check_Enough_Cacoa, false)
+        else
+            repeat
+                TP1(CFrame.new(233.22836303710938,29.876001358032227,-12201.2333984375))
+                task.wait(0.1)
+            until CheckBoss({"Chocolate Bar Battler","Cocoa Warrior"}) or Check_Enough_Cacoa() or CheckBackPack({"Sweet Chalice"})
+        end
+    elseif NearestChest then
+        getgenv().Cake = false
+        repeat
+            PickChest(NearestChest)
+            NearestChest = getNearestChest()
+            task.wait(0.1)
+        until not NearestChest or CheckBoss({"Dough King"}) or CheckBackPack({"God's Chalice","Sweet Chalice"})
+    end
+    getgenv().Cake = false
+end
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ToggleButton"
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -1709,23 +1759,64 @@ spawn(function()
                     Duration = 3,
                     Icon = "rbxassetid://83754196059446"
                 })
+                wait(3)
             end
         end
     end
 end)
 local v8 = Tabs.Stack:AddToggle("v8", {
-    Title = "Fully Rip Indra",
-    Description = "Summon + Attack Rip Indra",
+    Title = "Fully Rip Indra | Soon",
+    Description = "Summon + Attack Rip Indra ",
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
     end
 })
 spawn(function()
-    while task.wait(1) do
+    while task.wait(0.1) do
         if _G.FullyRip then
             Rip_Indra()
         end
     end
 end)
 local v9 = Tabs.Stack:AddSection("Boss Dough King")
+local v10 = Tabs.Stack:AddToggle("v10", {
+    Tile = "Attack Dough King",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AttackDough = Value
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if _G.AttackDough and World3 then
+            if CheckBoss({"Dough King"}) then
+                KillBoss({"Dough King"}, true)
+            elseif not CheckBoss({"Dough King"}) then
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Zero X Hub",
+                    Text = "Not Found Dough King",
+                    Duration = 3,
+                    Icon = "rbxassetid://83754196059446"
+                })
+                wait(3)
+            end
+        end
+    end
+end)
+local v11 = Tabs.Stack:AddToggle("v11", {
+    Title = "Fully Dough King",
+    Description = "is active",
+    Default = false,
+    Callback = function(Value)
+        _G.FullyDough = Value
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if _G.FullyDough then
+            Dough_King()
+        end
+    end
+end)
