@@ -1720,6 +1720,25 @@ end
 function Check_Sweet_Chalice()
     return CheckBackPack({"Sweet Chalice"}) == nil
 end
+local CakeCache = {t = 0, v = false}
+function CheckCake()
+    local n = tick()
+    if n - CakeCache.t < 1.5 then return CakeCache.v end
+    local r = game.ReplicatedStorage.Remotes.CommF_:InvokeServer("CakePrinceSpawner")
+    local len = string.len(r)
+    local num
+    if len == 88 then
+        num = tonumber(string.sub(r, 39, 41))
+    elseif len == 87 then
+        num = tonumber(string.sub(r, 39, 40))
+    elseif len == 86 then
+        num = tonumber(string.sub(r, 39, 39))
+    end
+    print(num)
+    CakeCache.v = num == nil or (num and num <= 0) or false
+    CakeCache.t = n
+    return CakeCache.v
+end
 
 function Dough_King()
     if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
