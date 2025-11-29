@@ -1690,7 +1690,7 @@ spawn(function()
 end)
 local v6 = Tabs.Stack:AddSection("Boss Rip Indra")
 local v7 = Tabs.Stack:AddToggle("v7", {
-    Tile = "Attack Rip Indra",
+    Title = "Attack Rip Indra",
     Description = "",
     Default = false,
     Callback = function(Value)
