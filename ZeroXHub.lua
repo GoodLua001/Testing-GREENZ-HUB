@@ -1750,7 +1750,7 @@ function Dough_King()
         if not CheckCake() then
             if CheckBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}) then
                 getgenv().Cake = true
-                KillBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}, false, Check_Sweet_Chalice, false)
+                KillBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}, false, Check_Sweet_Chalice(), false)
             else
                 getgenv().Cake = false
                 repeat
@@ -2004,7 +2004,7 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Default = false,
     Callback = function(Value)
         _G.FullyDough = Value
-        getgenv().SaveSetting()
+        StopTween(Value)
     end
 })
 spawn(function()
