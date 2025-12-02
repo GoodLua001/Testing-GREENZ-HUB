@@ -656,33 +656,29 @@ function Hop()
 end
 local HttpService = game:GetService("HttpService")
 local Player = game.Players.LocalPlayer
+local FileName = "ZeroXHub_Config_" .. Player.Name .. ".json"
 
-local RootFolder = "Zero X Hub"
-local GameFolder = RootFolder .. "/Blox Fruits"
-local ConfigFile = GameFolder .. "/" .. Player.Name .. ".json"
-
-if not isfolder(RootFolder) then makefolder(RootFolder) end
-if not isfolder(GameFolder) then makefolder(GameFolder) end
+local TargetVariables = {
+    "SelectModeFarm",
+    "StartFarm",
+    "NewWorld",
+    "AttackRip",
+    "FullyRip",
+    "AttackDough",
+    "FullyDough",
+    "AttackDark",
+    "FullyDark"
+}
 
 getgenv().SaveManager = {}
 
 function SaveManager:Save()
     local Settings = {}
-    
-    if Fluent and Fluent.Options then
-        for Key, Option in pairs(Fluent.Options) do
-            if Option.Value ~= nil then
-                if typeof(Option.Value) == "Color3" then
-                    Settings[Key] = {
-                        IsColor = true,
-                        R = Option.Value.R,
-                        G = Option.Value.G,
-                        B = Option.Value.B
-                    }
-                else
-                    Settings[Key] = Option.Value
-                end
-            end
+    for _, VarName in pairs(TargetVariables) do
+        if getgenv()[VarName] ~= nil then
+            Settings[VarName] = getgenv()[VarName]
+        elseif _G[VarName] ~= nil then
+            Settings[VarName] = _G[VarName]
         end
     end
 
@@ -691,49 +687,33 @@ function SaveManager:Save()
     end)
 
     if Success then
-        writefile(ConfigFile, Encoded)
+        writefile(FileName, Encoded)
     end
 end
 
 function SaveManager:Load()
-    if not isfile(ConfigFile) then return end
+    if not isfile(FileName) then return end
 
     local Success, Decoded = pcall(function()
-        return HttpService:JSONDecode(readfile(ConfigFile))
+        return HttpService:JSONDecode(readfile(FileName))
     end)
 
     if Success and type(Decoded) == "table" then
-        task.spawn(function()
-            if Fluent and Fluent.Options then
-                for Key, Value in pairs(Decoded) do
-                    if Fluent.Options[Key] then
-                        pcall(function()
-                            if type(Value) == "table" and Value.IsColor then
-                                Fluent.Options[Key]:SetValue(Color3.new(Value.R, Value.G, Value.B))
-                            else
-                                Fluent.Options[Key]:SetValue(Value)
-                            end
-                        end)
-                    end
-                end
-            end
-        end)
+        for VarName, Value in pairs(Decoded) do
+            getgenv()[VarName] = Value
+            _G[VarName] = Value
+        end
     end
 end
 
 function SaveManager:Delete()
-    if isfile(ConfigFile) then
-        delfile(ConfigFile)
+    if isfile(FileName) then
+        delfile(FileName)
     end
 end
+
 task.spawn(function()
-    task.wait(1)
     SaveManager:Load()
-end)
-task.spawn(function()
-    while task.wait(0.1) do
-        SaveManager:Save()
-    end
 end)
 _G.ServerData = {} 
 _G.ServerData['Chest'] = {}
