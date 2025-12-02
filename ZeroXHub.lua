@@ -1,8 +1,7 @@
 print("Cak")
-SaveManager:Load()
 local daibo = Instance.new("BindableFunction")
 
-Bindable.OnInvoke = function(Button)
+daibo.OnInvoke = function(Button)
     if Button == "Yes" then
         if SaveManager and SaveManager.Delete then
             SaveManager:Delete()
@@ -2130,3 +2129,5 @@ spawn(function()
         end
     end
 end)
+local v12 = Tabs.Stack:AddSection("Boss Darkbeard")
+SaveManager:Load()
