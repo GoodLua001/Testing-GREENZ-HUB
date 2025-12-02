@@ -1940,7 +1940,7 @@ local v2 = Tabs.Main:AddDropdown("v2", {
     Default = getgenv().SelectModeFarm == "Level",
     Callback = function(Value)
         getgenv().SelectModeFarm = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
     end
 })
 local v3 = Tabs.Main:AddToggle("v3", {
@@ -2004,7 +2004,7 @@ local v5 = Tabs.Stack:AddToggle("v5", {
     Default = false,
     Callback = function(Value)
         _G.NewWorld = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopTween(Value)
     end
 })
@@ -2046,7 +2046,7 @@ local v7 = Tabs.Stack:AddToggle("v7", {
     Default = false,
     Callback = function(Value)
         _G.AttackRip = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopTween(Value)
     end
 })
@@ -2073,7 +2073,7 @@ local v8 = Tabs.Stack:AddToggle("v8", {
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopStween(Value)
     end
 })
@@ -2091,7 +2091,7 @@ local v10 = Tabs.Stack:AddToggle("v10", {
     Default = false,
     Callback = function(Value)
         _G.AttackDough = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopTween(Value)
     end
 })
@@ -2118,7 +2118,7 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Default = false,
     Callback = function(Value)
         _G.FullyDough = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopTween(Value)
     end
 })
@@ -2136,7 +2136,7 @@ local v13 = Tabs.Stack:AddToggle("v13", {
     Default = false,
     Callback = function(Value)
         _G.AttackDark = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopStween(Value)
     end
 })
@@ -2163,7 +2163,7 @@ local v13 = Tabs.Stack:AddToggle("v13", {
     Default = false,
     Callback = function(Value)
         _G.FullyDark = Value
-        SaveManager:Save()
+        SaveManager:Save(Value)
         StopStween(Value)
     end
 })
