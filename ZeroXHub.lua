@@ -1940,7 +1940,7 @@ local v2 = Tabs.Main:AddDropdown("v2", {
     Default = getgenv().SelectModeFarm == "Level",
     Callback = function(Value)
         getgenv().SelectModeFarm = Value
-        SaveManager:Save(Value)
+        SaveManager:Save()
     end
 })
 local v3 = Tabs.Main:AddToggle("v3", {
@@ -2004,7 +2004,7 @@ local v5 = Tabs.Stack:AddToggle("v5", {
     Default = false,
     Callback = function(Value)
         _G.NewWorld = Value
-        SaveManager:Save(Value)
+        SaveManager:Save()
         StopTween(Value)
     end
 })
@@ -2046,7 +2046,7 @@ local v7 = Tabs.Stack:AddToggle("v7", {
     Default = false,
     Callback = function(Value)
         _G.AttackRip = Value
-        SaveManager:Save(Value)
+        SaveManager:Save()
         StopTween(Value)
     end
 })
@@ -2073,8 +2073,8 @@ local v8 = Tabs.Stack:AddToggle("v8", {
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
-        SaveManager:Save(Value)
-        StopStween(Value)
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
@@ -2091,7 +2091,7 @@ local v10 = Tabs.Stack:AddToggle("v10", {
     Default = false,
     Callback = function(Value)
         _G.AttackDough = Value
-        SaveManager:Save(Value)
+        SaveManager:Save()
         StopTween(Value)
     end
 })
@@ -2118,7 +2118,7 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Default = false,
     Callback = function(Value)
         _G.FullyDough = Value
-        SaveManager:Save(Value)
+        SaveManager:Save()
         StopTween(Value)
     end
 })
@@ -2136,23 +2136,26 @@ local v13 = Tabs.Stack:AddToggle("v13", {
     Default = false,
     Callback = function(Value)
         _G.AttackDark = Value
-        SaveManager:Save(Value)
-        StopStween(Value)
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.AttackDark and World2 then
+        if _G.AttackDark then
+            if not World2 then
+                TeleportWorld(2)   
+            end
             if CheckBoss({"Darkbeard"}) then
                 KillBoss({"Darkbeard"}, true)
-            elseif not CheckBoss({"Dough King"}) then
+            elseif not CheckBoss({"Darkbeard"}) then
                 game.StarterGui:SetCore("SendNotification", {
                     Title = "Zero X Hub",
                     Text = "Not Found Darkbeard",
                     Duration = 3,
                     Icon = "rbxassetid://83754196059446"
                 })
-            wait(3)
+                wait(3)
             end
         end
     end
@@ -2163,8 +2166,8 @@ local v13 = Tabs.Stack:AddToggle("v13", {
     Default = false,
     Callback = function(Value)
         _G.FullyDark = Value
-        SaveManager:Save(Value)
-        StopStween(Value)
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
