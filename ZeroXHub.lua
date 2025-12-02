@@ -2079,7 +2079,7 @@ local v8 = Tabs.Stack:AddToggle("v8", {
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.FullyRip then
+        if _G.FullyRip and World3 then
             Rip_Indra()
         end
     end
@@ -2124,10 +2124,56 @@ local v11 = Tabs.Stack:AddToggle("v11", {
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.FullyDough then
+        if _G.FullyDough and World3 then
             Dough_King()
         end
     end
 end)
 local v12 = Tabs.Stack:AddSection("Boss Darkbeard")
+local v13 = Tabs.Stack:AddToggle("v13", {
+    Title = "Attack Darkbeard",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AttackDark = Value
+        SaveManager:Save()
+        StopStween(Value)
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if _G.AttackDark and World2 then
+            if CheckBoss({"Darkbeard"}) then
+                KillBoss({"Darkbeard"}, true)
+            elseif not CheckBoss({"Dough King"}) then
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Zero X Hub",
+                    Text = "Not Found Darkbeard",
+                    Duration = 3,
+                    Icon = "rbxassetid://83754196059446"
+                })
+            wait(3)
+            end
+        end
+    end
+end)
+local v13 = Tabs.Stack:AddToggle("v13", {
+    Title = "Fully Darkbeard",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.FullyDark = Value
+        SaveManager:Save()
+        StopStween(Value)
+    end
+})
+spawn(function()
+    while task.wait(0.1) do
+        if _G.FullyDark and World2 then
+            pcall(Dark_Beard)
+        end
+    end
+end)
+if SaveManager then
 SaveManager:Load()
+end
