@@ -1,4 +1,25 @@
 print("Cak")
+SaveManager:Load()
+local daibo = Instance.new("BindableFunction")
+
+Bindable.OnInvoke = function(Button)
+    if Button == "Yes" then
+        if SaveManager and SaveManager.Delete then
+            SaveManager:Delete()
+        end
+    end
+end
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Zero X Hub",
+    Text = "Do You Want Delete Config?",
+    Duration = 10,
+    Icon = "rbxassetid://83754196059446",
+    Callback = daibo,
+    Button1 = "Yes",
+    Button2 = "No"
+})
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title = "Zero X Hub [Premium] ",
@@ -636,36 +657,85 @@ function Hop()
 end
 local HttpService = game:GetService("HttpService")
 local Player = game.Players.LocalPlayer
-local Path = "Zero X Hub/Blox Fruits/"
-local File = Path .. Player.Name .. ".json"
 
-getgenv().Settings = getgenv().Settings or {}
+local RootFolder = "Zero X Hub"
+local GameFolder = RootFolder .. "/Blox Fruits"
+local ConfigFile = GameFolder .. "/" .. Player.Name .. ".json"
 
-getgenv().Load = function()
-    if not (readfile and writefile and isfile and isfolder) then return warn("Status : Undetected Executor") end
-    if not isfolder("Zero X Hub") then makefolder("Zero X Hub") end
-    if not isfolder(Path) then makefolder(Path) end
-    if not isfile(File) then
-        writefile(File, HttpService:JSONEncode(getgenv().Settings))
-    else
-        local Decode = HttpService:JSONDecode(readfile(File))
-        for i,v in pairs(Decode) do
-            getgenv().Settings[i] = v
+if not isfolder(RootFolder) then makefolder(RootFolder) end
+if not isfolder(GameFolder) then makefolder(GameFolder) end
+
+getgenv().SaveManager = {}
+
+function SaveManager:Save()
+    local Settings = {}
+    
+    if Fluent and Fluent.Options then
+        for Key, Option in pairs(Fluent.Options) do
+            if Option.Value ~= nil then
+                if typeof(Option.Value) == "Color3" then
+                    Settings[Key] = {
+                        IsColor = true,
+                        R = Option.Value.R,
+                        G = Option.Value.G,
+                        B = Option.Value.B
+                    }
+                else
+                    Settings[Key] = Option.Value
+                end
+            end
         end
+    end
+
+    local Success, Encoded = pcall(function()
+        return HttpService:JSONEncode(Settings)
+    end)
+
+    if Success then
+        writefile(ConfigFile, Encoded)
     end
 end
 
-getgenv().SaveSetting = function()
-    if not (readfile and writefile and isfile and isfolder) then return warn("Status : Undetected Executor") end
-    writefile(File, HttpService:JSONEncode(getgenv().Settings))
+function SaveManager:Load()
+    if not isfile(ConfigFile) then return end
+
+    local Success, Decoded = pcall(function()
+        return HttpService:JSONDecode(readfile(ConfigFile))
+    end)
+
+    if Success and type(Decoded) == "table" then
+        task.spawn(function()
+            if Fluent and Fluent.Options then
+                for Key, Value in pairs(Decoded) do
+                    if Fluent.Options[Key] then
+                        pcall(function()
+                            if type(Value) == "table" and Value.IsColor then
+                                Fluent.Options[Key]:SetValue(Color3.new(Value.R, Value.G, Value.B))
+                            else
+                                Fluent.Options[Key]:SetValue(Value)
+                            end
+                        end)
+                    end
+                end
+            end
+        end)
+    end
 end
 
-getgenv().SetValue = function(key,value)
-    getgenv().Settings[key] = value
-    getgenv().SaveSetting()
+function SaveManager:Delete()
+    if isfile(ConfigFile) then
+        delfile(ConfigFile)
+    end
 end
-
-getgenv().Load()
+task.spawn(function()
+    task.wait(1)
+    SaveManager:Load()
+end)
+task.spawn(function()
+    while task.wait(0.1) do
+        SaveManager:Save()
+    end
+end)
 _G.ServerData = {} 
 _G.ServerData['Chest'] = {}
 _G.ChestsConnection = {}
@@ -1614,6 +1684,62 @@ function Pick_Color()
         end
     end
 end
+function Rejoin(t)
+    task.spawn(function()
+        for _ = 1, t do task.wait(1) end
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+    end)
+end
+function Dark_Beard()
+    if not World2 then repeat TeleportWorld(2) task.wait(3) until World2 end
+    if CheckBoss("Darkbeard") then
+        repeat 
+            KillBoss("Darkbeard")
+            task.wait(0.1)
+        until not CheckBoss("Darkbeard")
+    elseif CheckBackPack({"Fist of darkness"}) then
+        repeat 
+            EquipWeapon("Fist of Darkness")
+            TP1(workspace.Map.DarkbeardArena.Summoner.WorldPivot)
+        until not CheckBackPack({"Fist of darkness"}) or CheckBoss("Darkbeard")
+    else
+        local NearestChest = getNearestChest()
+        if NearestChest ~= false then
+           PickChest(NearestChest)
+        else
+           Rejoin(15)
+           Hop()
+        end
+    end
+end
+function Soul_Reaper()
+    if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+    if CheckBoss({"Soul Reaper"}) then
+        getgenv().Soul = false
+        KillBoss({"Soul Reaper"}, true)
+    elseif CheckBackPack({"Hallow Essence"}) then
+        getgenv().Soul = false
+        repeat
+            TP1(CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125))
+            task.wait()
+        until (CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125).Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 8 or not CheckBackPack({"Hallow Essence"}) or CheckBoss({"Soul Reaper"})
+        EquipWeapon("Hallow Essence")
+    elseif Check_Bone().v316 >= 50 and Check_Bone().v318 > 0 then
+        game.ReplicatedStorage.Remotes.CommF_:InvokeServer("Bones", "Buy", 1, 1)
+    else
+        if CheckBoss({"Demonic Soul", "Posessed Mummy", "Living Zombie", "Reborn Skeleton"}) then
+            getgenv().Soul = true
+            KillBoss({"Demonic Soul", "Posessed Mummy", "Living Zombie", "Reborn Skeleton"}, false, false, getgenv().Config["Bosses"]["Hop If Players Nearby"])
+        else
+            repeat
+                getgenv().Soul = false
+                TP1(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
+                task.wait(0.1)
+            until CheckBoss({"Demonic Soul", "Posessed Mummy", "Living Zombie", "Reborn Skeleton"}) or CheckBackPack({"Hallow Essence"}) or CheckBoss({"Soul Reaper"})
+        end
+    getgenv().Soul = false
+    end
+end
 local Haki1,Haki2,Haki3=false,false,false
 function Rip_Indra()
     local NearestChest=getNearestChest()
@@ -1645,9 +1771,6 @@ function Rip_Indra()
                 task.wait(0.1)
             until Check_Color()~="cmm" or not Check_Color() or not CheckBackPack({"God's Chalice"}) or CheckBoss({"rip_indra","rip_indra True Form"})
         end
-    elseif getgenv().Config["Bosses"]["Hop To Find Boss"] and CheckApi("indra") then
-        if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
-        repeat HopApi("indra") task.wait(0.1) until not CheckApi("indra") or CheckBoss({"rip_indra","rip_indra True Form"})
     elseif not Haki1 then
         if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Equip"}) == "Winter Sky" then Haki1=true end
         if Haki1 then return end
@@ -1691,26 +1814,10 @@ function Rip_Indra()
             NearestChest=getNearestChest()
             task.wait(0.1)
         until not NearestChest or CheckBoss({"rip_indra","rip_indra True Form"}) or CheckBackPack({"God's Chalice"})
+    elseif not NearestChest then
+        Rejoin(15)
+        Hop()
     end
-end
-function CheckBackPack(bx)
-    local BackpackandCharacter = { LocalPlayer.Backpack, LocalPlayer.Character }
-    for _, by in pairs(BackpackandCharacter) do
-        if by then
-            for _, v in pairs(by:GetChildren()) do
-                if type(bx) == "table" then
-                    if table.find(bx, v.Name) then
-                        return v
-                    end
-                else
-                    if v.Name == bx then
-                        return v
-                    end
-                end
-            end
-        end
-    end
-    return nil
 end
 
 function Check_Enough_Cacoa()
@@ -1750,7 +1857,7 @@ function Dough_King()
         if not CheckCake() then
             if CheckBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}) then
                 getgenv().Cake = true
-                KillBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}, false, Check_Sweet_Chalice(), false)
+                KillBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}, false, Check_Sweet_Chalice, false)
             else
                 getgenv().Cake = false
                 repeat
@@ -1759,7 +1866,7 @@ function Dough_King()
                 until CheckBoss({"Cookie Crafter","Cake Guard","Baking Staff","Head Baker"}) or Check_Sweet_Chalice() or not CheckBackPack({"Sweet Chalice"})
             end
         end
-    elseif CheckBackPack({"God's Chalice"}) then
+    elseif CheckBackPack({"God's Chalice"}) and Check_Enough_Cacoa() then
         getgenv().Cake = false
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SweetChaliceNpc")
     elseif not Check_Enough_Cacoa() then
@@ -1779,9 +1886,13 @@ function Dough_King()
             NearestChest = getNearestChest()
             task.wait(0.1)
         until not NearestChest or CheckBoss({"Dough King"}) or CheckBackPack({"God's Chalice","Sweet Chalice"})
+    elseif not NearestChest then
+        Rejoin(15)
+        Hop()
     end
     getgenv().Cake = false
 end
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ToggleButton"
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -1830,7 +1941,7 @@ local v2 = Tabs.Main:AddDropdown("v2", {
     Default = getgenv().SelectModeFarm == "Level",
     Callback = function(Value)
         getgenv().SelectModeFarm = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
     end
 })
 local v3 = Tabs.Main:AddToggle("v3", {
@@ -1839,7 +1950,7 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Default = false,
 	Callback = function(Value)
         getgenv().StartFarm = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
 	    StopTween(Value)
 	end
 })
@@ -1894,7 +2005,8 @@ local v5 = Tabs.Stack:AddToggle("v5", {
     Default = false,
     Callback = function(Value)
         _G.NewWorld = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
@@ -1935,7 +2047,8 @@ local v7 = Tabs.Stack:AddToggle("v7", {
     Default = false,
     Callback = function(Value)
         _G.AttackRip = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
@@ -1961,7 +2074,8 @@ local v8 = Tabs.Stack:AddToggle("v8", {
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
+        StopStween(Value)
     end
 })
 spawn(function()
@@ -1978,7 +2092,8 @@ local v10 = Tabs.Stack:AddToggle("v10", {
     Default = false,
     Callback = function(Value)
         _G.AttackDough = Value
-        getgenv().SaveSetting()
+        SaveManager:Save()
+        StopTween(Value)
     end
 })
 spawn(function()
@@ -2004,6 +2119,7 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Default = false,
     Callback = function(Value)
         _G.FullyDough = Value
+        SaveManager:Save()
         StopTween(Value)
     end
 })
