@@ -1,27 +1,96 @@
-print("Cak")
-local daibo = Instance.new("BindableFunction")
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
-daibo.OnInvoke = function(Button)
-    if Button == "Yes" then
-        if SaveManager and SaveManager.Delete then
-            SaveManager:Delete()
-        end
+local SERVICE = "alescial"
+local VERIFY_URL = "https://pandadevelopment.net/api/verify"
+local hwid = gethwid and gethwid() or tostring(player.UserId)
+local GETKEY_URL = "https://pandadevelopment.net/getkey?service=" .. SERVICE .. "&hwid=" .. hwid
+
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+local Frame = Instance.new("Frame", ScreenGui)
+local UICorner = Instance.new("UICorner", Frame)
+local KeyBox = Instance.new("TextBox", Frame)
+local CheckBtn = Instance.new("TextButton", Frame)
+local GetKeyBtn = Instance.new("TextButton", Frame)
+local Title = Instance.new("TextLabel", Frame)
+
+Frame.Size = UDim2.fromScale(0.3, 0.25)
+Frame.Position = UDim2.fromScale(0.35, 0.35)
+Frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+
+UICorner.CornerRadius = UDim.new(0,12)
+
+Title.Size = UDim2.fromScale(1,0.25)
+Title.Text = "ALESCIAL LOADER"
+Title.TextColor3 = Color3.new(1,1,1)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+KeyBox.Size = UDim2.fromScale(0.9,0.25)
+KeyBox.Position = UDim2.fromScale(0.05,0.3)
+KeyBox.PlaceholderText = "Nhập key tại đây"
+KeyBox.Text = ""
+KeyBox.Font = Enum.Font.Gotham
+KeyBox.TextSize = 14
+KeyBox.BackgroundColor3 = Color3.fromRGB(35,35,35)
+KeyBox.TextColor3 = Color3.new(1,1,1)
+
+CheckBtn.Size = UDim2.fromScale(0.4,0.25)
+CheckBtn.Position = UDim2.fromScale(0.05,0.6)
+CheckBtn.Text = "CHECK KEY"
+CheckBtn.BackgroundColor3 = Color3.fromRGB(60,120,255)
+CheckBtn.TextColor3 = Color3.new(1,1,1)
+CheckBtn.Font = Enum.Font.GothamBold
+
+GetKeyBtn.Size = UDim2.fromScale(0.4,0.25)
+GetKeyBtn.Position = UDim2.fromScale(0.55,0.6)
+GetKeyBtn.Text = "GET KEY"
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+GetKeyBtn.TextColor3 = Color3.new(1,1,1)
+GetKeyBtn.Font = Enum.Font.GothamBold
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(GETKEY_URL)
     end
-end
+end)
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Zero X Hub",
-    Text = "Do You Want Delete Config?",
-    Duration = 10,
-    Icon = "rbxassetid://83754196059446",
-    Callback = daibo,
-    Button1 = "Yes",
-    Button2 = "No"
-})
+CheckBtn.MouseButton1Click:Connect(function()
+    local key = KeyBox.Text
+    if key == "" then return end
 
+    local res = request({
+        Url = VERIFY_URL,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode({
+            service = SERVICE,
+            key = key,
+            hwid = hwid
+        })
+    })
+
+    if not res then
+        player:Kick("Lỗi xác thực")
+        return
+    end
+
+    local data = HttpService:JSONDecode(res.Body)
+
+    if data.success then
+        ScreenGui:Destroy()
+    else
+        player:Kick("Key sai hoặc hết hạn")
+    end
+end)
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/InterfaceManager.lua"))()
+
 local Window = Fluent:CreateWindow({
-    Title = "Zero X Hub [Premium] ",
+    Title = "Đoán Vội Không Lông",
     SubTitle = "by Saries",
     TabWidth = 155,
     Size = UDim2.fromOffset(485, 370),
@@ -34,6 +103,7 @@ local Tabs = {
     Setting = Window:AddTab({ Title = "Settings", Icon = ""}),
     Main = Window:AddTab({ Title = "General", Icon = ""}),
     Stack = Window:AddTab({ Title = "Stack Farming", Icon = ""}),
+    Sub = Window:AddTab({ Title = "Sub Farming", Icon = ""}),
 }
 
 if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
@@ -43,7 +113,7 @@ if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
     elseif game.PlaceId == 7449423635 or game.PlaceId == 100117331123089 then
         World3 = true
     else 
-       game:GetService("Players").LocalPlayer:Kick("This Game Is Not Support [ Zero X Hub ]") 
+       game:GetService("Players").LocalPlayer:Kick("This Game Is Not Support [ Alescial Hub ]") 
 end
 
 if game:GetService("Players").LocalPlayer.Team == nil then
@@ -279,9 +349,9 @@ end
 
 function AddVelocity()
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        if not LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Zero X Hub") then
+        if not LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Alescial Hub") then
             local body = Instance.new("BodyVelocity")
-            body.Name = "Zero X Hub"
+            body.Name = "Alescial Hub"
             body.Parent = LocalPlayer.Character.HumanoidRootPart
             body.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             body.Velocity = Vector3.new(0, 0, 0)
@@ -291,7 +361,7 @@ end
 
 function RemoveVelocity()
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        local velocity = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Zero X Hub")
+        local velocity = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Alescial Hub")
         if velocity then
             velocity:Destroy()
         end
@@ -581,7 +651,7 @@ end)
 
 function Hop()
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Zero X Hub",
+        Title = "Alescial Hub",
         Text = "Hopping...",
         Duration = 3,
         Icon = "rbxassetid://83754196059446"
@@ -630,7 +700,7 @@ function Hop()
                     saveIDs()
                     isTeleporting = true
                     game.StarterGui:SetCore("SendNotification", {
-                        Title = "Zero X Hub",
+                        Title = "Alescial Hub",
                         Text = "Joining server: "..id.." | "..v.playing.."/"..v.maxPlayers,
                         Duration = 3
                     })
@@ -654,67 +724,6 @@ function Hop()
         end
     end
 end
-local HttpService = game:GetService("HttpService")
-local Player = game.Players.LocalPlayer
-local FileName = "ZeroXHub_Config_" .. Player.Name .. ".json"
-
-local TargetVariables = {
-    "SelectModeFarm",
-    "StartFarm",
-    "NewWorld",
-    "AttackRip",
-    "FullyRip",
-    "AttackDough",
-    "FullyDough",
-    "AttackDark",
-    "FullyDark"
-}
-
-getgenv().SaveManager = {}
-
-function SaveManager:Save()
-    local Settings = {}
-    for _, VarName in pairs(TargetVariables) do
-        if getgenv()[VarName] ~= nil then
-            Settings[VarName] = getgenv()[VarName]
-        elseif _G[VarName] ~= nil then
-            Settings[VarName] = _G[VarName]
-        end
-    end
-
-    local Success, Encoded = pcall(function()
-        return HttpService:JSONEncode(Settings)
-    end)
-
-    if Success then
-        writefile(FileName, Encoded)
-    end
-end
-
-function SaveManager:Load()
-    if not isfile(FileName) then return end
-
-    local Success, Decoded = pcall(function()
-        return HttpService:JSONDecode(readfile(FileName))
-    end)
-
-    if Success and type(Decoded) == "table" then
-        for VarName, Value in pairs(Decoded) do
-            getgenv()[VarName] = Value
-            _G[VarName] = Value
-        end
-    end
-end
-
-function SaveManager:Delete()
-    if isfile(FileName) then
-        delfile(FileName)
-    end
-end
-
-task.spawn(function()
-    SaveManager:Load()
-end)
 _G.ServerData = {} 
 _G.ServerData['Chest'] = {}
 _G.ChestsConnection = {}
@@ -1750,45 +1759,45 @@ function Rip_Indra()
                 task.wait(0.1)
             until Check_Color()~="cmm" or not Check_Color() or not CheckBackPack({"God's Chalice"}) or CheckBoss({"rip_indra","rip_indra True Form"})
         end
-    elseif not Haki1 then
-        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Equip"}) == "Winter Sky" then Haki1=true end
-        if Haki1 then return end
-        task.wait(1)
-        if GetCountMaterials("Pink Pig Berry")<15 and not Haki1 then if Haki1 then return end print("need Pink Pig Berry") CollectB("all",true,1)
-        else
-            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
-            if not CheckHakiSeller("Winter Sky") then repeat print("hop") Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/pink?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Winter Sky") end
-            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
-            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Craft"})
-        end
-    elseif not Haki2 then
-        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Equip"}) == "Snow White" then Haki2=true end
-        if Haki2 then return end
-        task.wait(1)
-        if GetCountMaterials("White Cloud Berry")<10 and not Haki2 then if Haki2 then return end print("need White Cloud Berry") CollectB("all",true,1)
-        else
-            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
-            if not CheckHakiSeller("Snow White") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/white?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Snow White") end
-            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
-            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Craft"})
-        end
-    elseif not Haki3 then
-        if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Equip"}) == "Pure Red" then Haki3=true end
-        if Haki3 then return end
-        task.wait(1)
-        if GetCountMaterials("Red Cherry Berry")<15 and not Haki3 then if Haki3 then return end print("need Red Cherry Berry") CollectB("all",true,1)
-        else
-            if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
-            if not CheckHakiSeller("Pure Red") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/red?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Pure Red") end
-            repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
-            game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Craft"})
-        end
+  --  elseif not Haki1 then
+       -- if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Equip"}) == "Winter Sky" then Haki1=true end
+      --  if Haki1 then return end
+       -- task.wait(1)
+       -- if GetCountMaterials("Pink Pig Berry")<15 and not Haki1 then if Haki1 then return end print("need Pink Pig Berry") CollectB("all",true,1)
+      --  else
+         --   if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+         --   if not CheckHakiSeller("Winter Sky") then repeat print("hop") Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/pink?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Winter Sky") end
+           -- repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+           -- game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+         --   game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Winter Sky",Type="AuraSkin",Context="Craft"})
+       -- end
+   -- elseif not Haki2 then
+      --  if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Equip"}) == "Snow White" then Haki2=true end
+      --  if Haki2 then return end
+      --  task.wait(1)
+      --  if GetCountMaterials("White Cloud Berry")<10 and not Haki2 then if Haki2 then return end print("need White Cloud Berry") CollectB("all",true,1)
+    --    else
+        --    if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+       --     if not CheckHakiSeller("Snow White") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/white?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Snow White") end
+        --    repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+         --   game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+       --     game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Snow White",Type="AuraSkin",Context="Craft"})
+      --  end
+  --  elseif not Haki3 then
+     --   if game.ReplicatedStorage.Modules.Net["RF/FruitCustomizerRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Equip"}) == "Pure Red" then Haki3=true end
+      --  if Haki3 then return end
+       -- task.wait(1)
+    --    if GetCountMaterials("Red Cherry Berry")<15 and not Haki3 then if Haki3 then return end print("need Red Cherry Berry") CollectB("all",true,1)
+        --else
+            --if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
+          --  if not CheckHakiSeller("Pure Red") then repeat Hopcake("http://zeroxhub.ddnsking.com:19173/Api/ZeroXHub/red?apikey=CONCHODDOS") task.wait(0.1) until CheckHakiSeller("Pure Red") end
+         --   repeat TP1(CFrame.new(-12464,337,-7439)) task.wait(0.1) until GetDistance(CFrame.new(-12464,337,-7439))<=10
+        --    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ColorsDealer", "2")
+            --game.ReplicatedStorage.Modules.Net["RF/JuiceNetworkRF"]:InvokeServer({StorageName="Pure Red",Type="AuraSkin",Context="Craft"})
+       -- end
     elseif NearestChest then
         if not World3 then repeat TeleportWorld(3) task.wait(3) until World3 end
-        repeat
+         repeat
             PickChest(NearestChest)
             NearestChest=getNearestChest()
             task.wait(0.1)
@@ -1917,10 +1926,10 @@ local v2 = Tabs.Main:AddDropdown("v2", {
     Title = "Select Method Farm",
     Values = {"Level", "Bone", "Katakuri", "Tyrant of the Skies"},
     Multi = false,
-    Default = getgenv().SelectModeFarm == "Level",
+    Default = "Level",
     Callback = function(Value)
         getgenv().SelectModeFarm = Value
-        SaveManager:Save()
+         
     end
 })
 local v3 = Tabs.Main:AddToggle("v3", {
@@ -1929,7 +1938,7 @@ local v3 = Tabs.Main:AddToggle("v3", {
 	Default = false,
 	Callback = function(Value)
         getgenv().StartFarm = Value
-        SaveManager:Save()
+         
 	    StopTween(Value)
 	end
 })
@@ -1984,7 +1993,7 @@ local v5 = Tabs.Stack:AddToggle("v5", {
     Default = false,
     Callback = function(Value)
         _G.NewWorld = Value
-        SaveManager:Save()
+         
         StopTween(Value)
     end
 })
@@ -2026,7 +2035,6 @@ local v7 = Tabs.Stack:AddToggle("v7", {
     Default = false,
     Callback = function(Value)
         _G.AttackRip = Value
-        SaveManager:Save()
         StopTween(Value)
     end
 })
@@ -2037,7 +2045,7 @@ spawn(function()
                 KillBoss({"rip_indra True Form"}, true)
             elseif not CheckBoss({"rip_indra True Form"}) then
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Zero X Hub",
+                    Title = "Alescial Hub",
                     Text = "Not Found rip_indra True Form",
                     Duration = 3,
                     Icon = "rbxassetid://83754196059446"
@@ -2047,19 +2055,38 @@ spawn(function()
         end
     end
 end)
+local v12 = Tabs.Stack:AddToggle("v9", {
+    Title = "Auto Farm Elite",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoElite = Value
+    end
+})
+spawn(function()
+    while task.wait() do
+        pcall(function()
+        if _G.AutoElite then
+            if CheckBoss({Elites}) then
+                KillBoss{(Elites}, true)
+                end
+            end
+        end)
+    end
+end)
+    
 local v8 = Tabs.Stack:AddToggle("v8", {
-    Title = "Fully Rip Indra | Soon",
+    Title = "Fully Rip Indra",
     Description = "Summon + Attack Rip Indra ",
     Default = false,
     Callback = function(Value)
         _G.FullyRip = Value
-        SaveManager:Save()
-        StopTween(Value)
+        StopStween(Value)
     end
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.FullyRip and World3 then
+        if _G.FullyRip then
             Rip_Indra()
         end
     end
@@ -2071,7 +2098,7 @@ local v10 = Tabs.Stack:AddToggle("v10", {
     Default = false,
     Callback = function(Value)
         _G.AttackDough = Value
-        SaveManager:Save()
+         
         StopTween(Value)
     end
 })
@@ -2082,7 +2109,7 @@ spawn(function()
                 KillBoss({"Dough King"}, true)
             elseif not CheckBoss({"Dough King"}) then
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Zero X Hub",
+                    Title = "Alescial Hub",
                     Text = "Not Found Dough King",
                     Duration = 3,
                     Icon = "rbxassetid://83754196059446"
@@ -2097,40 +2124,34 @@ local v11 = Tabs.Stack:AddToggle("v11", {
     Description = "is active",
     Default = false,
     Callback = function(Value)
-        _G.FullyDough = Value
-        SaveManager:Save()
+        _G.FullyDough = Value        
         StopTween(Value)
     end
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.FullyDough and World3 then
+        if _G.FullyDough then
             Dough_King()
         end
     end
 end)
-local v12 = Tabs.Stack:AddSection("Boss Darkbeard")
-local v13 = Tabs.Stack:AddToggle("v13", {
-    Title = "Attack Darkbeard",
+local c1 = Tabs.Stack:AddSection("Boss Darkbeard")
+local c2 = Tabs.Stack:AddToggle("c2", {
+    Title = "Attack Boss Darkbeard",
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.AttackDark = Value
-        SaveManager:Save()
-        StopTween(Value)
+        _G.AutoDark = Value
     end
 })
 spawn(function()
     while task.wait(0.1) do
-        if _G.AttackDark then
-            if not World2 then
-                TeleportWorld(2)   
-            end
+        if _G.AutoDark and World2 then
             if CheckBoss({"Darkbeard"}) then
                 KillBoss({"Darkbeard"}, true)
-            elseif not CheckBoss({"Darkbeard"}) then
+            elseif not CheckBoss({"Dardbeard"}) then
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Zero X Hub",
+                    Title = "Alescial Hub",
                     Text = "Not Found Darkbeard",
                     Duration = 3,
                     Icon = "rbxassetid://83754196059446"
@@ -2140,23 +2161,302 @@ spawn(function()
         end
     end
 end)
-local v13 = Tabs.Stack:AddToggle("v13", {
+local c3 = Tabs.Stack:AddToggle("c3", {
     Title = "Fully Darkbeard",
     Description = "",
     Default = false,
     Callback = function(Value)
-        _G.FullyDark = Value
-        SaveManager:Save()
-        StopTween(Value)
+        Dark_Beard(Value)
     end
 })
-spawn(function()
-    while task.wait(0.1) do
-        if _G.FullyDark and World2 then
-            pcall(Dark_Beard)
-        end
+local x1 = Tabs.Sub:AddSection("Upgrade Race")
+local x2 = Tabs.Sub:AddToggle("x2", {
+    Title = "Auto Evo Race V3",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoV3 = Value
     end
-end)
-if SaveManager then
-SaveManager:Load()
+})
+local chestCount = 0
+local killCount = 0
+local completed = false
+local KillDiamond = false
+local KillJe = false
+local Killorb = false
+local evo = false
+
+function EvoRaceV3()
+    if not evo then
+        local repStorage = game:GetService("ReplicatedStorage").Remotes.CommF_
+        repStorage:InvokeServer("Wenlocktoad", "1")
+        task.wait(1)
+        repStorage:InvokeServer("Wenlocktoad", "2")
+        evo = true
+    end
+    if not (evo and not completed) then return end
+
+    pcall(function()
+        local player = game.Players.LocalPlayer
+        if not (player.Character and player.Character:FindFirstChild("HumanoidRootPart")) then return end
+        local race = player.Data.Race.Value
+        local repStorage = game:GetService("ReplicatedStorage").Remotes.CommF_
+
+        if race == "Human" then
+            local boss
+            while not completed do
+                if not KillDiamond then
+                    boss = game:GetService("Workspace").Enemies:FindFirstChild("Diamond")
+                    if boss then
+                        repeat
+                            task.wait()
+                            AutoHaki()
+                            if _G.AutoV3 then
+                              EquipWeapon("Melee") 
+                            end
+                            TP("Tween", boss.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0))
+                        until not boss.Parent or boss.Humanoid.Health <= 0
+                        KillDiamond = true
+                    else
+                        TP("Tween", CFrame.new(-1770.86, 198.99, 6.28))
+                        task.wait(1)
+                    end
+                elseif KillDiamond and not KillJe then
+                    boss = game:GetService("Workspace").Enemies:FindFirstChild("Jeremy")
+                    if boss then
+                        repeat
+                            task.wait()
+                            AutoHaki()
+                            if _G.AutoV3 then
+                              EquipWeapon("Melee") 
+                            end
+                            TP("Tween", boss.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0))
+                        until not boss.Parent or boss.Humanoid.Health <= 0
+                        KillJe = true
+                    else
+                        TP1(CFrame.new(2276.17, 450.83, 752.38))
+                        task.wait(1)
+                    end
+                elseif KillDiamond and KillJe and not Killorb then
+                    boss = game:GetService("Workspace").Enemies:FindFirstChild("Orbitus")
+                    if boss then
+                        repeat
+                            task.wait()
+                            AutoHaki()
+                            if getgenv().Config and getgenv().Config["Pull Lever"] and getgenv().Config["Pull Lever"]["Weapon"] then
+                              EquipWeapon(getgenv().Config["Pull Lever"]["Weapon"]) 
+                            end
+                            TP1(boss.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0))
+                        until not boss.Parent or boss.Humanoid.Health <= 0
+                        Killorb = true
+                    else
+                        TP1(CFrame.new(-2121, 88, -4379))
+                        task.wait(1)
+                    end
+                end
+                if KillDiamond and KillJe and Killorb then completed = true end
+            end
+
+        elseif race == "Mink" then
+            repeat
+                local chests = game:GetService("CollectionService"):GetTagged("_ChestTagged")
+                local nearest, distance = nil, math.huge
+                for _, chest in ipairs(chests) do
+                    if not chest:GetAttribute("IsDisabled") then
+                        local mag = (chest:GetPivot().Position - player.Character:GetPivot().Position).Magnitude
+                        if mag < distance then
+                            distance, nearest = mag, chest
+                        end
+                    end
+                end
+                if nearest then
+                    TP1(nearest:GetPivot())
+                    player.Character.Humanoid.Sit = false
+                    repeat
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Space", false, game)
+                        task.wait(0.5)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Space", false, game)
+                        task.wait(0.5)
+                    until nearest:GetAttribute("IsDisabled") or not nearest.Parent
+                    chestCount = chestCount + 1
+                    print(chestCount)
+                end
+                task.wait()
+            until chestCount >= 35
+            completed = true
+
+        elseif race == "Cyborg" then
+            local foundFruit = false
+            repeat
+                GetFruitUnder1()
+                for _, v in pairs(player.Backpack:GetChildren()) do
+                    if string.find(v.Name, "Fruit") then
+                        foundFruit = true
+                        break
+                    end
+                end
+                wait(0.5)
+                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy")
+                task.wait(1)
+            until foundFruit
+            StoreFruit()
+            completed = true
+
+        elseif race == "Skypiea" then
+            local function findValidTarget()
+                for _, v in pairs(game.Players:GetPlayers()) do
+                    if v ~= player and v.Data.Race.Value == race then
+                        local canTarget = not (player.Team and v.Team and player.Team.Name == "Marines" and v.Team.Name == "Marines")
+                        if canTarget then
+                            local targetCharacter = v.Character
+                            if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") and targetCharacter.Humanoid.Health > 0 then
+                                if not checksafezone(targetCharacter.HumanoidRootPart.Position) and not checkraid(targetCharacter) and not checkNotify() then
+                                    return v
+                                end
+                            end
+                        end
+                    end
+                end
+                return nil
+            end
+            local targetPlayer = findValidTarget()
+            if not targetPlayer then HopServer() return end
+            if player.PlayerGui.Main.BottomHUDList.PvpDisabled.Visible then
+                repStorage:InvokeServer("EnablePvp")
+                task.wait(0.5)
+            end
+            local positions = {CFrame.new(0, 35, 1), CFrame.new(0, 1, 35), CFrame.new(1, 1, -35), CFrame.new(35, 1, 0), CFrame.new(-35, 1, 0)}
+            repeat
+                task.wait()
+                local targetCharacter = targetPlayer.Character
+                if not (targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") and targetCharacter.Humanoid.Health > 0) then break end
+                if checksafezone(targetCharacter.HumanoidRootPart.Position) or checkraid(targetCharacter) or checkNotify() then break end
+                AutoHaki()
+                if getgenv().Config and getgenv().Config["Pull Lever"] and getgenv().Config["Pull Lever"]["Weapon"] then
+                  EquipWeapon(getgenv().Config["Pull Lever"]["Weapon"]) 
+                end
+                TP1(targetCharacter.HumanoidRootPart.CFrame * positions[math.random(1, 5)])
+            until not targetPlayer or not targetPlayer.Character or not targetPlayer.Character:FindFirstChild("HumanoidRootPart") or targetPlayer.Character.Humanoid.Health <= 0
+            completed = true
+
+        elseif race == "Ghoul" then
+            if #game.Players:GetPlayers() < 10 then HopServer() return end
+            local function findValidTarget()
+                for _, v in pairs(game.Players:GetPlayers()) do
+                    if v ~= player then
+                        local canTarget = not (player.Team and v.Team and player.Team.Name == "Marines" and v.Team.Name == "Marines")
+                        if canTarget then
+                            local levelDiff = math.abs(player.Data.Level.Value - v.Data.Level.Value)
+                            if levelDiff <= 600 then
+                                local targetCharacter = v.Character
+                                if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") and targetCharacter.Humanoid.Health > 0 then
+                                    if not checksafezone(targetCharacter.HumanoidRootPart.Position) and not checkraid(targetCharacter) and not checkNotify() then
+                                        return v
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                return nil
+            end
+            repeat
+                local targetPlayer = findValidTarget()
+                if targetPlayer then
+                    if player.PlayerGui.Main.BottomHUDList.PvpDisabled.Visible then
+                        repStorage:InvokeServer("EnablePvp")
+                        task.wait(0.5)
+                    end
+                    local positions = {CFrame.new(0, 35, 1), CFrame.new(0, 1, 35), CFrame.new(1, 1, -35), CFrame.new(35, 1, 0), CFrame.new(-35, 1, 0)}
+                    repeat
+                        task.wait()
+                        local targetCharacter = targetPlayer.Character
+                        if not (targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") and targetCharacter.Humanoid.Health > 0) then break end
+                        if checksafezone(targetCharacter.HumanoidRootPart.Position) or checkraid(targetCharacter) or checkNotify() then break end
+                        AutoHaki()
+                        EquipWeapon("Melee") 
+                        end
+                        TP1(targetCharacter.HumanoidRootPart.CFrame * positions[math.random(1, 5)])
+                    until not targetPlayer or not targetPlayer.Character or not targetPlayer.Character:FindFirstChild("HumanoidRootPart") or targetPlayer.Character.Humanoid.Health <= 0
+                    if targetPlayer and targetPlayer.Character and targetPlayer.Character.Humanoid.Health <= 0 then
+                        killCount = killCount + 1
+                    end
+                else
+                    task.wait(1)
+                end
+            until killCount >= 5
+            completed = true
+
+        elseif race == "Fishman" then
+            local SelectBoat = "PirateBrigade"
+            local buyCoordinates = CFrame.new(-5326.29, 5.03, -712.19)
+            local destination = CFrame.new(-6788.04, -4.71, 2117.27)
+            local boat
+            for _, v in pairs(game:GetService("Workspace").Boats:GetChildren()) do
+                if v:FindFirstChild("Owner") and v.Owner.Value == player then
+                    boat = v
+                    break
+                end
+            end
+            local nearestSeaBeast = nil
+            local shortestDistance = 800
+            for _, v in pairs(game:GetService("Workspace").SeaBeasts:GetChildren()) do
+                local seaBeastRoot = v:FindFirstChild("HumanoidRootPart")
+                if seaBeastRoot then
+                    local distance = (player.Character.HumanoidRootPart.Position - seaBeastRoot.Position).Magnitude
+                    if distance <= 800 and distance < shortestDistance then
+                        nearestSeaBeast = v
+                        shortestDistance = distance
+                    end
+                end
+            end
+            if nearestSeaBeast then
+                local seaBeastRoot = nearestSeaBeast:FindFirstChild("HumanoidRootPart")
+                local fixedHeight = seaBeastRoot.Position.Y + 300
+                repeat
+                    task.wait(0.1)
+                    AutoHaki()
+                    TP1(CFrame.new(seaBeastRoot.Position.X + 20, fixedHeight, seaBeastRoot.Position.Z + 10))
+                    AimBotSkillPosition = seaBeastRoot
+                    getgenv().Aimbot = true
+                    aimpos = player.Character.HumanoidRootPart.Position - Vector3.new(0, 2, 0)
+                    _G.AutoSkillSea = true
+                    player.Character.Humanoid.Sit = false
+                until not seaBeastRoot.Parent or nearestSeaBeast.Health.Value <= 0
+                getgenv().Aimbot = false
+                _G.AutoSkillSea = false
+                completed = true
+            else
+                if not boat then
+                    TP1(buyCoordinates)
+                    if (buyCoordinates.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 10 then
+                        repStorage:InvokeServer("BuyBoat", SelectBoat)
+                    end
+                end
+                if boat and not player.Character.Humanoid.Sit then
+                    TP1(boat.VehicleSeat.CFrame * CFrame.new(0, 1, 0))
+                end
+                if boat and player.Character.Humanoid.Sit then
+                    local distance = (boat.VehicleSeat.Position - destination.Position).Magnitude
+                    if distance > 350 then TPB2(destination) end
+                end
+            end
+        end
+
+        if completed then
+            repStorage:InvokeServer("Wenlocktoad", "3")
+            if repStorage:InvokeServer("Wenlocktoad", "3") == -2 then return end
+        end
+    end)
 end
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("AlescialHub")
+SaveManager:SetFolder("AlescialHub/configs")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
+SaveManager:LoadAutoloadConfig()
