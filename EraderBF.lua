@@ -1,22 +1,29 @@
-local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/AmbatukamHub.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/InterfaceManager.lua"))()
+local GITHUB_RAW = "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/"
+local FILE_HOST = "https://files.catbox.moe/"
+
+local Fluent = loadstring(game:HttpGet(FILE_HOST .. "hxye8c.lua", true))()
+local SaveManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/SaveManager.lua", true))()
+local InterfaceManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/InterfaceManager.lua", true))()
 
 local Window = Fluent:CreateWindow({
-    Title = "KimP Hub",
-    SubTitle = "by Saries",
+    Title = "KimP Hub ",
+    TitleIcon = "",
+    Image = "",
+    Icon = "",
+    Theme = "",
     Search = true,
-    Icon = "home",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = true,
-    Theme = "Dark",
-    MinimizeKey = Enum.ZIndexBehavior.Sibling,
-    UserInfo = true,
+    Acrylic = false,
+    TabWidth = 150,
+    Size = UDim2.fromOffset(450, 380),
+    MinimizeKey = Enum.KeyCode.End,
+    BackgroundImage = "",
+    BackgroundTransparency = 0,
+    DropdownsOutsideWindow = true,
+    UserInfo = false,
     UserInfoTop = false,
-    UserInfoTitle = game:GetService("Players").LocalPlayer.DisplayName,
-    UserInfoSubtitle = "User",
-    UserInfoSubtitleColor = Color3.fromRGB(71, 123, 255)
+    UserInfoTitle = game.Players.LocalPlayer.DisplayName,
+    UserInfoSubtitle = "Blox Fruits",
+    UserInfoSubtitleColor = Color3.fromRGB(180, 0, 255)
 })
 local Tabs = {
     Shop = Window:AddTab({ Title = "Shop", Icon = "" }),
@@ -1550,3 +1557,4 @@ spawn(function()
         end
     end
 end)
+print("Hello Guys")
