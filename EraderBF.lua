@@ -1,29 +1,15 @@
-local GITHUB_RAW = "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/"
-local FILE_HOST = "https://files.catbox.moe/"
-
-local Fluent = loadstring(game:HttpGet(FILE_HOST .. "hxye8c.lua", true))()
-local SaveManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/SaveManager.lua", true))()
-local InterfaceManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/InterfaceManager.lua", true))()
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "KimP Hub ",
-    TitleIcon = "",
-    Image = "",
-    Icon = "",
-    Theme = "",
-    Search = true,
+    Title = "KimP Roblox",
+    SubTitle = "by Saries",
+    TabWidth = 155,
+    Size = UDim2.fromOffset(485, 370),
     Acrylic = false,
-    TabWidth = 150,
-    Size = UDim2.fromOffset(450, 380),
-    MinimizeKey = Enum.KeyCode.End,
-    BackgroundImage = "",
-    BackgroundTransparency = 0,
-    DropdownsOutsideWindow = true,
-    UserInfo = false,
-    UserInfoTop = false,
-    UserInfoTitle = game.Players.LocalPlayer.DisplayName,
-    UserInfoSubtitle = "Blox Fruits",
-    UserInfoSubtitleColor = Color3.fromRGB(180, 0, 255)
+    Theme = "Darker",
+    MinimizeKey = Enum.ZIndexBehavior.Sibling
 })
 local Tabs = {
     Shop = Window:AddTab({ Title = "Shop", Icon = "" }),
