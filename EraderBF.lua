@@ -1,38 +1,28 @@
-local GITHUB_RAW = "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/"
-local FILE_HOST = "https://files.catbox.moe/"
-
-local Fluent = loadstring(game:HttpGet(FILE_HOST .. "hxye8c.lua", true))()
-local SaveManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/SaveManager.lua", true))()
-local InterfaceManager = loadstring(game:HttpGet(GITHUB_RAW .. "Addons/InterfaceManager.lua", true))()
+local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/AmbatukamHub.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/vinh129150/Library/refs/heads/main/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "KimP Hub ",
-    TitleIcon = "",
-    Image = "",
-    Icon = "",
-    Theme = "",
+    Title = "KimP Hub",
+    SubTitle = "by Saries",
     Search = true,
-    Acrylic = false,
-    TabWidth = 150,
-    Size = UDim2.fromOffset(450, 380),
-    MinimizeKey = Enum.KeyCode.End,
-    BackgroundImage = "image here",
-    BackgroundTransparency = 0,
-    DropdownsOutsideWindow = true,
-    UserInfo = false,
+    Icon = "home",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.ZIndexBehavior.Sibling,
+    UserInfo = true,
     UserInfoTop = false,
-    UserInfoTitle = game.Players.LocalPlayer.DisplayName,
-    UserInfoSubtitle = "Blox Fruits",
-    UserInfoSubtitleColor = Color3.fromRGB(180, 0, 255)
+    UserInfoTitle = game:GetService("Players").LocalPlayer.DisplayName,
+    UserInfoSubtitle = "User",
+    UserInfoSubtitleColor = Color3.fromRGB(71, 123, 255)
 })
-
 local Tabs = {
-    Shop  = Window:AddTab({ Title = "Shop",  Icon = "" }),
-    Setting  = Window:AddTab({ Title = "Settings",  Icon = "" }),
-    Main  = Window:AddTab({ Title = "Farming",  Icon = "" }),
-    Tab4  = Window:AddTab({ Title = "Stack Farm",  Icon = "" })
+    Shop = Window:AddTab({ Title = "Shop", Icon = "" }),
+    Setting = Window:AddTab({ Title = "Settings", Icon = "" }),
+    Main = Window:AddTab({ Title = "Farming", Icon = "" })
 }
-
 if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
         World1 = true
     elseif game.PlaceId == 4442272183 or game.PlaceId == 79091703265657 then
@@ -40,7 +30,7 @@ if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
     elseif game.PlaceId == 7449423635 or game.PlaceId == 100117331123089 then
         World3 = true
     else 
-       game:GetService("Players").LocalPlayer:Kick("This Game Is Not Support [ Yiner Hub ]") 
+       game:GetService("Players").LocalPlayer:Kick("This Game Is Not Support [ Alescial Hub ]") 
 end
 
 if game:GetService("Players").LocalPlayer.Team == nil then
@@ -276,9 +266,9 @@ end
 
 function AddVelocity()
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        if not LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Yiner Hub") then
+        if not LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Alescial Hub") then
             local body = Instance.new("BodyVelocity")
-            body.Name = "Yiner Hub"
+            body.Name = "Alescial Hub"
             body.Parent = LocalPlayer.Character.HumanoidRootPart
             body.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             body.Velocity = Vector3.new(0, 0, 0)
@@ -288,7 +278,7 @@ end
 
 function RemoveVelocity()
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        local velocity = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Yiner Hub")
+        local velocity = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Alescial Hub")
         if velocity then
             velocity:Destroy()
         end
@@ -403,55 +393,6 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end)
 end)
-function topos(pos, notinstant)
-    if not pos then return end
-    local lastPauseTime = tick()
-    local localFkwarp = false
-    local Pos = typeof(pos) == "CFrame" and pos or CFrame.new(pos.X, pos.Y, pos.Z)
-    repeat task.wait() until IsPlayerAlive() and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid")
-    local Character = LocalPlayer.Character
-    local Humanoid = Character:FindFirstChild("Humanoid")
-    local HRP = Character:FindFirstChild("HumanoidRootPart")
-    if not Humanoid or not HRP then return end
-    if Humanoid.Sit then
-        repeat
-            task.wait()
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Space, false, game)
-        until not Humanoid.Sit or not Character.Parent
-        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Space, false, game)
-    end
-    local Distance = q1(Pos.Position, HRP.Position)
-    local request_place = CheckNearestRequestIsland2(Pos, shouldtp(not notinstant))
-    if request_place then
-        if Request_Places2[request_place] and shouldtp(not notinstant) then
-            if PlrData:FindFirstChild("LastSpawnPoint") and type(PlrData.LastSpawnPoint.Value) == "string" and PlrData.LastSpawnPoint.Value ~= request_place then
-                if tween then tween:Cancel() end
-                if IsPlayerAlive() then setlastspawn(request_place) end
-            end
-        elseif Request_Places[request_place] and checkcanentrance() and not localFkwarp then
-            rqentrance(request_place)
-            Distance = q1(Pos.Position, HRP.Position)
-            localFkwarp = true
-        end
-    end
-    if Pos.Position.Y > 0 and math.abs(HRP.Position.Y - Pos.Position.Y) > 50 then
-        HRP.CFrame = CFrame.new(HRP.Position.X, Pos.Position.Y, HRP.Position.Z)
-        task.wait(0.5)
-    end
-    local Time
-    if Distance <= 50 then
-        Time = 0
-    elseif Distance <= 200 then
-        Time = 0.25
-    else
-        Time = Distance / 350
-    end
-    if HRP and HRP.Parent then
-        tween = game:GetService("TweenService"):Create(HRP, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = Pos})
-        AddVelocity()
-        tween:Play()
-    end
-end
 
 function AutoHaki() --// turn on haki
     local char = game.Players.LocalPlayer.Character
@@ -471,79 +412,114 @@ function IsPlayerNearby(position, radius)
     return false
 end
 
-local plr = game.Players.LocalPlayer
+local lp = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
-local workspace = game:GetService("Workspace")
+local bringConnection
+local stabilized = {}
+local activePos
+local maxBring = 3
+local isBring = {mobName=nil,targetPos=nil}
 
-_G.BringMob = true
-local BRING_RANGE = 350
+function BringMob(mobName, targetPos, range, skipDeath, bringAll)
+    range = range or 350
+    if bringConnection then bringConnection:Disconnect() end
+    isBring.mobName = mobName
+    isBring.targetPos = targetPos
+    activePos = targetPos
 
-local function GetMobPosition(EnemiesName)
-    local pos = Vector3.zero
-    local count = 0
-    for _, v in pairs(workspace.Enemies:GetChildren()) do
-        if v.Name == EnemiesName and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-            pos = pos + v.HumanoidRootPart.Position
-            count = count + 1
+    bringConnection = RunService.Heartbeat:Connect(function()
+        local hrpPlr = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+        if not hrpPlr then return end
+        pcall(function() sethiddenproperty(lp,"SimulationRadius",math.huge) end)
+        local alive=0
+        for _,mob in ipairs(workspace.Enemies:GetChildren()) do
+            local hrp,hum=mob:FindFirstChild("HumanoidRootPart"),mob:FindFirstChild("Humanoid")
+            if hrp and hum and hum.Health>0 and (bringAll or string.find(mob.Name,mobName)) then alive+=1 end
         end
-    end
-    if count == 0 then return nil end
-    return pos / count
-end
+        if alive==0 then stabilized={} activePos=nil isBring.mobName=nil isBring.targetPos=nil bringConnection:Disconnect() return end
 
-local function SetNetwork()
-    pcall(function()
-        sethiddenproperty(plr, "SimulationRadius", math.huge)
-        sethiddenproperty(plr, "MaxSimulationRadius", math.huge)
+        local count=0
+        for _,mob in ipairs(workspace.Enemies:GetChildren()) do
+            if count>=maxBring then break end
+            local hrp,hum=mob:FindFirstChild("HumanoidRootPart"),mob:FindFirstChild("Humanoid")
+            if hrp and hum and hum.Health>0 and (bringAll or string.find(mob.Name,mobName)) then
+                local dist=(hrpPlr.Position-hrp.Position).Magnitude
+                if dist>range then
+                    if stabilized[mob] and not stabilized[mob].OutOfRangeTime then stabilized[mob].OutOfRangeTime=tick()
+                    elseif stabilized[mob] and tick()-stabilized[mob].OutOfRangeTime>5 then stabilized[mob]=nil end
+                    continue
+                end
+                hrp.CanCollide=false
+                for _,v in ipairs(mob:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide=false end end
+                hum.JumpPower,hum.WalkSpeed,hum.AutoRotate=0,0,false
+
+                if not stabilized[mob] then
+                    local t=Instance.new("Part")
+                    t.Name="GlobalBringTarget"
+                    t.Size=Vector3.new(1,1,1)
+                    t.Anchored=true
+                    t.Transparency=1
+                    t.CanCollide=false
+                    t.Parent=workspace
+                    stabilized[mob]={BasePos=activePos,RX=math.random(1,3),RZ=math.random(1,3),Phase=math.random()*math.pi*2,Target=t}
+                end
+                local data=stabilized[mob]
+                local att0=hrp:FindFirstChild("AP_Att0") or Instance.new("Attachment",hrp)
+                att0.Name="AP_Att0"
+                local att1=data.Target:FindFirstChild("AP_Att1") or Instance.new("Attachment",data.Target)
+                att1.Name="AP_Att1"
+                local ap=hrp:FindFirstChild("AlignPos_AP") or Instance.new("AlignPosition")
+                ap.Name="AlignPos_AP" ap.Attachment0=att0 ap.Attachment1=att1 ap.Responsiveness=200
+                ap.MaxForce=math.huge ap.MaxVelocity=math.huge ap.Parent=hrp
+                local ao=hrp:FindFirstChild("AlignOri_AP") or Instance.new("AlignOrientation")
+                ao.Name="AlignOri_AP" ao.Attachment0=att0 ao.Attachment1=att1 ao.Responsiveness=200
+                ao.MaxTorque=math.huge ao.MaxAngularVelocity=math.huge ao.Parent=hrp
+                hrp.AssemblyLinearVelocity=Vector3.new() hrp.AssemblyAngularVelocity=Vector3.new()
+                data.OutOfRange=false
+                count+=1
+            end
+        end
     end)
 end
 
-RunService.Heartbeat:Connect(function()
-    if not _G.BringMob then return end
-    
-    SetNetwork()
-    
-    local enemies = workspace.Enemies:GetChildren()
-    local totalpos = {}
-
-    for _, v in pairs(enemies) do
-        if v:IsA("Model") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-            if not totalpos[v.Name] then
-                totalpos[v.Name] = GetMobPosition(v.Name)
-            end
-        end
-    end
-
-    for _, v in pairs(enemies) do
-        if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
-            local hrp = v.HumanoidRootPart
-            local hum = v.Humanoid
-            
-            if hum.Health > 0 then
-                local distToPlayer = (hrp.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-                
-                if distToPlayer <= BRING_RANGE then
-                    local targetPosVector = totalpos[v.Name]
-                    if targetPosVector then
-                        if (hrp.Position - targetPosVector).Magnitude > 5 then
-                            hrp.CFrame = CFrame.new(targetPosVector)
-                            hrp.CanCollide = false
-                            hrp.AssemblyLinearVelocity = Vector3.zero
-                            hrp.AssemblyAngularVelocity = Vector3.zero
-                            hum.PlatformStand = true
-                            if hum:FindFirstChild("Animator") then
-                                hum.Animator:Destroy()
-                            end
-                        end
-                    end
+RunService.RenderStepped:Connect(function()
+    local hrpPlr=lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+    if not hrpPlr then return end
+    for mob,data in pairs(stabilized) do
+        if mob and mob.Parent and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health>0 then
+            local dist=(hrpPlr.Position-mob.HumanoidRootPart.Position).Magnitude
+            if dist>350 then
+                if not data.OutOfRangeTime then data.OutOfRangeTime=tick()
+                elseif tick()-data.OutOfRangeTime>5 then stabilized[mob]=nil end
+            else
+                data.OutOfRangeTime=nil
+                local t=tick()
+                local x=math.sin(t*data.RX+data.Phase)*0.5
+                local z=math.cos(t*data.RZ+data.Phase)*0.5
+                data.Target.Position=Vector3.new(isBring.targetPos.X+x,isBring.targetPos.Y,isBring.targetPos.Z+z)
+                if not mob:FindFirstChild("AlignPos_AP") or not mob:FindFirstChild("AlignOri_AP") then
+                    local hrp=mob.HumanoidRootPart
+                    local att0=hrp:FindFirstChild("AP_Att0") or Instance.new("Attachment",hrp)
+                    att0.Name="AP_Att0"
+                    local att1=data.Target:FindFirstChild("AP_Att1") or Instance.new("Attachment",data.Target)
+                    att1.Name="AP_Att1"
+                    local ap=Instance.new("AlignPosition")
+                    ap.Name="AlignPos_AP" ap.Attachment0=att0 ap.Attachment1=att1 ap.Responsiveness=200
+                    ap.MaxForce=math.huge ap.MaxVelocity=math.huge ap.Parent=hrp
+                    local ao=Instance.new("AlignOrientation")
+                    ao.Name="AlignOri_AP" ao.Attachment0=att0 ao.Attachment1=att1 ao.Responsiveness=200
+                    ao.MaxTorque=math.huge ao.MaxAngularVelocity=math.huge ao.Parent=hrp
                 end
             end
+        else
+            stabilized[mob]=nil
         end
     end
 end)
+
 function Hop()
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Yiner Hub",
+        Title = "Alescial Hub",
         Text = "Hopping...",
         Duration = 3,
         Icon = "rbxassetid://83754196059446"
@@ -592,7 +568,7 @@ function Hop()
                     saveIDs()
                     isTeleporting = true
                     game.StarterGui:SetCore("SendNotification", {
-                        Title = "Yiner Hub",
+                        Title = "Alescial Hub",
                         Text = "Joining server: "..id.." | "..v.playing.."/"..v.maxPlayers,
                         Duration = 3
                     })
@@ -1278,6 +1254,46 @@ function getMobCFrames(mobName)
     end
     return matchingCFrames
 end
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ToggleButton"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+local TextButton = Instance.new("TextButton")
+TextButton.Parent = ScreenGui
+TextButton.Active = true
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0, 20, 0.1, -6)
+TextButton.Size = UDim2.new(0, 50, 0, 50)
+TextButton.ZIndex = 10
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.Font = Enum.Font.GothamBold
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = TextButton
+local MenuEnabled = false
+local function updateButton()
+    if MenuEnabled then
+        TextButton.Text = "OFF"
+    else
+        TextButton.Text = "ON"
+    end
+end
+updateButton()
+
+TextButton.MouseButton1Click:Connect(function()
+    MenuEnabled = not MenuEnabled
+    pcall(function()
+        if Window and Window.Minimize then
+            Window:Minimize()
+        end
+    end)
+    updateButton()
+end)
 function QuestCheck()
     local player = game.Players.LocalPlayer
     local level = player.Data.Level.Value
@@ -1495,8 +1511,42 @@ function Farm_Cake()
         KillMobList({"Cookie Crafter", "Cake Guard", "Baking Staff", "Head Baker"}, nil, true)
     end
 end
+Tabs.Main:AddSection("Tab Farming")
+Tabs.Main:AddDropdown("v1", {
+    Title = "Select Mode Farm",
+    Values = {"Level", "Bone", "Cake"},
+    Default = "Level"
+    Multi = false,
+    Callback = function(Value)
+        getgenv().SelectModeFarm = Value
+    end
+})
+Tabs.Main:AddToggle("start_farm", {
+    Title = "Start Farm",
+    Description = "",
+    Default = false,
+    Callback = function(Value)
+        _G.StartFarm = Value
+    end
+})
 spawn(function()
-    while task.wait() do
-        pcall(Farm_Bone)
+    while task.wait(0.1) do
+        if _G.StartFarm and getgenv().SelectModeFarm == "Level" then
+            pcall(Farm_Level)
+        end
+    end
+end)
+spawn(function()
+    while task.wait(0.1) do
+        if _G.StartFarm and getgenv().SelectModeFarm == "Bone" then
+            pcall(Farm_Bone)
+        end
+    end
+end)
+spawn(function()
+    while task.wait(0.1) do
+        if _G.StartFarm and getgenv().SelectModeFarm == "Cake" then
+            pcall(Farm_Cake)
+        end
     end
 end)
